@@ -9,25 +9,29 @@ const Index: React.FC = () => {
   }>()
   const webSocket = useModel('useWebsocketModel')
 
+  const {current} = useModel('useCurrentModel')
+
   const sendMsg = React.useCallback((event: React.KeyboardEvent) => {
     if (event.shiftKey && event.code === 'Enter') {
-      const content = form.getFieldValue('message')
-      const message: APP.Text = {
-        id: 1,
-        from: 1,
-        to: 1,
-        type: 'text',
-        time: (new Date()).getTime(),
-        content,
-        success: false
+      if (current) {
+        const content = form.getFieldValue('message')
+        const message: APP.Message = {
+          created_at: (new Date()).getTime(),
+          user_id: current.id,
+          type: 'text',
+          content,
+          success: false,
+          is_server: true,
+        }
+        webSocket.send(message)
+        form.setFieldsValue({
+          message: ''
+        })
+        event.preventDefault()
       }
-      webSocket.send(message)
-      form.setFieldsValue({
-        message: ''
-      })
-      event.preventDefault()
+
     }
-  }, [form, webSocket])
+  }, [current, form, webSocket])
   return <div className='input'>
     <Form form={form} initialValues={{message: ''}}>
       <Form.Item name='message'>
