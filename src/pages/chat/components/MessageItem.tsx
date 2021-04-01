@@ -1,11 +1,11 @@
 import React from "react";
 import {Avatar} from "antd";
-import {useModel} from "@@/plugin-model/useModel";
+import { InfoCircleOutlined } from "@ant-design/icons/lib";
 
 const Index: React.FC<{
-  message: APP.Message
+  message: APP.Message,
+  success: boolean
 }> = props => {
-  const user = useModel('@@initialState', model => model.initialState?.currentUser)
   return React.useMemo(() => {
     return <div className={props.message.is_server ? 'message-item right': 'message-item'}>
       <div className='avatar'>
@@ -14,7 +14,10 @@ const Index: React.FC<{
       <div className='word'>
         {props.message.content}
       </div>
+      {
+        !props.success && <InfoCircleOutlined className={"error"}/>
+      }
     </div>
-  }, [props.message.content, props.message.id, user?.id])
+  }, [props.message.content, props.message.is_server, props.success])
 }
 export default Index

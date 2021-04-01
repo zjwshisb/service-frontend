@@ -3,7 +3,8 @@ import MessageItem from './MessageItem'
 import {useModel} from "@@/plugin-model/useModel";
 
 const Index: React.FC = () => {
-  const current = useModel('useCurrentModel')
+  const {current} = useModel('useCurrentModel')
+  const users = useModel('useUsersModel')
   const ref = React.useRef<HTMLDivElement>(null)
   React.useEffect(() => {
     if (ref.current != null) {
@@ -13,12 +14,14 @@ const Index: React.FC = () => {
     }
   })
   return <div className='message-list' ref={ref}>
-    {current.current?.messages.map(v => {
-      if (v.type === 'text') {
-        return <MessageItem message={v as APP.Message} key={Math.random() * 1000} />
-      }
-      return <></>
-    })}
+    {
+      users.users.get(current)?.messages.map(v => {
+        if (v.data.type === 'text') {
+          return <MessageItem message={v.data as APP.Message} success={v.is_success}  key={Math.random() * 1000} />
+        }
+        return <></>
+      })
+    }
   </div>
 }
 export default Index

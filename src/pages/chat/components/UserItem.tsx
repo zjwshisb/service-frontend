@@ -1,16 +1,18 @@
 import React from "react";
-import {Avatar} from "antd";
+import {Avatar, Badge} from "antd";
 import {useModel} from "@@/plugin-model/useModel";
 
 const Index: React.FC<{
   user: APP.User
 }> = (props) => {
-  const {setCurrent} = useModel("useCurrentModel")
-  return <div className='user-item' onClick={() => setCurrent(props.user)}>
+  const {setCurrent, current} = useModel("useCurrentModel")
+  return <div className={current === props.user.id ? 'user-item active': 'user-item'} onClick={() => setCurrent(props.user.id)}>
     <div className='avatar'>
-      <Avatar size={50} shape='square'>
-        {props.user.name}
-      </Avatar>
+      <Badge count={props.user.unread} size={"small"}>
+        <Avatar size={50} shape='square'>
+          {props.user.name}
+        </Avatar>
+      </Badge>
     </div>
     <div className='info'>
       <div className='first'>

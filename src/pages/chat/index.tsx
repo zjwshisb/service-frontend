@@ -9,46 +9,57 @@ import lodash from 'lodash'
 
 const Index: React.FC = () => {
 
-  const {connect, setOnMessage, setOnSend} = useModel('useWebsocketModel')
+  const {connect, setOnMessage, setOnSend, setOnReceipt} = useModel('useWebsocketModel')
   const {setUsers} = useModel('useUsersModel')
-  const {setCurrent} = useModel('useCurrentModel')
-  const initialState = useModel('@@initialState', model => model.initialState)
 
 
   React.useEffect(() => {
-    setOnSend(() => (msg: APP.Message) => {
-      setCurrent(prevState => {
-        if (prevState) {
-          prevState.messages.push(msg)
+    setOnSend(() => {
+      return (action: APP.Action<APP.Message>) => {
+        setUsers(prevState => {
+          const newState = lodash.cloneDeep(prevState)
+          const user = newState.get(action.data.user_id)
+          if (user) {
+            user.messages.push(action)
+            return newState
+          }
+          return prevState
+        })
+      }
+    })
+  }, [setOnSend, setUsers])
+
+  React.useEffect(() => {
+    setOnReceipt(() => (action: APP.Action<APP.Receipt>) => {
+      setUsers(prevState => {
+        const user = prevState.get(action.data.user_id)
+        if (user) {
+          const index = user.messages.findIndex(v => v.req_id === action.req_id)
+          if (index > -1) {
+            user.messages[index].is_success = true
+          }
           return lodash.cloneDeep(prevState)
         }
         return prevState
       })
     })
-  }, [setCurrent, setOnSend])
-
+  }, [setOnReceipt, setUsers])
 
   React.useEffect(() => {
-    if (initialState?.currentUser) {
-      setOnMessage(() => (message: APP.Message) => {
-        setCurrent(c => {
-          if (c && c.id === message.user_id) {
-            c.messages.push(message as APP.Message)
-            return lodash.cloneDeep(c)
-          }
-          return c
-        })
-        setUsers(prevState => {
-          const user = prevState.find(v => v.id === message.user_id)
-          if (user !== undefined) {
-            user.messages.push(message)
-            return lodash.cloneDeep(prevState)
-          }
-          return prevState
-        })
+    setOnMessage(() => (action: APP.Action<APP.Message>) => {
+      const message = action.data
+      setUsers(prevState => {
+        const newState = lodash.cloneDeep(prevState)
+        const user = newState.get(message.user_id)
+        if (user) {
+          user.messages.push(action)
+          user.unread += 1
+          return newState
+        }
+        return prevState
       })
-    }
-  }, [initialState?.currentUser, setCurrent, setOnMessage, setUsers])
+    })
+  }, [setOnMessage, setUsers])
 
 
   React.useEffect(() => {

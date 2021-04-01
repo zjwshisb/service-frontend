@@ -4,13 +4,14 @@ import {getToken} from "@/utils/auth";
 export default function useWebsocketModel() {
 
   const [websocket, setWebSocket] = React.useState<WebSocket | undefined>()
-  const [onSend, setOnSend] = React.useState<(m: APP.Message) => void | undefined>()
-  const [onMessage, setOnMessage] = React.useState<(msg: APP.Message) => void | undefined>()
+  const [onSend, setOnSend] = React.useState<(m: APP.Action) => void | undefined>()
+  const [onMessage, setOnMessage] = React.useState<(msg: APP.Action) => void | undefined>()
   const [onOpen, setOpen] = React.useState<(e: Event) => void>()
   const [onError, setOnError] = React.useState<(e: Event) => void>()
   const [onClose, setOnClose] = React.useState<(e: CloseEvent) => void>()
-  const [onOnline, setOnOnLine] = React.useState<(msg: APP.OnLine) => void>()
-  const [onOffline, setOnOffline] = React.useState<(msg: APP.OnLine) => void>()
+  const [onOnline, setOnOnLine] = React.useState<(msg: APP.Action<APP.OnLine>) => void>()
+  const [onOffline, setOnOffline] = React.useState<(msg: APP.Action<APP.OffLine>) => void>()
+  const [onReceipt, setOnReceipt] = React.useState<(msg: APP.Action<APP.Receipt>) => void>()
 
   React.useEffect(() => {
     if (websocket) {
@@ -29,15 +30,19 @@ export default function useWebsocketModel() {
           const msg = JSON.parse(e.data)
           switch ((msg as APP.Action).action) {
             case "message": {
-              if (onMessage) onMessage((msg.data as APP.Message))
+              if (onMessage) onMessage((msg as APP.Action<APP.Message>))
               break
             }
             case "offline": {
-              if (onOffline) onOffline((msg.data as APP.OffLine))
+              if (onOffline) onOffline((msg as APP.Action<APP.OnLine>))
               break
             }
             case "online": {
-              if (onOnline) onOnline((msg.data as APP.OnLine))
+              if (onOnline) onOnline((msg as APP.Action<APP.OnLine>))
+              break
+            }
+            case "receipt": {
+              if (onReceipt) onReceipt((msg as APP.Action<APP.Receipt>))
               break
             }
             default: {
@@ -55,7 +60,7 @@ export default function useWebsocketModel() {
         setWebSocket(undefined)
       }
     }
-  }, [onClose, onError, onMessage, onOffline, onOnline, onOpen, websocket])
+  }, [onClose, onError, onMessage, onOffline, onOnline, onOpen, onReceipt, websocket])
 
   const connect = React.useCallback(() => {
     setWebSocket(() => {
@@ -65,11 +70,11 @@ export default function useWebsocketModel() {
   }, [])
 
 
-  const send: (msg: APP.Message) => void = React.useCallback((msg: APP.Message) => {
+  const send: <T>(msg: APP.Action<T>) => void = React.useCallback(<T>(action: APP.Action<T>) => {
     if (websocket) {
-      websocket.send(JSON.stringify(msg))
+      websocket.send(JSON.stringify(action))
       if (onSend) {
-        onSend(msg)
+        onSend(action)
       }
     }
   }, [onSend, websocket])
@@ -82,6 +87,7 @@ export default function useWebsocketModel() {
     setOnError,
     setOnClose,
     setOnOnLine,
-    setOnOffline
+    setOnOffline,
+    setOnReceipt
   }
 }

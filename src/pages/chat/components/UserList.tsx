@@ -4,11 +4,12 @@ import {useModel} from "@@/plugin-model/useModel";
 
 const Index: React.FC = () => {
   const users = useModel('useUsersModel')
+  const list = Array.from(users.users).map(v => {
+    return <UserItem user={v[1]} key={v[1].id}/>
+  })
   return <div className='user-list'>
     {
-      users.users.map(v => {
-        return <UserItem user={v} key={v.id}/>
-      })
+      list
     }
   </div>
 }
