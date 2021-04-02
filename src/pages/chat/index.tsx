@@ -12,7 +12,6 @@ const Index: React.FC = () => {
   const {connect, setOnMessage, setOnSend, setOnReceipt} = useModel('useWebsocketModel')
   const {setUsers} = useModel('useUsersModel')
 
-
   React.useEffect(() => {
     setOnSend(() => {
       return (action: APP.Action<APP.Message>) => {
@@ -33,7 +32,7 @@ const Index: React.FC = () => {
     setOnReceipt(() => (action: APP.Action<APP.Receipt>) => {
       setUsers(prevState => {
         const user = prevState.get(action.data.user_id)
-        if (user) {
+        if (user !== undefined) {
           const index = user.messages.findIndex(v => v.req_id === action.req_id)
           if (index > -1) {
             user.messages[index].is_success = true
