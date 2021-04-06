@@ -17,7 +17,7 @@ const Index: React.FC = () => {
     {
       users.users.get(current)?.messages.map(v => {
         if (v.data.type === 'text') {
-          return <MessageItem message={v.data as APP.Message} success={v.is_success}  key={Math.random() * 1000} />
+          return <MessageItem action={v}  key={v.req_id} />
         }
         return <></>
       })

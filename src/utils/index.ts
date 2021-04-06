@@ -13,6 +13,5 @@ export function createMsg(content: string, userId: number, type: APP.MessageType
     },
     req_id: createReqId(),
     time: (new Date()).getTime(),
-    is_success: false
   }
 }

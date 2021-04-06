@@ -1,17 +1,18 @@
 import React from "react";
 import {getToken} from "@/utils/auth";
+import lodash from 'lodash'
+
+export type ActionHandle<T = any> = (action: APP.Action<T>) => void
+
 
 export default function useWebsocketModel() {
 
   const [websocket, setWebSocket] = React.useState<WebSocket | undefined>()
-  const [onSend, setOnSend] = React.useState<(m: APP.Action) => void | undefined>()
-  const [onMessage, setOnMessage] = React.useState<(msg: APP.Action) => void | undefined>()
+  const [onSend, setOnSend] = React.useState<ActionHandle | undefined>()
+  const [onMessage, updateOnMessage] = React.useState<ActionHandle[]>([])
   const [onOpen, setOpen] = React.useState<(e: Event) => void>()
   const [onError, setOnError] = React.useState<(e: Event) => void>()
   const [onClose, setOnClose] = React.useState<(e: CloseEvent) => void>()
-  const [onOnline, setOnOnLine] = React.useState<(msg: APP.Action<APP.OnLine>) => void>()
-  const [onOffline, setOnOffline] = React.useState<(msg: APP.Action<APP.OffLine>) => void>()
-  const [onReceipt, setOnReceipt] = React.useState<(msg: APP.Action<APP.Receipt>) => void>()
 
   React.useEffect(() => {
     if (websocket) {
@@ -28,27 +29,9 @@ export default function useWebsocketModel() {
       websocket.onmessage = (e: MessageEvent<string>) => {
         try {
           const msg = JSON.parse(e.data)
-          switch ((msg as APP.Action).action) {
-            case "message": {
-              if (onMessage) onMessage((msg as APP.Action<APP.Message>))
-              break
-            }
-            case "offline": {
-              if (onOffline) onOffline((msg as APP.Action<APP.OnLine>))
-              break
-            }
-            case "online": {
-              if (onOnline) onOnline((msg as APP.Action<APP.OnLine>))
-              break
-            }
-            case "receipt": {
-              if (onReceipt) onReceipt((msg as APP.Action<APP.Receipt>))
-              break
-            }
-            default: {
-              break
-            }
-          }
+          onMessage.forEach(callback => {
+            callback((msg as APP.Action))
+          })
         }catch (err) {
           console.log(err)
         }
@@ -60,12 +43,20 @@ export default function useWebsocketModel() {
         setWebSocket(undefined)
       }
     }
-  }, [onClose, onError, onMessage, onOffline, onOnline, onOpen, onReceipt, websocket])
+  }, [onClose, onError, onMessage,onOpen, websocket])
 
   const connect = React.useCallback(() => {
     setWebSocket(() => {
       const url = `${WS_URL}?token=${getToken()}`
       return new WebSocket(url)
+    })
+  }, [])
+
+  const setOnMessage = React.useCallback(<T>(callback: ActionHandle<T>): void => {
+    updateOnMessage(prevState => {
+      const newState = lodash.cloneDeep(prevState)
+      newState.push(callback)
+      return newState
     })
   }, [])
 
@@ -86,8 +77,5 @@ export default function useWebsocketModel() {
     setOpen,
     setOnError,
     setOnClose,
-    setOnOnLine,
-    setOnOffline,
-    setOnReceipt
   }
 }

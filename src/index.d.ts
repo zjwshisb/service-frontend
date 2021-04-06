@@ -9,7 +9,7 @@ declare namespace APP{
     action: ActionType,
     data: T,
     time: number,
-    is_success: boolean
+    is_success?: boolean
   }
 
   export type Receipt = {
