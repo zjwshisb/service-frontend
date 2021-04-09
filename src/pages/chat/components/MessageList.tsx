@@ -1,6 +1,7 @@
 import React from "react";
 import MessageItem from './MessageItem'
 import {useModel} from "@@/plugin-model/useModel";
+import { Alert } from "antd";
 
 const Index: React.FC = () => {
   const {current} = useModel('useCurrentModel')
@@ -21,6 +22,9 @@ const Index: React.FC = () => {
         }
         return <></>
       })
+    }
+    {
+      users.users.get(current)?.disabled && <Alert type={"warning"} message={"已过失效，无法交谈"} />
     }
   </div>
 }

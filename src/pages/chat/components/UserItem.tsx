@@ -10,14 +10,14 @@ const Index: React.FC<{
     <div className='avatar'>
       <Badge count={props.user.unread} size={"small"}>
         <Avatar size={50} shape='square'>
-          {props.user.name}
+          {props.user.username}
         </Avatar>
       </Badge>
     </div>
     <div className='info'>
       <div className='first'>
         <div className='name'>
-          {props.user.name}
+          {props.user.username}
         </div>
         <div className='time'>
           20:10

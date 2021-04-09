@@ -3,6 +3,7 @@ declare namespace APP{
   export type MessageType = 'text' | 'image'
 
   export type ActionType = 'message' | 'offline' | 'online' | 'receipt'
+    | 'waiting-users' | 'accept-user' | 'server-user-list'
 
   export type Action<T = any> = {
     req_id: number,
@@ -33,13 +34,27 @@ declare namespace APP{
     user_id: number
   }
 
+  export type WaitingUser = {
+    id: number,
+    username: string
+  }
+
+  export type UserList = {
+    list: APP.User[]
+  }
+
+  export type WaitingUserData = {
+    list: WaitingUser[]
+  }
+
   export type User = {
     id: number,
-    name: string,
+    username: string,
     avatar?: string,
-    is_online: boolean,
+    online: boolean,
     messages: Action<APP.Message>[],
-    last_send_time: number,
-    unread: number
+    last_chat_time: number,
+    unread: number,
+    disabled: boolean
   }
 }

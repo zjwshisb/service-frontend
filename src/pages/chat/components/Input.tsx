@@ -49,7 +49,7 @@ const Index: React.FC = () => {
   return <div className='input'>
     <Form form={form} initialValues={{message: ''}}>
       <Form.Item name='message'>
-        <Input.TextArea disabled={current === 0} showCount={true} maxLength={512} placeholder={'enter+shirt 发送'} bordered={false} autoSize={{maxRows: 6, minRows:6 }} onKeyDown={sendMsg} />
+        <Input.TextArea disabled={current === 0 || users.get(current)?.disabled} showCount={true} maxLength={512} placeholder={'enter+shirt 发送'} bordered={false} autoSize={{maxRows: 6, minRows:6 }} onKeyDown={sendMsg} />
       </Form.Item>
     </Form>
   </div>
