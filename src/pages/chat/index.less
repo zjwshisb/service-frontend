@@ -64,6 +64,18 @@
             }
             &>.last{
               color: #888888;
+              display: flex;
+              justify-content: space-between;
+              overflow:hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              &>.message{
+                flex: 1;
+              }
+              &>.action{
+                text-align: right;
+                width: 50px;
+              }
             }
           }
         }

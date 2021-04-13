@@ -6,8 +6,8 @@ import {Alert, message} from 'antd';
 import React, {useState} from 'react';
 import ProForm, {ProFormText} from '@ant-design/pro-form';
 import {Link, history, useModel} from 'umi';
-import type {LoginParamsType} from '@/services/login';
-import {login} from '@/services/login';
+import type {LoginParamsType} from '@/services';
+import {index} from '@/services';
 import {setToken} from "@/utils/auth";
 
 import styles from './index.less';
@@ -56,7 +56,7 @@ const Login: React.FC = () => {
     setSubmitting(true);
     try {
       // 登录
-      const resp = await login({...values});
+      const resp = await index({...values});
       if (resp.success) {
         message.success('登录成功！');
         setToken(resp.data.token)

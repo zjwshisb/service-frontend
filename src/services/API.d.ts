@@ -1,14 +1,13 @@
 declare namespace API {
 
-  export type Response<T> = {
-    success: Boolean,
-    data : T,
+  export type Response<T = any> = {
+    success: true,
+    data: T,
     message?: string
   }
 
-
   export type CurrentUser = {
-    username: string;
+    username: string;ue
     id: number
   };
 

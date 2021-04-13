@@ -7,7 +7,7 @@ import {history} from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import type {ResponseError} from 'umi-request';
-import {queryCurrent} from './services/user';
+import {queryCurrent} from '@/services';
 import defaultSettings from '../config/defaultSettings';
 import {getToken} from "@/utils/auth";
 
@@ -91,18 +91,18 @@ const errorHandler = (error: ResponseError) => {
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const {status, url} = response;
+    switch (response.status) {
+      case 401: {
+        break
+      }
+      default: {
+        notification.error({
+          message: `请求错误 ${status}: ${url}`,
+          description: errorText,
+        });
+      }
+    }
 
-    notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
-  }
-
-  if (!response) {
-    notification.error({
-      description: '您的网络发生异常，无法连接服务器',
-      message: '网络异常',
-    });
   }
   throw error;
 };
@@ -115,7 +115,7 @@ export const request: RequestConfig = {
       const token= getToken()
       if (token) {
         const headers = {
-          Authorization: 'bearer ' + getToken(),
+          Authorization: `bearer ${  getToken()}`,
           ...options.headers
         }
         return {

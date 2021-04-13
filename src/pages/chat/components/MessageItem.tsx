@@ -5,6 +5,8 @@ import { InfoCircleOutlined } from "@ant-design/icons/lib";
 const Index: React.FC<{
   action: APP.Action,
 }> = props => {
+
+
   return React.useMemo(() => {
     return <div className={props.action.data.is_server ? 'message-item right': 'message-item'}>
       <div className='avatar'>
@@ -14,12 +16,16 @@ const Index: React.FC<{
         {props.action.data.content}
       </div>
       {
-        props.action.is_success === undefined && <Spin />
-      }
-      {
-        props.action.is_success === false && <InfoCircleOutlined className={"error"}/>
+        props.action.data.is_server ? <>
+          {
+            props.action.is_success === undefined && <Spin />
+          }
+          {
+            props.action.is_success === false && <InfoCircleOutlined className={"error"}/>
+          }
+        </> : <></>
       }
     </div>
-  }, [props.action])
+  }, [props.action.data.content, props.action.data.is_server, props.action.is_success])
 }
 export default Index

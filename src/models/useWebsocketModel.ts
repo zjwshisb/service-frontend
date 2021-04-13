@@ -9,7 +9,7 @@ export default function useWebsocketModel() {
 
   const [websocket, setWebSocket] = React.useState<WebSocket | undefined>()
   const [onSend, setOnSend] = React.useState<ActionHandle | undefined>()
-  const [onMessage, updateOnMessage] = React.useState<ActionHandle[]>([])
+  const [onMessage, updateOnMessage] = React.useState<Map<APP.ActionType, ActionHandle>>(new Map())
   const [onOpen, setOpen] = React.useState<(e: Event) => void>()
   const [onError, setOnError] = React.useState<(e: Event) => void>()
   const [onClose, setOnClose] = React.useState<(e: CloseEvent) => void>()
@@ -28,10 +28,13 @@ export default function useWebsocketModel() {
       }
       websocket.onmessage = (e: MessageEvent<string>) => {
         try {
-          const msg = JSON.parse(e.data)
-          onMessage.forEach(callback => {
-            callback((msg as APP.Action))
-          })
+          if (e.data !== '') {
+            const action: APP.Action = JSON.parse(e.data)
+            const handle = onMessage.get(action.action)
+            if (handle) {
+              handle(action)
+            }
+          }
         }catch (err) {
           console.log(err)
         }
@@ -52,10 +55,10 @@ export default function useWebsocketModel() {
     })
   }, [])
 
-  const setOnMessage = React.useCallback(<T>(callback: ActionHandle<T>): void => {
+  const setOnMessage = React.useCallback(<T>(callback: ActionHandle<T>, type: APP.ActionType): void => {
     updateOnMessage(prevState => {
       const newState = lodash.cloneDeep(prevState)
-      newState.push(callback)
+      newState.set(type, callback)
       return newState
     })
   }, [])

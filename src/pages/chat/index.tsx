@@ -13,6 +13,7 @@ const Index: React.FC = () => {
   const {connect, setOnMessage, setOnSend} = useModel('useWebsocketModel')
   const {setUsers} = useModel('useUsersModel')
   const {setWaitingUsers} = useModel('useWaitingUserModel')
+  const {current} = useModel('useCurrentModel')
 
   React.useEffect(() => {
     setOnSend(() => {
@@ -32,62 +33,59 @@ const Index: React.FC = () => {
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.UserList>) => {
-      if (action.action === "server-user-list") {
-        setUsers(() => {
-          const map = new Map<number, APP.User>()
-          action.data.list.forEach(v => {
-            map.set(v.id, v)
-          })
-          return map
+      setUsers(() => {
+        const map = new Map<number, APP.User>()
+        action.data.list.forEach(v => {
+          map.set(v.id, v)
         })
-      }
-    })
+        return map
+      })
+    }, 'server-user-list')
 
   }, [setOnMessage, setUsers])
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.Receipt>) => {
-      if (action.action === "receipt") {
-        setUsers(prevState => {
-          const user = prevState.get(action.data.user_id)
-          if (user !== undefined) {
-            const index = user.messages.findIndex(v => v.req_id === action.req_id)
-            if (index > -1) {
-              user.messages[index].is_success = true
-            }
-            return lodash.cloneDeep(prevState)
+      setUsers(prevState => {
+        const user = prevState.get(action.data.user_id)
+        if (user !== undefined) {
+          const index = user.messages.findIndex(v => v.req_id === action.req_id)
+          if (index > -1) {
+            user.messages[index].is_success = true
           }
-          return prevState
-        })
-      }
-    })
+          return lodash.cloneDeep(prevState)
+        }
+        return prevState
+      })
+    }, 'receipt')
+  }, [setOnMessage, setUsers, setWaitingUsers])
+
+  React.useEffect(() => {
     setOnMessage((action: APP.Action<{list: APP.WaitingUser[]}>) => {
       if (action.action === "waiting-users") {
         setWaitingUsers(action.data.list)
       }
-    })
-  }, [setOnMessage, setUsers, setWaitingUsers])
-
+    }, 'waiting-users')
+  }, [setOnMessage, setWaitingUsers])
 
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.Message>) => {
-      if (action.action === "message") {
-        const message = action.data
-        setUsers(prevState => {
-          const newState = lodash.cloneDeep(prevState)
-          const user = newState.get(message.user_id)
-          if (user) {
-            user.messages.push(action)
+      const message = action.data
+      setUsers(prevState => {
+        const newState = lodash.cloneDeep(prevState)
+        const user = newState.get(message.user_id)
+        if (user) {
+          user.messages.push(action)
+          if (current !== user.id) {
             user.unread += 1
-            return newState
           }
-          return prevState
-        })
-      }
-    })
-  }, [setOnMessage, setUsers])
-
+          return newState
+        }
+        return prevState
+      })
+    }, 'message')
+  }, [current, setOnMessage, setUsers])
 
   React.useEffect(() => {
     connect()
