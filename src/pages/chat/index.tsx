@@ -7,14 +7,34 @@ import MessageList from './components/MessageList'
 import WaitingUser from './components/WaitingUser/index'
 import {useModel} from "umi"
 import lodash from 'lodash'
-import { message } from "antd";
+import { message, Modal } from "antd";
+import { removeToken } from "@/utils/auth";
+
 
 const Index: React.FC = () => {
 
-  const {connect, setOnMessage, setOnSend} = useModel('useWebsocketModel')
+  const {connect, setOnMessage, setOnSend, setOnClose, setOnError, setOnOpen} = useModel('useWebsocketModel')
   const {setUsers} = useModel('useUsersModel')
   const {setWaitingUsers} = useModel('useWaitingUserModel')
   const {current} = useModel('useCurrentModel')
+
+  React.useEffect(() => {
+    setOnOpen(() =>  () => {
+      message.success('连接聊天服务器成功').then()
+    })
+    setOnClose(() => () => {
+      Modal.error({
+        title: '提示',
+        content: '与服务器连接已断开',
+        okText: '请重新登录',
+        onOk: async () => {
+          removeToken()
+          window.location.reload()
+        }
+      })
+    })
+  }, [setOnOpen, setOnError, setOnClose, connect])
+
 
   React.useEffect(() => {
     setOnSend(() => {

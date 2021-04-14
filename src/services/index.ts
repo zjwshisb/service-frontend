@@ -28,6 +28,3 @@ export async function removeUser(uid: number) {
     method: 'delete'
   })
 }
-export async function outLogin() {
-  return request('/api/login/outLogin');
-}

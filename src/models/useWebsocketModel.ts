@@ -3,6 +3,7 @@ import {getToken} from "@/utils/auth";
 import lodash from 'lodash'
 
 export type ActionHandle<T = any> = (action: APP.Action<T>) => void
+export type EventHandle<T extends Event = Event> = (e: T) => void
 
 
 export default function useWebsocketModel() {
@@ -10,9 +11,9 @@ export default function useWebsocketModel() {
   const [websocket, setWebSocket] = React.useState<WebSocket | undefined>()
   const [onSend, setOnSend] = React.useState<ActionHandle | undefined>()
   const [onMessage, updateOnMessage] = React.useState<Map<APP.ActionType, ActionHandle>>(new Map())
-  const [onOpen, setOpen] = React.useState<(e: Event) => void>()
-  const [onError, setOnError] = React.useState<(e: Event) => void>()
-  const [onClose, setOnClose] = React.useState<(e: CloseEvent) => void>()
+  const [onOpen, setOnOpen] = React.useState<EventHandle>()
+  const [onError, setOnError] = React.useState<EventHandle>()
+  const [onClose, setOnClose] = React.useState<EventHandle<CloseEvent>>()
 
   React.useEffect(() => {
     if (websocket) {
@@ -21,7 +22,10 @@ export default function useWebsocketModel() {
           onOpen(e)
         }
       }
+      // 连接服务器失败
       websocket.onerror = (e: Event) => {
+        console.log('error')
+        console.log(e)
         if (onError) {
           onError(e)
         }
@@ -39,11 +43,12 @@ export default function useWebsocketModel() {
           console.log(err)
         }
       }
+      // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = e => {
+        setWebSocket(undefined)
         if (onClose) {
           onClose(e)
         }
-        setWebSocket(undefined)
       }
     }
   }, [onClose, onError, onMessage,onOpen, websocket])
@@ -66,9 +71,13 @@ export default function useWebsocketModel() {
 
   const send: <T>(msg: APP.Action<T>) => void = React.useCallback(<T>(action: APP.Action<T>) => {
     if (websocket) {
-      websocket.send(JSON.stringify(action))
-      if (onSend) {
-        onSend(action)
+      try {
+        websocket.send(JSON.stringify(action))
+        if (onSend) {
+          onSend(action)
+        }
+      }catch (e) {
+        console.log(e)
       }
     }
   }, [onSend, websocket])
@@ -77,7 +86,7 @@ export default function useWebsocketModel() {
     send,
     setOnSend,
     setOnMessage,
-    setOpen,
+    setOnOpen,
     setOnError,
     setOnClose,
   }

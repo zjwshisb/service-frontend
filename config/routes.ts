@@ -19,7 +19,8 @@
     path: '/chat',
     component: './chat/index',
     layout: {
-      hideMenu: true
+      hideMenu: true,
+      hideNav: true
     }
   }
 ];
