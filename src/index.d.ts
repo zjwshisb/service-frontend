@@ -2,19 +2,18 @@ declare namespace APP{
 
   export type MessageType = 'text' | 'image'
 
-  export type ActionType = 'message' | 'offline' | 'online' | 'receipt'
+  export type ActionType = 'message' | 'user-offline' | 'user-online' | 'receipt'
     | 'waiting-users' | 'accept-user' | 'server-user-list'
 
   export type Action<T = any> = {
-    req_id: number,
     action: ActionType,
     data: T,
     time: number,
-    is_success?: boolean
   }
 
   export type Receipt = {
-    user_id: number
+    user_id: number,
+    req_id: number
   }
 
   export type Message = {
@@ -24,6 +23,9 @@ declare namespace APP{
     id?: number
     content: string
     is_server: boolean
+    is_success?: boolean
+    req_id: number,
+    received_at: number
   }
 
   export type OffLine = {
@@ -52,7 +54,7 @@ declare namespace APP{
     username: string,
     avatar?: string,
     online: boolean,
-    messages: Action<APP.Message>[],
+    messages: APP.Message[],
     last_chat_time: number,
     unread: number,
     disabled: boolean

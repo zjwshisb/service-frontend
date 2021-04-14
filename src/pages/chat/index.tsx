@@ -7,6 +7,7 @@ import MessageList from './components/MessageList'
 import WaitingUser from './components/WaitingUser/index'
 import {useModel} from "umi"
 import lodash from 'lodash'
+import { message } from "antd";
 
 const Index: React.FC = () => {
 
@@ -22,7 +23,7 @@ const Index: React.FC = () => {
           const newState = lodash.cloneDeep(prevState)
           const user = newState.get(action.data.user_id)
           if (user) {
-            user.messages.push(action)
+            user.messages.push(action.data)
             return newState
           }
           return prevState
@@ -49,7 +50,7 @@ const Index: React.FC = () => {
       setUsers(prevState => {
         const user = prevState.get(action.data.user_id)
         if (user !== undefined) {
-          const index = user.messages.findIndex(v => v.req_id === action.req_id)
+          const index = user.messages.findIndex(v => v.req_id === action.data.req_id)
           if (index > -1) {
             user.messages[index].is_success = true
           }
@@ -58,7 +59,7 @@ const Index: React.FC = () => {
         return prevState
       })
     }, 'receipt')
-  }, [setOnMessage, setUsers, setWaitingUsers])
+  }, [setOnMessage, setUsers])
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<{list: APP.WaitingUser[]}>) => {
@@ -71,12 +72,12 @@ const Index: React.FC = () => {
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.Message>) => {
-      const message = action.data
+      const msg = action.data
       setUsers(prevState => {
         const newState = lodash.cloneDeep(prevState)
-        const user = newState.get(message.user_id)
+        const user = newState.get(msg.user_id)
         if (user) {
-          user.messages.push(action)
+          user.messages.push(action.data)
           if (current !== user.id) {
             user.unread += 1
           }
@@ -86,6 +87,40 @@ const Index: React.FC = () => {
       })
     }, 'message')
   }, [current, setOnMessage, setUsers])
+
+  React.useEffect(() => {
+    setOnMessage((action: APP.Action<APP.OnLine>) => {
+      setUsers(prevState => {
+        if ( prevState.get(action.data.user_id)) {
+          const newState = lodash.cloneDeep(prevState)
+          const user = newState.get(action.data.user_id)
+          if (user) {
+            user.online = true
+            message.success(`${user.username}上线啦`).then()
+          }
+          return newState
+        }
+        return prevState
+      })
+    }, 'user-online')
+  }, [setOnMessage, setUsers])
+
+  React.useEffect(() => {
+    setOnMessage((action: APP.Action<APP.OffLine>) => {
+      setUsers(prevState => {
+        if ( prevState.get(action.data.user_id)) {
+          const newState = lodash.cloneDeep(prevState)
+          const user = newState.get(action.data.user_id)
+          if (user) {
+            user.online = false
+            message.info(`${user.username}下线啦`).then()
+          }
+          return newState
+        }
+        return prevState
+      })
+    }, 'user-offline')
+  }, [setOnMessage, setUsers])
 
   React.useEffect(() => {
     connect()

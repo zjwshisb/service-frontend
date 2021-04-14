@@ -7,7 +7,8 @@ const Index: React.FC = () => {
   const {current} = useModel('useCurrentModel')
   const users = useModel('useUsersModel')
   const ref = React.useRef<HTMLDivElement>(null)
-  React.useEffect(() => {
+
+  React.useLayoutEffect(() => {
     if (ref.current != null) {
       const {scrollHeight, clientHeight} = ref.current
       const maxScrollTop = scrollHeight - clientHeight
@@ -17,8 +18,8 @@ const Index: React.FC = () => {
   return <div className='message-list' ref={ref}>
     {
       users.users.get(current)?.messages.map(v => {
-        if (v.data.type === 'text') {
-          return <MessageItem action={v}  key={v.req_id} />
+        if (v.type === 'text') {
+          return <MessageItem message={v}  key={v.req_id} />
         }
         return <></>
       })

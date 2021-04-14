@@ -3,15 +3,17 @@ export function createReqId(minNum: number = 10000000000,maxNum: number = 999999
 }
 
 export function createMsg(content: string, userId: number, type: APP.MessageType = 'text'): APP.Action<APP.Message> {
+  const id = createReqId()
   return {
     action: 'message',
     data: {
       type,
       user_id: userId,
       content,
-      is_server: true
+      is_server: true,
+      req_id: id,
+      received_at: (new Date()).getTime(),
     },
-    req_id: createReqId(),
     time: (new Date()).getTime(),
   }
 }
