@@ -1,21 +1,21 @@
 import React from 'react';
-import type {Settings as LayoutSettings} from '@ant-design/pro-layout';
-import {PageLoading} from '@ant-design/pro-layout';
-import {notification} from 'antd';
-import type {RequestConfig, RunTimeLayoutConfig} from 'umi';
-import {history} from 'umi';
+import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
+import { PageLoading } from '@ant-design/pro-layout';
+import { notification } from 'antd';
+import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
+import { history } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import type {ResponseError} from 'umi-request';
-import {queryCurrent} from '@/services';
+import type { ResponseError } from 'umi-request';
+import { queryCurrent } from '@/services';
 import defaultSettings from '../config/defaultSettings';
-import {getToken} from "@/utils/auth";
+import { getToken } from '@/utils/auth';
 
 /**
  * 获取用户信息比较慢的时候会展示一个 loading
  */
 export const initialStateConfig = {
-  loading: <PageLoading/>,
+  loading: <PageLoading />,
 };
 
 export async function getInitialState(): Promise<{
@@ -25,9 +25,10 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const token = getToken()
+      const token = getToken();
       if (token) {
-        return await queryCurrent();
+        const res = await queryCurrent();
+        return res.data;
       }
     } catch (error) {
       history.push('/user/login');
@@ -36,7 +37,7 @@ export async function getInitialState(): Promise<{
   };
   const currentUser = await fetchUserInfo();
   if (!currentUser) {
-    history.push('/')
+    history.push('/chat');
   }
   return {
     fetchUserInfo,
@@ -45,13 +46,13 @@ export async function getInitialState(): Promise<{
   };
 }
 
-export const layout: RunTimeLayoutConfig = ({initialState}) => {
+export const layout: RunTimeLayoutConfig = ({ initialState }) => {
   return {
-    rightContentRender: () => <RightContent/>,
+    rightContentRender: () => <RightContent />,
     disableContentMargin: false,
-    footerRender: () => <Footer/>,
+    footerRender: () => <Footer />,
     onPageChange: () => {
-      const {location} = history;
+      const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== '/user/login') {
         history.push('/user/login');
@@ -87,13 +88,13 @@ const codeMessage = {
  * 异常处理程序
  */
 const errorHandler = (error: ResponseError) => {
-  const {response} = error;
+  const { response } = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
-    const {status, url} = response;
+    const { status, url } = response;
     switch (response.status) {
       case 401: {
-        break
+        break;
       }
       default: {
         notification.error({
@@ -102,7 +103,6 @@ const errorHandler = (error: ResponseError) => {
         });
       }
     }
-
   }
   throw error;
 };
@@ -112,24 +112,24 @@ export const request: RequestConfig = {
   prefix: BASE_URL,
   requestInterceptors: [
     (url, options) => {
-      const token= getToken()
+      const token = getToken();
       if (token) {
         const headers = {
-          Authorization: `bearer ${  getToken()}`,
-          ...options.headers
-        }
+          Authorization: `bearer ${getToken()}`,
+          ...options.headers,
+        };
         return {
           url,
           options: {
             ...options,
             headers,
-          }
-        }
+          },
+        };
       }
       return {
         url,
-        options
-      }
-    }
-  ]
+        options,
+      };
+    },
+  ],
 };
