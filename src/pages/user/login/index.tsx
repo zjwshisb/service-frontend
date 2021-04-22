@@ -1,29 +1,13 @@
-import {
-  LockTwoTone,
-  UserOutlined,
-} from '@ant-design/icons';
-import {Alert, message} from 'antd';
-import React, {useState} from 'react';
-import ProForm, {ProFormText} from '@ant-design/pro-form';
-import {Link, history, useModel} from 'umi';
-import type {LoginParamsType} from '@/services';
-import {index} from '@/services';
-import {setToken} from "@/utils/auth";
+import { LockTwoTone, UserOutlined } from '@ant-design/icons';
+import { message } from 'antd';
+import React, { useState } from 'react';
+import ProForm, { ProFormText } from '@ant-design/pro-form';
+import { Link, history, useModel } from 'umi';
+import type { LoginParamsType } from '@/services';
+import { index } from '@/services';
+import { setToken } from '@/utils/auth';
 
 import styles from './index.less';
-
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({content}) => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
 
 /**
  * 此方法会跳转到 redirect 参数所在的位置
@@ -31,16 +15,15 @@ const LoginMessage: React.FC<{
 const goto = () => {
   if (!history) return;
   setTimeout(() => {
-    const {query} = history.location;
-    const {redirect} = query as { redirect: string };
-    history.push(redirect || '/');
+    const { query } = history.location;
+    const { redirect } = query as { redirect: string };
+    history.push(redirect || '/chat');
   }, 10);
 };
 
 const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
-  const {initialState, setInitialState} = useModel('@@initialState');
-
+  const { initialState, setInitialState } = useModel('@@initialState');
 
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
@@ -56,10 +39,10 @@ const Login: React.FC = () => {
     setSubmitting(true);
     try {
       // 登录
-      const resp = await index({...values});
+      const resp = await index({ ...values });
       if (resp.success) {
         message.success('登录成功！');
-        setToken(resp.data.token)
+        setToken(resp.data.token);
         await fetchUserInfo();
         goto();
         return;
@@ -77,7 +60,7 @@ const Login: React.FC = () => {
         <div className={styles.top}>
           <div className={styles.header}>
             <Link to="/">
-              <img alt="logo" className={styles.logo} src="/logo.svg"/>
+              <img alt="logo" className={styles.logo} src="/logo.svg" />
               <span className={styles.title}>Ant Design</span>
             </Link>
           </div>
@@ -91,7 +74,7 @@ const Login: React.FC = () => {
             }}
             submitter={{
               searchConfig: {
-                submitText: '登录'
+                submitText: '登录',
               },
               render: (_, dom) => dom.pop(),
               submitButtonProps: {
@@ -106,24 +89,18 @@ const Login: React.FC = () => {
               await handleSubmit(values as LoginParamsType);
             }}
           >
-            {status === 'error' && (
-              <LoginMessage
-                content='账户或密码错误'
-              />
-            )}
-
             <>
               <ProFormText
                 name="username"
                 fieldProps={{
                   size: 'large',
-                  prefix: <UserOutlined className={styles.prefixIcon}/>,
+                  prefix: <UserOutlined className={styles.prefixIcon} />,
                 }}
-                placeholder='用户名'
+                placeholder="用户名"
                 rules={[
                   {
                     required: true,
-                    message: '请输入用户名!'
+                    message: '请输入用户名!',
                   },
                 ]}
               />
@@ -131,9 +108,9 @@ const Login: React.FC = () => {
                 name="password"
                 fieldProps={{
                   size: 'large',
-                  prefix: <LockTwoTone className={styles.prefixIcon}/>,
+                  prefix: <LockTwoTone className={styles.prefixIcon} />,
                 }}
-                placeholder='密码'
+                placeholder="密码"
                 rules={[
                   {
                     required: true,
@@ -146,8 +123,7 @@ const Login: React.FC = () => {
               style={{
                 marginBottom: 24,
               }}
-            >
-            </div>
+            ></div>
           </ProForm>
         </div>
       </div>
