@@ -1,62 +1,65 @@
-declare namespace APP{
+declare namespace APP {
+  export type MessageType = 'text' | 'image';
 
-  export type MessageType = 'text' | 'image'
-
-  export type ActionType = 'message' | 'user-offline' | 'user-online' | 'receipt'
-    | 'waiting-users' | 'accept-user' | 'server-user-list'
+  export type ActionType =
+    | 'send-message'
+    | 'user-offline'
+    | 'user-online'
+    | 'receipt'
+    | 'waiting-users'
+    | 'accept-user'
+    | 'server-user-list'
+    | 'receive-message';
 
   export type Action<T = any> = {
-    action: ActionType,
-    data: T,
-    time: number,
-  }
+    action: ActionType;
+    data: T;
+    time: number;
+  };
 
   export type Receipt = {
-    user_id: number,
-    req_id: number
-  }
+    user_id: number;
+    req_id: number;
+  };
 
   export type Message = {
-    type: MessageType
-    user_id: number
-    service_id?: number
-    id?: number
-    content: string
-    is_server: boolean
-    is_success?: boolean
-    req_id: number,
-    received_at: number
-  }
+    type: MessageType;
+    user_id: number;
+    service_id?: number;
+    id?: number;
+    content: string;
+    is_server: boolean;
+    is_success?: boolean;
+    req_id: number;
+    received_at: number;
+    avatar: string;
+  };
 
   export type OffLine = {
-    user_id: number
-  }
+    user_id: number;
+  };
 
   export type OnLine = {
-    user_id: number
-  }
+    user_id: number;
+  };
 
   export type WaitingUser = {
-    id: number,
-    username: string
-  }
+    id: number;
+    username: string;
+  };
 
   export type UserList = {
-    list: APP.User[]
-  }
-
-  export type WaitingUserData = {
-    list: WaitingUser[]
-  }
+    list: APP.User[];
+  };
 
   export type User = {
-    id: number,
-    username: string,
-    avatar?: string,
-    online: boolean,
-    messages: APP.Message[],
-    last_chat_time: number,
-    unread: number,
-    disabled: boolean
-  }
+    id: number;
+    username: string;
+    avatar?: string;
+    online: boolean;
+    messages: APP.Message[];
+    last_chat_time: number;
+    unread: number;
+    disabled: boolean;
+  };
 }

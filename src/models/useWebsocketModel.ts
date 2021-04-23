@@ -1,6 +1,7 @@
 import React from 'react';
 import { getToken } from '@/utils/auth';
 import lodash from 'lodash';
+import { useModel } from '@@/plugin-model/useModel';
 
 export type ActionHandle<T = any> = (action: APP.Action<T>) => void;
 export type EventHandle<T extends Event = Event> = (e: T) => void;
@@ -12,6 +13,8 @@ export default function useWebsocketModel() {
   const [onOpen, setOnOpen] = React.useState<EventHandle>();
   const [onError, setOnError] = React.useState<EventHandle>();
   const [onClose, setOnClose] = React.useState<EventHandle<CloseEvent>>();
+
+  const { setUsers } = useModel('useUsersModel');
 
   React.useEffect(() => {
     if (websocket) {
@@ -67,11 +70,27 @@ export default function useWebsocketModel() {
     [],
   );
 
-  const send: <T>(msg: APP.Action<T>) => void = React.useCallback(
-    <T>(action: APP.Action<T>) => {
+  const send: (msg: APP.Action<APP.Message>) => void = React.useCallback(
+    (action: APP.Action<APP.Message>) => {
       if (websocket) {
         try {
           websocket.send(JSON.stringify(action));
+          // 2秒后没有收到回执则把消息状态改成发送失败
+          setTimeout(() => {
+            setUsers((prevState) => {
+              const u = prevState.get(action.data.user_id);
+              if (u) {
+                const msg = u.messages.find((v) => v.req_id === action.data.req_id);
+                if (msg && msg.is_success === undefined) {
+                  msg.is_success = false;
+                  const newState = lodash.cloneDeep(prevState);
+                  prevState.set(u.id, u);
+                  return newState;
+                }
+              }
+              return prevState;
+            });
+          }, 2000);
           if (onSend) {
             onSend(action);
           }
@@ -80,7 +99,7 @@ export default function useWebsocketModel() {
         }
       }
     },
-    [onSend, websocket],
+    [onSend, setUsers, websocket],
   );
   return {
     connect,

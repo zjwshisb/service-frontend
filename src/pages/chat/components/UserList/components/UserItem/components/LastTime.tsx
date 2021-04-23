@@ -8,7 +8,7 @@ const Index: React.FC<{
 
   React.useEffect(() => {
     const today = moment();
-    const pre = moment(props.time);
+    const pre = moment(props.time * 1000);
     if (
       pre.year() === today.year() &&
       pre.month() === today.month() &&

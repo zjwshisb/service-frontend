@@ -9,13 +9,14 @@ export function createMsg(
 ): APP.Action<APP.Message> {
   const id = createReqId();
   return {
-    action: 'message',
+    action: 'send-message',
     data: {
       type,
       user_id: userId,
       content,
       is_server: true,
       req_id: id,
+      avatar: '',
       received_at: new Date().getTime() / 1000,
     },
     time: new Date().getTime(),

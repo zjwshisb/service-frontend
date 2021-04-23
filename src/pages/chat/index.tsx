@@ -1,11 +1,10 @@
 import React from 'react';
 import './index.less';
-import Action from './components/Action/index';
-import Input from './components/Input/index';
 import UserList from './components/UserList/index';
 import MessageList from './components/MessageList/index';
 import WaitingUser from './components/WaitingUser/index';
 import Menu from './components/Menu/index';
+import InputArea from './components/InputArea/index';
 import { useModel } from 'umi';
 import lodash from 'lodash';
 import { message } from 'antd';
@@ -19,6 +18,7 @@ const Index: React.FC = () => {
   const { setUsers } = useModel('useUsersModel');
   const { setWaitingUsers } = useModel('useWaitingUserModel');
   const { current } = useModel('useCurrentModel');
+  const initialState = useModel('@@initialState');
 
   React.useEffect(() => {
     setOnOpen(() => () => {
@@ -32,18 +32,21 @@ const Index: React.FC = () => {
   React.useEffect(() => {
     setOnSend(() => {
       return (action: APP.Action<APP.Message>) => {
+        const avatar = initialState.initialState?.currentUser?.avatar || '';
+        const msg = action.data;
+        msg.avatar = avatar;
         setUsers((prevState) => {
           const newState = lodash.cloneDeep(prevState);
-          const user = newState.get(action.data.user_id);
+          const user = newState.get(msg.user_id);
           if (user) {
-            user.messages.push(action.data);
+            user.messages.push(msg);
             return newState;
           }
           return prevState;
         });
       };
     });
-  }, [setOnSend, setUsers]);
+  }, [initialState.initialState?.currentUser?.avatar, setOnSend, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.UserList>) => {
@@ -98,7 +101,7 @@ const Index: React.FC = () => {
         }
         return prevState;
       });
-    }, 'message');
+    }, 'receive-message');
   }, [current, setOnMessage, setUsers]);
 
   React.useEffect(() => {
@@ -154,8 +157,7 @@ const Index: React.FC = () => {
           <UserList />
           <div className={styles.message}>
             <MessageList />
-            <Action />
-            <Input />
+            <InputArea />
           </div>
         </div>
       </div>

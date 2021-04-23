@@ -1,20 +1,17 @@
 import React from 'react';
-import { Modal, Avatar, Upload } from 'antd';
+import { Modal, Avatar } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
-import { getToken } from '@/utils/auth';
+import Upload from '@/components/Upload/index';
+import type { UploadFile } from 'antd/lib/upload/interface';
 
 const Index: React.FC = () => {
   const [visible, setVisible] = React.useState(false);
 
   const initialState = useModel('@@initialState');
 
-  const headers = {
-    Authorization: `bearer ${getToken()}`,
-  };
-
   const onChange = React.useCallback(
-    (e) => {
-      if (e.event && e.event.percent === 100) {
+    (file: UploadFile) => {
+      if (file.status === 'done') {
         initialState.refresh();
       }
     },
@@ -25,13 +22,7 @@ const Index: React.FC = () => {
     <>
       <a onClick={() => setVisible(true)}>更换头像</a>
       <Modal footer={<></>} visible={visible} onCancel={() => setVisible(false)} width={400}>
-        <Upload
-          onChange={onChange}
-          showUploadList={false}
-          accept="image/*"
-          headers={headers}
-          action={`${BASE_URL}/me/avatar`}
-        >
+        <Upload onChange={onChange} action={`${BASE_URL}/me/avatar`}>
           <Avatar
             className={'pointer'}
             shape="square"
