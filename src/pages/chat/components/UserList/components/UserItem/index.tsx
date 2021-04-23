@@ -14,20 +14,25 @@ const Index: React.FC<{
   const { setCurrent, current } = useModel('useCurrentModel');
   const { setUsers } = useModel('useUsersModel');
 
-  const onClick = React.useCallback(() => {
-    setCurrent(props.user.id);
-    setUsers((prevState) => {
-      const newState = lodash.cloneDeep(prevState);
-      const u = newState.get(props.user.id);
-      if (u) {
-        if (u.unread > 0) {
-          u.unread = 0;
-          handleRead(u.id).then().catch();
+  const onClick = React.useCallback(
+    (id) => {
+      setUsers((prevState) => {
+        const newUsers = lodash.cloneDeep(prevState);
+        const user = newUsers.get(id);
+        if (user) {
+          user.unread = 0;
+          setCurrent(lodash.cloneDeep(user));
+          if (current) {
+            newUsers.set(current.id, current);
+          }
+          newUsers.delete(id);
+          handleRead(id).then().catch();
         }
-      }
-      return newState;
-    });
-  }, [props.user.id, setCurrent, setUsers]);
+        return newUsers;
+      });
+    },
+    [current, setCurrent, setUsers],
+  );
 
   const { length } = props.user.messages;
 
@@ -35,7 +40,11 @@ const Index: React.FC<{
     length > 0 ? props.user.messages[length - 1] : undefined;
 
   return (
-    <div className={styles.item} onClick={onClick} data-active={current === props.user.id}>
+    <div
+      className={styles.item}
+      onClick={() => onClick(props.user.id)}
+      data-active={current && current.id === props.user.id}
+    >
       <div className={styles.avatar}>
         <Badge count={props.user.unread} size={'small'}>
           <Avatar size={50} shape="square">

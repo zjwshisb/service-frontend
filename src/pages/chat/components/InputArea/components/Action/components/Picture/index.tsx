@@ -11,10 +11,12 @@ const Index = () => {
 
   const onChange = React.useCallback(
     (file: UploadFile) => {
-      if (file.status === 'done') {
-        const resp = file.response;
-        const action = createMsg(resp.data.url, current, 'image');
-        send(action);
+      if (current) {
+        if (file.status === 'done') {
+          const resp = file.response;
+          const action = createMsg(resp.data.url, current.id, 'image');
+          send(action);
+        }
       }
     },
     [current, send],

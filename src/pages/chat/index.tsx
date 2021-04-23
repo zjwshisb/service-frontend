@@ -17,7 +17,7 @@ const Index: React.FC = () => {
   );
   const { setUsers } = useModel('useUsersModel');
   const { setWaitingUsers } = useModel('useWaitingUserModel');
-  const { current } = useModel('useCurrentModel');
+  const { current, setCurrent } = useModel('useCurrentModel');
   const initialState = useModel('@@initialState');
 
   React.useEffect(() => {
@@ -35,18 +35,29 @@ const Index: React.FC = () => {
         const avatar = initialState.initialState?.currentUser?.avatar || '';
         const msg = action.data;
         msg.avatar = avatar;
-        setUsers((prevState) => {
-          const newState = lodash.cloneDeep(prevState);
-          const user = newState.get(msg.user_id);
-          if (user) {
-            user.messages.push(msg);
-            return newState;
-          }
-          return prevState;
-        });
+        if (current && current.id === action.data.user_id) {
+          setCurrent((prevState) => {
+            if (prevState) {
+              const newState = lodash.cloneDeep(prevState);
+              newState.messages.push(msg);
+              return newState;
+            }
+            return prevState;
+          });
+        } else {
+          setUsers((prevState) => {
+            const newState = lodash.cloneDeep(prevState);
+            const user = newState.get(msg.user_id);
+            if (user) {
+              user.messages.push(msg);
+              return newState;
+            }
+            return prevState;
+          });
+        }
       };
     });
-  }, [initialState.initialState?.currentUser?.avatar, setOnSend, setUsers]);
+  }, [current, initialState.initialState?.currentUser?.avatar, setCurrent, setOnSend, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.UserList>) => {
@@ -62,19 +73,33 @@ const Index: React.FC = () => {
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.Receipt>) => {
-      setUsers((prevState) => {
-        const user = prevState.get(action.data.user_id);
-        if (user !== undefined) {
-          const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
-          if (index > -1) {
-            user.messages[index].is_success = true;
+      if (action.data.user_id === current?.id) {
+        setCurrent((user) => {
+          if (user) {
+            const newUser = lodash.cloneDeep(user);
+            const index = newUser.messages.findIndex((v) => v.req_id === action.data.req_id);
+            if (index > -1) {
+              newUser.messages[index].is_success = true;
+            }
+            return newUser;
           }
-          return lodash.cloneDeep(prevState);
-        }
-        return prevState;
-      });
+          return user;
+        });
+      } else {
+        setUsers((prevState) => {
+          const user = prevState.get(action.data.user_id);
+          if (user !== undefined) {
+            const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
+            if (index > -1) {
+              user.messages[index].is_success = true;
+            }
+            return lodash.cloneDeep(prevState);
+          }
+          return prevState;
+        });
+      }
     }, 'receipt');
-  }, [setOnMessage, setUsers]);
+  }, [current?.id, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<{ list: APP.WaitingUser[] }>) => {
@@ -87,22 +112,30 @@ const Index: React.FC = () => {
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.Message>) => {
       const msg = action.data;
-      setUsers((prevState) => {
-        const newState = lodash.cloneDeep(prevState);
-        const user = newState.get(msg.user_id);
-        if (user) {
-          user.messages.push(action.data);
-          if (current !== user.id) {
-            user.unread += 1;
-          } else {
-            handleRead(current).catch();
+      if (msg.user_id === current?.id) {
+        setCurrent((prevState) => {
+          if (prevState) {
+            const newState = lodash.cloneDeep(prevState);
+            newState.messages.push(msg);
+            handleRead(msg.user_id);
+            return newState;
           }
-          return newState;
-        }
-        return prevState;
-      });
+          return prevState;
+        });
+      } else {
+        setUsers((prevState) => {
+          const newState = lodash.clone(prevState);
+          const user = newState.get(msg.user_id);
+          if (user) {
+            user.messages.push(action.data);
+            user.unread += 1;
+            return newState;
+          }
+          return prevState;
+        });
+      }
     }, 'receive-message');
-  }, [current, setOnMessage, setUsers]);
+  }, [current, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.OnLine>) => {

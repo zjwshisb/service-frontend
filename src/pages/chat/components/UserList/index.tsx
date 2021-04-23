@@ -6,6 +6,8 @@ import styles from './index.less';
 const Index: React.FC = () => {
   const users = useModel('useUsersModel');
 
+  const { current } = useModel('useCurrentModel');
+
   const userList = React.useMemo(() => {
     let u = Array.from(users.users).map((v) => {
       return v[1];
@@ -19,10 +21,13 @@ const Index: React.FC = () => {
       }
       return 1;
     });
+    if (current) {
+      u = [current].concat(u);
+    }
     return u.map((v) => {
       return <UserItem user={v} key={v.id} />;
     });
-  }, [users.users]);
+  }, [current, users.users]);
 
   return <div className={styles.list}>{userList}</div>;
 };

@@ -11,28 +11,24 @@ const Index: React.FC = () => {
   const webSocket = useModel('useWebsocketModel');
 
   const { current } = useModel('useCurrentModel');
-  const { users } = useModel('useUsersModel');
 
   const sendMsg = React.useCallback(
     (event: React.KeyboardEvent) => {
       if (event.shiftKey && event.code === 'Enter') {
         if (current) {
-          const currentUser = users.get(current);
-          if (currentUser) {
-            const content = form.getFieldValue('message');
-            if (content !== '') {
-              const action = createMsg(content, currentUser.id);
-              webSocket.send(action);
-              form.setFieldsValue({
-                message: '',
-              });
-            }
-            event.preventDefault();
+          const content = form.getFieldValue('message');
+          if (content !== '') {
+            const action = createMsg(content, current.id);
+            webSocket.send(action);
+            form.setFieldsValue({
+              message: '',
+            });
           }
+          event.preventDefault();
         }
       }
     },
-    [current, form, users, webSocket],
+    [current, form, webSocket],
   );
   return (
     <div className={styles.input}>

@@ -15,6 +15,7 @@ export default function useWebsocketModel() {
   const [onClose, setOnClose] = React.useState<EventHandle<CloseEvent>>();
 
   const { setUsers } = useModel('useUsersModel');
+  const { current, setCurrent } = useModel('useCurrentModel');
 
   React.useEffect(() => {
     if (websocket) {
@@ -77,19 +78,35 @@ export default function useWebsocketModel() {
           websocket.send(JSON.stringify(action));
           // 2秒后没有收到回执则把消息状态改成发送失败
           setTimeout(() => {
-            setUsers((prevState) => {
-              const u = prevState.get(action.data.user_id);
-              if (u) {
-                const msg = u.messages.find((v) => v.req_id === action.data.req_id);
-                if (msg && msg.is_success === undefined) {
-                  msg.is_success = false;
-                  const newState = lodash.cloneDeep(prevState);
-                  prevState.set(u.id, u);
-                  return newState;
+            if (action.data.user_id === current?.id) {
+              setCurrent((user) => {
+                if (user) {
+                  const newUser = lodash.cloneDeep(user);
+                  const index = newUser.messages.findIndex((v) => v.req_id === action.data.req_id);
+                  if (index > -1) {
+                    if (newUser.messages[index].is_success === undefined) {
+                      newUser.messages[index].is_success = false;
+                    }
+                  }
+                  return newUser;
                 }
-              }
-              return prevState;
-            });
+                return user;
+              });
+            } else {
+              setUsers((prevState) => {
+                const user = prevState.get(action.data.user_id);
+                if (user !== undefined) {
+                  const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
+                  if (index > -1) {
+                    if (user.messages[index].is_success === undefined) {
+                      user.messages[index].is_success = false;
+                    }
+                  }
+                  return lodash.cloneDeep(prevState);
+                }
+                return prevState;
+              });
+            }
           }, 2000);
           if (onSend) {
             onSend(action);
@@ -99,7 +116,7 @@ export default function useWebsocketModel() {
         }
       }
     },
-    [onSend, setUsers, websocket],
+    [current?.id, onSend, setCurrent, setUsers, websocket],
   );
   return {
     connect,

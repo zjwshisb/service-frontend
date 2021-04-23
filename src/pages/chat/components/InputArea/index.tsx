@@ -11,12 +11,11 @@ const Index: React.FC = () => {
   const [disabled, setDisabled] = React.useState(false);
 
   React.useEffect(() => {
-    if (current === 0) {
+    if (!current) {
       setDisabled(true);
       return;
     }
-    const u = users.get(current);
-    if (u && u.disabled) {
+    if (current.disabled) {
       setDisabled(true);
       return;
     }
