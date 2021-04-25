@@ -7,8 +7,6 @@ declare namespace APP {
     | 'user-online'
     | 'receipt'
     | 'waiting-users'
-    | 'accept-user'
-    | 'server-user-list'
     | 'receive-message';
 
   export type Action<T = any> = {
@@ -46,10 +44,6 @@ declare namespace APP {
   export type WaitingUser = {
     id: number;
     username: string;
-  };
-
-  export type UserList = {
-    list: APP.User[];
   };
 
   export type User = {

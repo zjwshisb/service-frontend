@@ -1,6 +1,6 @@
 import React from 'react';
 import Action from './components/Action/index';
-import Input from './components/Input/index';
+import Input from './components/Text/index';
 import { useModel } from 'umi';
 import styles from './index.less';
 

@@ -4,11 +4,11 @@ import UserList from './components/UserList/index';
 import MessageList from './components/MessageList/index';
 import WaitingUser from './components/WaitingUser/index';
 import Menu from './components/Menu/index';
-import InputArea from './components/InputArea/index';
+import InputArea from './components/Input/index';
 import { useModel } from 'umi';
 import lodash from 'lodash';
 import { message } from 'antd';
-import { handleRead } from '@/services';
+import { handleRead, getUsers } from '@/services';
 import styles from './index.less';
 
 const Index: React.FC = () => {
@@ -37,6 +37,7 @@ const Index: React.FC = () => {
         msg.avatar = avatar;
         if (current && current.id === action.data.user_id) {
           setCurrent((prevState) => {
+            current.last_chat_time = msg.received_at;
             if (prevState) {
               const newState = lodash.cloneDeep(prevState);
               newState.messages.push(msg);
@@ -58,18 +59,6 @@ const Index: React.FC = () => {
       };
     });
   }, [current, initialState.initialState?.currentUser?.avatar, setCurrent, setOnSend, setUsers]);
-
-  React.useEffect(() => {
-    setOnMessage((action: APP.Action<APP.UserList>) => {
-      setUsers(() => {
-        const map = new Map<number, APP.User>();
-        action.data.list.forEach((v) => {
-          map.set(v.id, v);
-        });
-        return map;
-      });
-    }, 'server-user-list');
-  }, [setOnMessage, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.Receipt>) => {
@@ -102,9 +91,9 @@ const Index: React.FC = () => {
   }, [current?.id, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
-    setOnMessage((action: APP.Action<{ list: APP.WaitingUser[] }>) => {
+    setOnMessage((action: APP.Action<APP.WaitingUser[]>) => {
       if (action.action === 'waiting-users') {
-        setWaitingUsers(action.data.list);
+        setWaitingUsers(action.data);
       }
     }, 'waiting-users');
   }, [setOnMessage, setWaitingUsers]);
@@ -117,7 +106,7 @@ const Index: React.FC = () => {
           if (prevState) {
             const newState = lodash.cloneDeep(prevState);
             newState.messages.push(msg);
-            handleRead(msg.user_id);
+            handleRead(msg.user_id).then();
             return newState;
           }
           return prevState;
@@ -139,41 +128,64 @@ const Index: React.FC = () => {
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.OnLine>) => {
+      setCurrent((prevState) => {
+        if (action.data.user_id === prevState?.id) {
+          const newState = lodash.cloneDeep(prevState);
+          newState.online = true;
+          return newState;
+        }
+        return prevState;
+      });
       setUsers((prevState) => {
         if (prevState.get(action.data.user_id)) {
           const newState = lodash.cloneDeep(prevState);
           const user = newState.get(action.data.user_id);
           if (user) {
             user.online = true;
-            message.success(`${user.username}上线啦`).then();
           }
           return newState;
         }
         return prevState;
       });
     }, 'user-online');
-  }, [setOnMessage, setUsers]);
+  }, [setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.OffLine>) => {
+      setCurrent((prevState) => {
+        if (action.data.user_id === prevState?.id) {
+          const newState = lodash.cloneDeep(prevState);
+          newState.online = false;
+          return newState;
+        }
+        return prevState;
+      });
       setUsers((prevState) => {
         if (prevState.get(action.data.user_id)) {
           const newState = lodash.cloneDeep(prevState);
           const user = newState.get(action.data.user_id);
           if (user) {
             user.online = false;
-            message.info(`${user.username}下线啦`).then();
           }
           return newState;
         }
         return prevState;
       });
     }, 'user-offline');
-  }, [setOnMessage, setUsers]);
+  }, [setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
-    connect();
-  }, [connect]);
+    getUsers().then((res) => {
+      setUsers(() => {
+        const map = new Map<number, APP.User>();
+        res.data.forEach((v) => {
+          map.set(v.id, v);
+        });
+        connect();
+        return map;
+      });
+    });
+  }, [connect, setUsers]);
 
   return (
     <div className={styles.chat_container}>

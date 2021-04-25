@@ -19,22 +19,35 @@ const Index: React.FC = () => {
   const [messages, setMessages] = React.useState<APP.Message[]>([]);
   const [offset, setOffset] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
-  const [bottomDis, setBottomDis] = React.useState(0);
+  const [scrollBottom, setScrollBottom] = React.useState(0);
+
+  // 保存上一帧的聊天对象
+  const userRef = React.useRef<APP.User>();
 
   // 切换当前聊天用户
   // 接受到当前聊天用户的消息
   // 给当前聊天用户发送消息
-  // 消息列表重新渲染
   React.useEffect(() => {
+    const prevUser = userRef.current;
     if (current) {
-      setBottomDis(0);
+      userRef.current = current;
       const { length } = current.messages;
-      if (length <= pageSize) {
-        setMessages(current.messages);
+      if (prevUser && prevUser.id === current.id) {
+        setOffset((prevState) => {
+          setMessages(current.messages.slice(prevState));
+          return prevState;
+        });
+        setScrollBottom(0);
       } else {
-        const off = length - pageSize;
-        setOffset(off);
-        setMessages(current.messages.slice(off));
+        let os = 0;
+        if (length <= pageSize) {
+          setMessages(current.messages);
+        } else {
+          os = length - pageSize;
+          setMessages(current.messages.slice(os));
+        }
+        setOffset(os);
+        setScrollBottom(0);
       }
     }
   }, [current]);
@@ -44,9 +57,9 @@ const Index: React.FC = () => {
     (e: React.UIEvent<HTMLElement>) => {
       const el = e.target as HTMLDivElement;
       const top = el.scrollTop;
-      const scrollBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+      const scrollBot = el.scrollHeight - el.scrollTop - el.clientHeight;
       if (!loading && top < 30 && offset > 0) {
-        setBottomDis(scrollBottom);
+        setScrollBottom(scrollBot);
         setLoading(true);
         setMessages((prevState) => {
           if (current && offset > 0) {
@@ -69,22 +82,24 @@ const Index: React.FC = () => {
   React.useLayoutEffect(() => {
     if (ref.current != null) {
       const { scrollHeight, clientHeight } = ref.current;
-      const maxScrollTop = scrollHeight - clientHeight - bottomDis;
+      const maxScrollTop = scrollHeight - clientHeight - scrollBottom;
       ref.current.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
     }
-  }, [bottomDis, messages]);
+  }, [scrollBottom, messages]);
 
-  return (
-    <div className={styles.list} ref={ref} onScroll={onScroll}>
-      {messages.map((v) => {
-        return <MessageItem message={v} key={v.req_id} />;
-      })}
-      {current?.disabled && (
-        <div className={'disabled-notice'}>
-          <Alert type={'warning'} message={'已过失效，无法交谈'} />
-        </div>
-      )}
-    </div>
-  );
+  return React.useMemo(() => {
+    return (
+      <div className={styles.list} ref={ref} onScroll={onScroll}>
+        {messages.map((v) => {
+          return <MessageItem message={v} key={v.req_id} />;
+        })}
+        {current?.disabled && (
+          <div className={'disabled-notice'}>
+            <Alert type={'warning'} message={'已过失效，无法交谈'} />
+          </div>
+        )}
+      </div>
+    );
+  }, [current?.disabled, messages, onScroll]);
 };
 export default Index;
