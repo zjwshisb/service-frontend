@@ -2,7 +2,8 @@ import React from 'react';
 import './index.less';
 import UserList from './components/UserList/index';
 import MessageList from './components/MessageList/index';
-import WaitingUser from './components/WaitingUser/index';
+import WaitingUser from './components/WaitingUserList/index';
+import WaitingUserInfo from './components/WaitingUserInfo/index';
 import Menu from './components/Menu/index';
 import InputArea from './components/Input/index';
 import { useModel } from 'umi';
@@ -188,25 +189,28 @@ const Index: React.FC = () => {
   }, [connect, setUsers]);
 
   return (
-    <div className={styles.chat_container}>
-      <div className={styles.chat}>
-        <div className={styles.title}>
-          <div className={styles.left}>
-            <WaitingUser />
+    <>
+      <WaitingUser />
+      <div className={styles.chat_container}>
+        <div className={styles.chat}>
+          <div className={styles.title}>
+            <div className={styles.left}>
+              <WaitingUserInfo />
+            </div>
+            <div className={styles.right}>
+              <Menu />
+            </div>
           </div>
-          <div className={styles.right}>
-            <Menu />
-          </div>
-        </div>
-        <div className={styles.body}>
-          <UserList />
-          <div className={styles.message}>
-            <MessageList />
-            <InputArea />
+          <div className={styles.body}>
+            <UserList />
+            <div className={styles.message}>
+              <MessageList />
+              <InputArea />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default Index;

@@ -1,10 +1,17 @@
-import React from "react";
+import React from 'react';
 
 export default function useWaitingUserModel() {
+  const [waitingUsers, setWaitingUsers] = React.useState<APP.WaitingUser[]>([]);
+  const [visible, setVisible] = React.useState(false);
 
-  const [waitingUsers, setWaitingUsers] = React.useState<APP.WaitingUser[]>([])
+  const trigger = React.useCallback(() => {
+    setVisible((prevState) => !prevState);
+  }, []);
+
   return {
     waitingUsers,
-    setWaitingUsers
-  }
+    setWaitingUsers,
+    visible,
+    trigger,
+  };
 }

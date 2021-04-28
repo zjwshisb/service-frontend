@@ -39,3 +39,14 @@ export async function handleRead(uid: number) {
     },
   });
 }
+export async function getMessages(uid: number, mid?: number) {
+  const query: Record<any, any> = {
+    uid,
+  };
+  if (mid) {
+    query.mid = mid;
+  }
+  return request<API.Response<APP.Message[]>>('/ws/messages', {
+    params: query,
+  });
+}

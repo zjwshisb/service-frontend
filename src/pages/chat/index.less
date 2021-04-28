@@ -7,7 +7,8 @@
     display: flex;
     flex-direction: column;
     width: 1080px;
-    height: 800px;
+    height: 700px;
+    overflow: hidden;
     background-color: #fff;
     & > .title {
       display: flex;
@@ -22,24 +23,11 @@
       display: flex;
       flex: 1;
       width: 100%;
+      overflow: hidden;
       & > .message {
         display: flex;
         flex: 1;
         flex-direction: column;
-        & > .input {
-          position: relative;
-          flex: 1;
-          & > .shadow {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            &:hover {
-              cursor: not-allowed;
-            }
-          }
-        }
       }
     }
   }

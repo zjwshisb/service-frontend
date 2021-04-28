@@ -3,6 +3,7 @@ import { Avatar, Menu, Dropdown } from 'antd';
 import ChangeAvatar from './components/ChangeAvatar/index';
 import styles from './index.less';
 import { useModel } from '@@/plugin-model/useModel';
+import { CaretDownOutlined } from '@ant-design/icons/lib';
 
 const Index = () => {
   const initialState = useModel('@@initialState');
@@ -21,13 +22,16 @@ const Index = () => {
           placement="bottomRight"
           trigger={['click']}
         >
-          <Avatar
-            src={initialState.initialState?.currentUser?.avatar}
-            shape="square"
-            className={styles.avatar}
-          >
-            {initialState.initialState?.currentUser?.username}
-          </Avatar>
+          <span className={styles.menu}>
+            <Avatar
+              src={initialState.initialState?.currentUser?.avatar}
+              shape="square"
+              className={styles.avatar}
+            >
+              {initialState.initialState?.currentUser?.username}
+            </Avatar>
+            <CaretDownOutlined />
+          </span>
         </Dropdown>
       </div>
     );

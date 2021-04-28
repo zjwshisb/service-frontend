@@ -24,7 +24,7 @@ const Index = () => {
             showPreview={false}
           />
         }
-        trigger={['click', 'hover']}
+        trigger={['click']}
       >
         <SmileOutlined className={'action-icon'} />
       </Popover>

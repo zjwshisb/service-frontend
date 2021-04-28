@@ -20,7 +20,8 @@
     component: './chat/index',
     layout: {
       hideMenu: true,
-      hideNav: true
-    }
-  }
+      hideNav: true,
+      hideFooter: true,
+    },
+  },
 ];

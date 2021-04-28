@@ -20,13 +20,15 @@ const Index: React.FC<{
         const newUsers = lodash.cloneDeep(prevState);
         const user = newUsers.get(id);
         if (user) {
-          user.unread = 0;
+          if (user.unread > 0) {
+            user.unread = 0;
+            handleRead(user.id).then().catch();
+          }
           setCurrent(lodash.cloneDeep(user));
           if (current) {
             newUsers.set(current.id, current);
           }
           newUsers.delete(id);
-          handleRead(id).then().catch();
         }
         return newUsers;
       });
@@ -39,38 +41,40 @@ const Index: React.FC<{
   const lastMessage: APP.Message | undefined =
     length > 0 ? props.user.messages[length - 1] : undefined;
 
-  return (
-    <div
-      className={styles.item}
-      onClick={() => onClick(props.user.id)}
-      data-active={current && current.id === props.user.id}
-    >
-      <div className={styles.avatar}>
-        <Badge count={props.user.unread} size={'small'}>
-          <Avatar size={50} shape="square">
-            {props.user.username}
-          </Avatar>
-        </Badge>
-      </div>
-      <div className={styles.info}>
-        <div className={styles.first}>
-          <div className={styles.name} data-online={props.user.online}>
-            {props.user.username}
+  return React.useMemo(() => {
+    return (
+      <div
+        className={styles.item}
+        onClick={() => onClick(props.user.id)}
+        data-active={current && current.id === props.user.id}
+      >
+        <div className={styles.avatar}>
+          <Badge count={props.user.unread} size={'small'}>
+            <Avatar size={50} shape="square">
+              {props.user.username}
+            </Avatar>
+          </Badge>
+        </div>
+        <div className={styles.info}>
+          <div className={styles.first}>
+            <div className={styles.name} data-online={props.user.online}>
+              {props.user.username}
+            </div>
+            <div className={styles.time}>
+              {lastMessage && <LastTime time={lastMessage.received_at} />}
+            </div>
           </div>
-          <div className={styles.time}>
-            {lastMessage && <LastTime time={lastMessage.received_at} />}
+          <div className={styles.last}>
+            <div className={styles.message}>
+              {lastMessage && <LastMessage message={lastMessage} />}
+            </div>
+            <div className={styles.action}>
+              <Remove user={props.user} />
+            </div>
           </div>
         </div>
-        <div className={styles.last}>
-          <div className={styles.message}>
-            {lastMessage && <LastMessage message={lastMessage} />}
-          </div>
-          <div className={styles.action}>
-            <Remove user={props.user} />
-          </div>
-        </div>
       </div>
-    </div>
-  );
+    );
+  }, [current, lastMessage, onClick, props.user]);
 };
 export default Index;

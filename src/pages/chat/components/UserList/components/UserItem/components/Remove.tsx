@@ -10,33 +10,36 @@ const Index: React.FC<{
 }> = (props) => {
   const { setUsers } = useModel('useUsersModel');
 
+  const { current, setCurrent } = useModel('useCurrentModel');
+
   const handleDelete = React.useCallback(
     (user: APP.User) => {
-      if (user.disabled) {
-        removeUser(user.id).then(() => {
-          setUsers((prevState) => {
-            const newState = lodash.cloneDeep(prevState);
-            newState.delete(user.id);
-            return newState;
-          });
+      const remove = (u: APP.User) => {
+        removeUser(u.id).then(() => {
+          if (current && current.id === u.id) {
+            setCurrent(undefined);
+          } else {
+            setUsers((prevState) => {
+              const newState = lodash.cloneDeep(prevState);
+              newState.delete(u.id);
+              return newState;
+            });
+          }
         });
+      };
+      if (user.disabled) {
+        remove(user);
       } else {
         Modal.confirm({
           title: '提示',
           content: '确定移除该用户?',
           onOk() {
-            removeUser(user.id).then(() => {
-              setUsers((prevState) => {
-                const newState = lodash.cloneDeep(prevState);
-                newState.delete(user.id);
-                return newState;
-              });
-            });
+            remove(user);
           },
         });
       }
     },
-    [setUsers],
+    [current, setCurrent, setUsers],
   );
 
   return (
