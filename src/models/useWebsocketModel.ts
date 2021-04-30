@@ -30,7 +30,7 @@ export default function useWebsocketModel() {
           onError(e);
         }
       };
-      websocket.onmessage = (e: MessageEvent<string>) => {
+      websocket.onmessage = (e: MessageEvent) => {
         try {
           if (e.data !== '') {
             const action: APP.Action = JSON.parse(e.data);

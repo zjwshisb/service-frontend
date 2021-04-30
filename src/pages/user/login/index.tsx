@@ -119,11 +119,6 @@ const Login: React.FC = () => {
                 ]}
               />
             </>
-            <div
-              style={{
-                marginBottom: 24,
-              }}
-            ></div>
           </ProForm>
         </div>
       </div>

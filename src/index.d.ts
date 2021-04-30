@@ -7,6 +7,7 @@ declare namespace APP {
     | 'user-online'
     | 'receipt'
     | 'waiting-users'
+    | 'service-users'
     | 'receive-message';
 
   export type Action<T = any> = {
@@ -55,5 +56,13 @@ declare namespace APP {
     last_chat_time: number;
     unread: number;
     disabled: boolean;
+  };
+
+  export type ServiceUser = {
+    id: number;
+    username: string;
+    avatar: string;
+    online: boolean;
+    today_accept_count: number;
   };
 }
