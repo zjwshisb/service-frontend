@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import { timeFormat } from '@/utils';
 
 const Index: React.FC<{
   time: number;
@@ -7,18 +7,9 @@ const Index: React.FC<{
   const [content, setContent] = React.useState('');
 
   React.useEffect(() => {
-    const today = moment();
-    const pre = moment(props.time * 1000);
-    if (
-      pre.year() === today.year() &&
-      pre.month() === today.month() &&
-      today.date() === pre.date()
-    ) {
-      setContent(pre.format('HH:mm:ss'));
-    } else {
-      setContent(pre.format('YYYY-MM-DD'));
-    }
+    setContent(timeFormat(props.time));
   }, [props.time]);
+
   return React.useMemo(() => {
     return <>{content}</>;
   }, [content]);

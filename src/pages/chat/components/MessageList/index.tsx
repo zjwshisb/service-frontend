@@ -4,7 +4,9 @@ import { useModel } from '@@/plugin-model/useModel';
 import { Alert, Spin } from 'antd';
 import styles from './index.less';
 import { getMessages } from '@/services';
-import Empty from './components/Empty/Index';
+import Empty from './components/Empty/index';
+import Notice from './components/Notice/index';
+import { timeFormat } from '@/utils';
 
 // 默认渲染条数
 const pageSize = 20;
@@ -143,8 +145,20 @@ const Index: React.FC = () => {
               <Spin />
             </div>
           )}
-          {current && offset === 0 && noMore && <div className={styles.nomore}>没有更多了</div>}
-          {messages.map((v) => {
+          {current && offset === 0 && noMore && <Notice>没有更多了</Notice>}
+          {messages.map((v, index) => {
+            const time = timeFormat(v.received_at);
+            if (time.length === 10 && index > 0) {
+              const prevTime = timeFormat(messages[index - 1].received_at);
+              if (prevTime !== time) {
+                return (
+                  <>
+                    <Notice>{time}</Notice>
+                    <MessageItem message={v} key={v.req_id} />
+                  </>
+                );
+              }
+            }
             return <MessageItem message={v} key={v.req_id} />;
           })}
           {current?.disabled && (

@@ -45,6 +45,10 @@ declare namespace APP {
   export type WaitingUser = {
     id: number;
     username: string;
+    avatar: string;
+    last_message: string;
+    last_time: number;
+    message_count: number;
   };
 
   export type User = {
