@@ -4,6 +4,7 @@ import UserList from './components/UserList/index';
 import MessageList from './components/MessageList/index';
 import InputArea from './components/Input/index';
 import Header from './components/Header/index';
+import Menu from './components/Menu/index';
 import { useModel } from 'umi';
 import lodash from 'lodash';
 import { message } from 'antd';
@@ -189,14 +190,19 @@ const Index: React.FC = () => {
   return (
     <div className={styles.chat_container}>
       <div className={styles.chat}>
-        <div className={styles.header}>
-          <Header />
+        <div className={styles.left}>
+          <Menu />
         </div>
-        <div className={styles.body}>
-          <UserList />
-          <div className={styles.message}>
-            <MessageList />
-            <InputArea />
+        <div className={styles.right}>
+          <div className={styles.header}>
+            <Header />
+          </div>
+          <div className={styles.body}>
+            <UserList />
+            <div className={styles.message}>
+              <MessageList />
+              <InputArea />
+            </div>
           </div>
         </div>
       </div>

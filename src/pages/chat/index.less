@@ -2,31 +2,43 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   & > .chat {
     display: flex;
-    flex-direction: column;
-    width: 1080px;
     height: 700px;
-    overflow: hidden;
-    background-color: #fff;
-    & > .header {
-      display: flex;
-      flex-shrink: 0;
-      justify-content: space-between;
-      width: 100%;
-      height: 60px;
-      border-bottom: 1px solid #eaeaea;
+    & > .left {
+      flex-direction: column;
+      align-items: center;
+      width: 60px;
+      height: 100%;
+      background-color: #ebeced;
     }
-    & > .body {
+    & > .right {
       display: flex;
-      flex: 1;
-      width: 100%;
+      flex-direction: column;
+      width: 1020px;
+      height: 100%;
       overflow: hidden;
-      & > .message {
+      background-color: #fff;
+      & > .header {
+        display: flex;
+        flex-shrink: 0;
+        justify-content: space-between;
+        width: 100%;
+        height: 60px;
+        background-color: #f3f3f3;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      & > .body {
         display: flex;
         flex: 1;
-        flex-direction: column;
+        width: 100%;
+        overflow: hidden;
+        background-color: #f3f3f3;
+        & > .message {
+          display: flex;
+          flex: 1;
+          flex-direction: column;
+        }
       }
     }
   }
