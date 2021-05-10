@@ -15,7 +15,7 @@ const Index = () => {
 
   React.useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (waitingUsers.length === 0) {
+    if (waitingUsers.length > 0) {
       interval = setInterval(() => {
         setColor((prevState) => {
           if (prevState === '#000') {

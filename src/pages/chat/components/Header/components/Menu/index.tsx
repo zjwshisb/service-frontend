@@ -3,15 +3,18 @@ import { Avatar, Menu, Dropdown } from 'antd';
 import ChangeAvatar from './components/ChangeAvatar/index';
 import styles from './index.less';
 import { useModel } from '@@/plugin-model/useModel';
-import { CaretDownOutlined } from '@ant-design/icons/lib';
+import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons/lib';
 
 const Index = () => {
   const initialState = useModel('@@initialState');
+
+  const [menuVisible, setMenuVisible] = React.useState(false);
 
   return React.useMemo(() => {
     return (
       <div className={styles.index}>
         <Dropdown
+          onVisibleChange={setMenuVisible}
           overlay={
             <Menu>
               <Menu.Item key="avatar">
@@ -30,7 +33,7 @@ const Index = () => {
             >
               {initialState.initialState?.currentUser?.username}
             </Avatar>
-            <CaretDownOutlined />
+            {menuVisible ? <CaretUpOutlined /> : <CaretDownOutlined />}
           </span>
         </Dropdown>
       </div>
@@ -38,6 +41,7 @@ const Index = () => {
   }, [
     initialState.initialState?.currentUser?.avatar,
     initialState.initialState?.currentUser?.username,
+    menuVisible,
   ]);
 };
 export default Index;

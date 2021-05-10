@@ -1,9 +1,8 @@
 import React from 'react';
-import { DeleteOutlined } from '@ant-design/icons/lib';
+import { Menu, Modal } from 'antd';
+import { useModel } from '@@/plugin-model/useModel';
 import { removeUser } from '@/services';
 import lodash from 'lodash';
-import { Modal } from 'antd';
-import { useModel } from '@@/plugin-model/useModel';
 
 const Index: React.FC<{
   user: APP.User;
@@ -42,10 +41,19 @@ const Index: React.FC<{
     [current, setCurrent, setUsers],
   );
 
+  const handleClick = React.useCallback(
+    (event) => {
+      if (event.key === 'remove') {
+        handleDelete(props.user);
+      }
+    },
+    [handleDelete, props.user],
+  );
+
   return (
-    <>
-      <DeleteOutlined style={{ color: 'red' }} onClick={() => handleDelete(props.user)} />
-    </>
+    <Menu onClick={handleClick}>
+      <Menu.Item key="remove">移除</Menu.Item>
+    </Menu>
   );
 };
 export default Index;

@@ -86,6 +86,6 @@ const Index = () => {
         <CustomerServiceFilled />
       </div>
     );
-  }, [sortUsers, users.length, visible]);
+  }, [sortUsers, visible]);
 };
 export default Index;
