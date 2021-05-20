@@ -14,6 +14,7 @@ const Index: React.FC = () => {
           <div className={styles.input}>
             <Action />
             <Input />
+            {current.disabled && <div className={styles.disabled} />}
           </div>
         )}
       </>

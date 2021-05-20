@@ -5,13 +5,15 @@ import Setting from './components/Setting/index';
 import Shortcut from './components/Shortcut/index';
 
 const Index = () => {
-  return (
-    <>
-      <WaitingUser />
-      <ServiceUser />
-      <Setting />
-      <Shortcut />
-    </>
-  );
+  return React.useMemo(() => {
+    return (
+      <>
+        <WaitingUser />
+        <ServiceUser />
+        <Setting />
+        <Shortcut />
+      </>
+    );
+  }, []);
 };
 export default Index;

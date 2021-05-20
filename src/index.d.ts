@@ -1,6 +1,4 @@
 declare namespace APP {
-  export type MessageType = 'text' | 'image';
-
   export type ActionType =
     | 'send-message'
     | 'user-offline'
@@ -19,6 +17,13 @@ declare namespace APP {
   export type Receipt = {
     user_id: number;
     req_id: number;
+  };
+
+  export type MessageType = 'text' | 'image';
+
+  export type MessageContent = {
+    text: string;
+    image: string;
   };
 
   export type Message = {
