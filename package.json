@@ -51,6 +51,7 @@
     "@ant-design/pro-table": "^2.30.0",
     "@umijs/route-utils": "^1.0.36",
     "antd": "^4.9.4",
+    "antd-img-crop": "^3.14.1",
     "classnames": "^2.2.6",
     "emoji-mart": "^3.0.1",
     "js-cookie": "^2.2.1",

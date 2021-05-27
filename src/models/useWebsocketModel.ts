@@ -1,6 +1,7 @@
 import React from 'react';
-import { getToken } from '@/utils/auth';
+import { getToken, removeToken } from '@/utils/auth';
 import lodash from 'lodash';
+import { Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 
 export type ActionHandle<T = any> = (action: APP.Action<T>) => void;
@@ -14,8 +15,17 @@ export default function useWebsocketModel() {
   const [onError, setOnError] = React.useState<EventHandle>();
   const [onClose, setOnClose] = React.useState<EventHandle<CloseEvent>>();
 
+  const [hadReConnect, setHadReConnect] = React.useState(false);
+
   const { setUsers } = useModel('useUsersModel');
   const { current, setCurrent } = useModel('useCurrentModel');
+
+  const connect = React.useCallback(() => {
+    setWebSocket(() => {
+      const url = `${WS_URL}?token=${getToken()}`;
+      return new WebSocket(url);
+    });
+  }, []);
 
   React.useEffect(() => {
     if (websocket) {
@@ -46,19 +56,33 @@ export default function useWebsocketModel() {
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = (e) => {
         setWebSocket(undefined);
+        if (!hadReConnect) {
+          Modal.error({
+            title: '提示',
+            content: '聊天服务器已断开',
+            okText: '从新连接聊天服务器',
+            onOk() {
+              setHadReConnect(true);
+              connect();
+            },
+          });
+        } else {
+          Modal.error({
+            title: '提示',
+            content: '连接服务器失败',
+            okText: '请重新登录',
+            onOk() {
+              removeToken();
+              window.location.reload();
+            },
+          });
+        }
         if (onClose) {
           onClose(e);
         }
       };
     }
-  }, [onClose, onError, onMessage, onOpen, websocket]);
-
-  const connect = React.useCallback(() => {
-    setWebSocket(() => {
-      const url = `${WS_URL}?token=${getToken()}`;
-      return new WebSocket(url);
-    });
-  }, []);
+  }, [connect, hadReConnect, onClose, onError, onMessage, onOpen, websocket]);
 
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: APP.ActionType): void => {

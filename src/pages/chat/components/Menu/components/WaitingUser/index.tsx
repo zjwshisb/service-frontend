@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { Drawer, List, message, Skeleton, Avatar } from 'antd';
+import { Drawer, List, message, Skeleton, Avatar, Badge } from 'antd';
 import { timeFormat } from '@/utils';
 import { handleAccept } from '@/services';
 import lodash from 'lodash';
@@ -11,22 +11,6 @@ const Index = () => {
   const { waitingUsers } = useModel('useWaitingUserModel');
   const setUsers = useModel('useUsersModel', (model) => model.setUsers);
   const [visible, setVisible] = React.useState(false);
-  const [color, setColor] = useState('none');
-
-  React.useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (waitingUsers.length > 0) {
-      interval = setInterval(() => {
-        setColor((prevState) => {
-          if (prevState === '#000') {
-            return '#1890ff';
-          }
-          return '#000';
-        });
-      }, 800);
-    }
-    return () => clearInterval(interval);
-  }, [waitingUsers.length]);
 
   return (
     <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
@@ -86,7 +70,9 @@ const Index = () => {
           )}
         />
       </Drawer>
-      <MessageOutlined style={{ color }} />
+      <Badge count={waitingUsers.length} size={'small'}>
+        <MessageOutlined />
+      </Badge>
     </div>
   );
 };

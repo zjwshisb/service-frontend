@@ -3,6 +3,7 @@ import { Modal, Avatar } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import Upload from '@/components/Upload/index';
 import type { UploadFile } from 'antd/lib/upload/interface';
+import 'antd/es/slider/style';
 
 const Index: React.FC = () => {
   const [visible, setVisible] = React.useState(false);
@@ -22,7 +23,7 @@ const Index: React.FC = () => {
     <>
       <a onClick={() => setVisible(true)}>更换头像</a>
       <Modal footer={<></>} visible={visible} onCancel={() => setVisible(false)} width={400}>
-        <Upload onChange={onChange} action={`${BASE_URL}/me/avatar`}>
+        <Upload onChange={onChange} action={`${BASE_URL}/me/avatar`} corp={true}>
           <Avatar
             className={'pointer'}
             shape="square"

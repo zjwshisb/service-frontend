@@ -1,7 +1,7 @@
 import React from 'react';
 import MessageItem from './components/Item/index';
 import { useModel } from '@@/plugin-model/useModel';
-import { Alert, Spin } from 'antd';
+import { Spin } from 'antd';
 import styles from './index.less';
 import { getMessages } from '@/services';
 import Empty from './components/Empty/index';
@@ -18,6 +18,7 @@ const pageSize = 20;
  */
 const Index: React.FC = () => {
   const { current } = useModel('useCurrentModel');
+
   const ref = React.useRef<HTMLDivElement>(null);
 
   const [messages, setMessages] = React.useState<APP.Message[]>([]);
@@ -134,6 +135,28 @@ const Index: React.FC = () => {
     }
   }, [scrollBottom, messages]);
 
+  const messagesView = React.useMemo(() => {
+    let preDate = '';
+    return messages.map((v) => {
+      const currentDate = timeFormat(v.received_at);
+      // 今日
+      if (currentDate.length === 8) {
+        return <MessageItem message={v} key={v.req_id} />;
+      }
+      if (preDate !== '' && preDate !== currentDate) {
+        preDate = timeFormat(v.received_at);
+        return (
+          <React.Fragment key={v.req_id}>
+            <Notice key={currentDate}>{currentDate}</Notice>
+            <MessageItem message={v} key={v.req_id} />
+          </React.Fragment>
+        );
+      }
+      preDate = timeFormat(v.received_at);
+      return <MessageItem message={v} key={v.req_id} />;
+    });
+  }, [messages]);
+
   return (
     <div className={styles.list} ref={ref} onScroll={onScroll}>
       {current === undefined ? (
@@ -146,26 +169,8 @@ const Index: React.FC = () => {
             </div>
           )}
           {current && offset === 0 && noMore && <Notice>没有更多了</Notice>}
-          {messages.map((v, index) => {
-            const time = timeFormat(v.received_at);
-            if (time.length === 10 && index > 0) {
-              const prevTime = timeFormat(messages[index - 1].received_at);
-              if (prevTime !== time) {
-                return (
-                  <>
-                    <Notice>{time}</Notice>
-                    <MessageItem message={v} key={v.req_id} />
-                  </>
-                );
-              }
-            }
-            return <MessageItem message={v} key={v.req_id} />;
-          })}
-          {current?.disabled && (
-            <div className={'disabled-notice'}>
-              <Alert type={'warning'} message={'已过失效，无法交谈'} />
-            </div>
-          )}
+          {messagesView}
+          {current?.disabled && <Notice>已失效，无法发送消息</Notice>}
         </>
       )}
     </div>
