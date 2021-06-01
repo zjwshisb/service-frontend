@@ -6,7 +6,9 @@ declare namespace APP {
     | 'receipt'
     | 'waiting-users'
     | 'service-users'
-    | 'receive-message';
+    | 'receive-message'
+    | 'other-login'
+    | 'more-than-one';
 
   export type Action<T = any> = {
     action: ActionType;

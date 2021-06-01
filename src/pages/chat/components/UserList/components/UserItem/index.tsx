@@ -27,11 +27,11 @@ const Index: React.FC<{
           user.unread = 0;
           handleRead(user.id).then().catch();
         }
-        setCurrent(lodash.cloneDeep(user));
         if (current) {
           newUsers.set(current.id, current);
         }
         newUsers.delete(id);
+        setCurrent(lodash.cloneDeep(user));
         return newUsers;
       });
     },

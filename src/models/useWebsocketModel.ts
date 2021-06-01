@@ -54,32 +54,8 @@ export default function useWebsocketModel() {
         }
       };
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
-      websocket.onclose = (e) => {
+      websocket.onclose = () => {
         setWebSocket(undefined);
-        if (!hadReConnect) {
-          Modal.error({
-            title: '提示',
-            content: '聊天服务器已断开',
-            okText: '从新连接聊天服务器',
-            onOk() {
-              setHadReConnect(true);
-              connect();
-            },
-          });
-        } else {
-          Modal.error({
-            title: '提示',
-            content: '连接服务器失败',
-            okText: '请重新登录',
-            onOk() {
-              removeToken();
-              window.location.reload();
-            },
-          });
-        }
-        if (onClose) {
-          onClose(e);
-        }
       };
     }
   }, [connect, hadReConnect, onClose, onError, onMessage, onOpen, websocket]);
@@ -94,6 +70,30 @@ export default function useWebsocketModel() {
     },
     [],
   );
+
+  React.useEffect(() => {
+    setOnMessage(() => {
+      Modal.error({
+        title: '提示',
+        content: '账户已在别处登录',
+        okText: '重新登录',
+        onOk() {
+          removeToken();
+          window.location.reload();
+        },
+      });
+    }, 'other-login');
+    setOnMessage(() => {
+      Modal.error({
+        title: '提示',
+        content: '请勿打开多个页面',
+        okText: '关闭',
+        onOk() {
+          window.close();
+        },
+      });
+    }, 'more-than-one');
+  }, [setOnMessage]);
 
   const send: (msg: APP.Action<APP.Message>) => void = React.useCallback(
     (action: APP.Action<APP.Message>) => {
@@ -138,9 +138,19 @@ export default function useWebsocketModel() {
         } catch (e) {
           console.log(e);
         }
+      } else {
+        Modal.error({
+          title: '提示',
+          content: '聊天服务器已断开',
+          okText: '重新连接连接聊天服务器',
+          onOk() {
+            setHadReConnect(true);
+            connect();
+          },
+        });
       }
     },
-    [current?.id, onSend, setCurrent, setUsers, websocket],
+    [connect, current?.id, onSend, setCurrent, setUsers, websocket],
   );
   return {
     connect,

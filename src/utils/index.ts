@@ -11,6 +11,15 @@ export function timeFormat(timestamp: number) {
   }
   return pre.format('YYYY-MM-DD');
 }
+
+export function isSameDate(first: moment.Moment, second: moment.Moment) {
+  return (
+    first.year() === second.year() &&
+    first.month() === second.month() &&
+    first.date() === second.date()
+  );
+}
+
 export function createMsg(
   content: string,
   userId: number,

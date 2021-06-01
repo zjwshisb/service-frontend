@@ -6,7 +6,7 @@ import styles from './index.less';
 import { getMessages } from '@/services';
 import Empty from './components/Empty/index';
 import Notice from './components/Notice/index';
-import { timeFormat } from '@/utils';
+import lodash from 'lodash';
 
 // 默认渲染条数
 const pageSize = 20;
@@ -17,7 +17,7 @@ const pageSize = 20;
  * @constructor
  */
 const Index: React.FC = () => {
-  const { current } = useModel('useCurrentModel');
+  const { current, setCurrent } = useModel('useCurrentModel');
 
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -63,14 +63,22 @@ const Index: React.FC = () => {
         setScrollBottom(0);
       } else {
         let os = 0;
-        if (length <= 0) {
-          setLoading(true);
-          fetchMessages(current.id).then((m) => {
-            setMessages(m);
-            setLoading(false);
+        if (length < pageSize) {
+          getMessages(current.id).then((res) => {
+            const msgs = res.data.reverse();
+            setMessages(msgs);
+            setCurrent((prevState) => {
+              if (prevState) {
+                const newState = lodash.clone(prevState);
+                newState.messages = msgs;
+                return newState;
+              }
+              return prevState;
+            });
+            if (msgs.length < pageSize) {
+              setNoMore(true);
+            }
           });
-        } else if (length <= pageSize) {
-          setMessages(current.messages);
         } else {
           os = length - pageSize;
           setMessages(current.messages.slice(os));
@@ -82,7 +90,7 @@ const Index: React.FC = () => {
     } else {
       setMessages([]);
     }
-  }, [current, fetchMessages]);
+  }, [current, fetchMessages, setCurrent]);
 
   // 滚动加载更多聊天消息
   const onScroll = React.useCallback(
@@ -90,7 +98,7 @@ const Index: React.FC = () => {
       const el = e.target as HTMLDivElement;
       const top = el.scrollTop;
       const scrollBot = el.scrollHeight - el.scrollTop - el.clientHeight;
-      if (current) {
+      if (current && messages.length >= 20) {
         setScrollBottom(scrollBot);
         if (!loading && top < 30) {
           setLoading(true);
@@ -136,24 +144,14 @@ const Index: React.FC = () => {
   }, [scrollBottom, messages]);
 
   const messagesView = React.useMemo(() => {
-    let preDate = '';
-    return messages.map((v) => {
-      const currentDate = timeFormat(v.received_at);
-      // 今日
-      if (currentDate.length === 8) {
-        return <MessageItem message={v} key={v.req_id} />;
-      }
-      if (preDate !== '' && preDate !== currentDate) {
-        preDate = timeFormat(v.received_at);
-        return (
-          <React.Fragment key={v.req_id}>
-            <Notice key={currentDate}>{currentDate}</Notice>
-            <MessageItem message={v} key={v.req_id} />
-          </React.Fragment>
-        );
-      }
-      preDate = timeFormat(v.received_at);
-      return <MessageItem message={v} key={v.req_id} />;
+    return messages.map((v, index) => {
+      return (
+        <MessageItem
+          message={v}
+          key={v.req_id}
+          prev={index > 0 ? messages[index - 1] : undefined}
+        />
+      );
     });
   }, [messages]);
 
