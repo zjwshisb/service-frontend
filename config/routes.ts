@@ -16,12 +16,23 @@
     ],
   },
   {
+    path: '/dashboard',
+    component: './dashboard',
+    name: 'dashboard',
+  },
+  {
+    path: '/rule',
+    component: './rule',
+    name: '自动回复',
+  },
+  {
+    path: '/message',
+    name: '消息记录',
+    component: './message/index',
+  },
+  {
     path: '/chat',
     component: './chat/index',
-    layout: {
-      hideMenu: true,
-      hideNav: true,
-      hideFooter: true,
-    },
+    layout: false,
   },
 ];

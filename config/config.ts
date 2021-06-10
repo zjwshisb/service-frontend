@@ -14,7 +14,7 @@ export default defineConfig({
   },
   layout: {
     name: 'Ant Design Pro',
-    locale: true,
+    locale: false,
     siderWidth: 208,
     ...defaultSettings,
   },
@@ -42,7 +42,7 @@ export default defineConfig({
   ignoreMomentLocale: true,
   // proxy: proxy[REACT_APP_ENV || 'dev'],
   define: {
-    BASE_URL: ''
+    BASE_URL: '',
   },
   manifest: {
     basePath: '/',
