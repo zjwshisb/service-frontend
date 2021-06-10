@@ -3,6 +3,7 @@ import { getToken, removeToken } from '@/utils/auth';
 import lodash from 'lodash';
 import { Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
+import { history } from '@@/core/history';
 
 export type ActionHandle<T = any> = (action: APP.Action<T>) => void;
 export type EventHandle<T extends Event = Event> = (e: T) => void;
@@ -79,17 +80,17 @@ export default function useWebsocketModel() {
         okText: '重新登录',
         onOk() {
           removeToken();
-          window.location.reload();
+          history.push('/login');
         },
       });
     }, 'other-login');
     setOnMessage(() => {
       Modal.error({
         title: '提示',
-        content: '请勿打开多个页面',
+        content: '请勿打开多个客服页面',
         okText: '关闭',
         onOk() {
-          window.close();
+          history.push('/');
         },
       });
     }, 'more-than-one');
