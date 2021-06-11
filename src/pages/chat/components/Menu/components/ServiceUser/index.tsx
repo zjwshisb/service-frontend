@@ -83,7 +83,7 @@ const Index = () => {
             columns={columns}
           />
         </Drawer>
-        <CustomerServiceFilled />
+        <CustomerServiceFilled className={styles.icon} data-active={visible} />
       </div>
     );
   }, [sortUsers, visible]);

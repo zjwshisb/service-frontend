@@ -10,4 +10,10 @@ declare namespace API {
     id: number;
     avatar: string;
   };
+
+  export type ShortcutReply = {
+    content: string;
+    id: number;
+    count: number;
+  };
 }

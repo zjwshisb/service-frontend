@@ -1,7 +1,7 @@
 import React from 'react';
 import Picture from './components/Picture';
 import Emoji from './components/Emoji';
-import Shortcut from './components/Shortcut';
+import ShortcutReply from './components/ShortcutReply';
 import styles from './index.less';
 
 const Index: React.FC = () => {
@@ -10,7 +10,7 @@ const Index: React.FC = () => {
       <div className={styles.action}>
         <Emoji />
         <Picture />
-        <Shortcut />
+        <ShortcutReply />
       </div>
     );
   }, []);

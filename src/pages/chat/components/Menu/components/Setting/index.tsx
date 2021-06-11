@@ -9,7 +9,7 @@ const Index = () => {
   return React.useMemo(() => {
     return (
       <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
-        <SettingOutlined />
+        <SettingOutlined className={styles.icon} data-active={visible} />
         <Modal
           visible={visible}
           title={'基本设置'}

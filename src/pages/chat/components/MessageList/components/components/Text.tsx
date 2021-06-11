@@ -4,6 +4,7 @@ import { isUrl } from '@/utils/utils';
 const Index: React.FC<{
   content: string;
 }> = (props) => {
+  console.log(props.content);
   return (
     <>
       {isUrl(props.content) ? (

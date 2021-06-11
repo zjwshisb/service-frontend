@@ -13,7 +13,7 @@ const Index = () => {
   const [visible, setVisible] = React.useState(false);
 
   return (
-    <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
+    <div className={styles.item} onClick={() => setVisible(true)}>
       <Drawer
         bodyStyle={{ padding: 0 }}
         closable={false}
@@ -71,7 +71,7 @@ const Index = () => {
         />
       </Drawer>
       <Badge count={waitingUsers.length} size={'small'}>
-        <MessageOutlined />
+        <MessageOutlined className={styles.icon} data-active={visible} />
       </Badge>
     </div>
   );

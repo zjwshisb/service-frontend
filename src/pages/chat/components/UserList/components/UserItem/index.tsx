@@ -40,8 +40,9 @@ const Index: React.FC<{
 
   const { length } = props.user.messages;
 
-  const lastMessage: APP.Message | undefined =
-    length > 0 ? props.user.messages[length - 1] : undefined;
+  const lastMessage: APP.Message | undefined = React.useMemo(() => {
+    return length > 0 ? props.user.messages[length - 1] : undefined;
+  }, [length, props.user.messages]);
 
   return React.useMemo(() => {
     return (
