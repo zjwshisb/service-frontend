@@ -34,7 +34,6 @@ const Index: React.FC<{
     }
     return (
       <>
-        {time}
         <div className={styles.item} data-right={props.message.is_server}>
           <div className={styles.avatar}>
             <Avatar src={props.message.avatar} />
@@ -45,6 +44,7 @@ const Index: React.FC<{
           </div>
           {props.message.is_server && <Spin isSuccess={props.message.is_success} />}
         </div>
+        {time}
       </>
     );
   }, [

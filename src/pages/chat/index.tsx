@@ -8,7 +8,7 @@ import Menu from './components/Menu/index';
 import { useModel } from 'umi';
 import lodash from 'lodash';
 import { message } from 'antd';
-import { handleRead, getUsers } from '@/services';
+import { getUsers } from '@/services';
 import styles from './index.less';
 
 const Index: React.FC = () => {
@@ -42,10 +42,10 @@ const Index: React.FC = () => {
         msg.avatar = avatar;
         if (current && current.id === action.data.user_id) {
           setCurrent((prevState) => {
-            current.last_chat_time = msg.received_at;
             if (prevState) {
-              const newState = lodash.cloneDeep(prevState);
-              newState.messages.push(msg);
+              const newState = lodash.clone(prevState);
+              newState.last_chat_time = msg.received_at;
+              newState.messages.unshift(msg);
               return newState;
             }
             return prevState;
@@ -70,7 +70,7 @@ const Index: React.FC = () => {
       if (action.data.user_id === current?.id) {
         setCurrent((user) => {
           if (user) {
-            const newUser = lodash.cloneDeep(user);
+            const newUser = lodash.clone(user);
             const index = newUser.messages.findIndex((v) => v.req_id === action.data.req_id);
             if (index > -1) {
               newUser.messages[index].is_success = true;
@@ -87,7 +87,7 @@ const Index: React.FC = () => {
             if (index > -1) {
               user.messages[index].is_success = true;
             }
-            return lodash.cloneDeep(prevState);
+            return lodash.clone(prevState);
           }
           return prevState;
         });
@@ -109,9 +109,9 @@ const Index: React.FC = () => {
       if (msg.user_id === current?.id) {
         setCurrent((prevState) => {
           if (prevState) {
-            const newState = lodash.cloneDeep(prevState);
-            newState.messages.push(msg);
-            handleRead(msg.user_id).then();
+            const newState = lodash.clone(prevState);
+            newState.messages.unshift(msg);
+            newState.unread += 1;
             return newState;
           }
           return prevState;
@@ -121,7 +121,7 @@ const Index: React.FC = () => {
           const newState = lodash.clone(prevState);
           const user = newState.get(msg.user_id);
           if (user) {
-            user.messages.push(action.data);
+            user.messages.unshift(action.data);
             user.unread += 1;
             return newState;
           }
@@ -143,7 +143,7 @@ const Index: React.FC = () => {
       });
       setUsers((prevState) => {
         if (prevState.get(action.data.user_id)) {
-          const newState = lodash.cloneDeep(prevState);
+          const newState = lodash.clone(prevState);
           const user = newState.get(action.data.user_id);
           if (user) {
             user.online = true;
@@ -159,7 +159,7 @@ const Index: React.FC = () => {
     setOnMessage((action: APP.Action<APP.OffLine>) => {
       setCurrent((prevState) => {
         if (action.data.user_id === prevState?.id) {
-          const newState = lodash.cloneDeep(prevState);
+          const newState = lodash.clone(prevState);
           newState.online = false;
           return newState;
         }
@@ -167,7 +167,7 @@ const Index: React.FC = () => {
       });
       setUsers((prevState) => {
         if (prevState.get(action.data.user_id)) {
-          const newState = lodash.cloneDeep(prevState);
+          const newState = lodash.clone(prevState);
           const user = newState.get(action.data.user_id);
           if (user) {
             user.online = false;

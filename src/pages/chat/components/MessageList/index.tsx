@@ -23,11 +23,9 @@ const Index: React.FC = () => {
 
   const [messages, setMessages] = React.useState<APP.Message[]>([]);
 
-  const [offset, setOffset] = React.useState(0);
+  const offset = React.useRef(pageSize);
 
   const [loading, setLoading] = React.useState(false);
-
-  const [scrollBottom, setScrollBottom] = React.useState(0);
 
   const [noMore, setNoMore] = React.useState(false);
 
@@ -44,7 +42,7 @@ const Index: React.FC = () => {
     if (res.data.length <= 0) {
       setNoMore(true);
     }
-    return res.data.reverse();
+    return res.data;
   }, []);
 
   // 切换当前聊天用户
@@ -56,21 +54,16 @@ const Index: React.FC = () => {
     if (current) {
       const { length } = current.messages;
       if (prevUser && prevUser.id === current.id) {
-        setOffset((prevState) => {
-          setMessages(current.messages.slice(prevState));
-          return prevState;
-        });
-        setScrollBottom(0);
+        setMessages(current.messages.slice(0, offset.current));
       } else {
-        let os = 0;
         if (length < pageSize) {
           getMessages(current.id).then((res) => {
-            const msgs = res.data.reverse();
-            setMessages(msgs);
+            const msgs = res.data;
             setCurrent((prevState) => {
               if (prevState) {
                 const newState = lodash.clone(prevState);
                 newState.messages = msgs;
+                setMessages(msgs);
                 return newState;
               }
               return prevState;
@@ -80,12 +73,9 @@ const Index: React.FC = () => {
             }
           });
         } else {
-          os = length - pageSize;
-          setMessages(current.messages.slice(os));
+          setMessages(current.messages.slice(0, offset.current));
         }
-        setOffset(os);
         setNoMore(false);
-        setScrollBottom(0);
       }
     } else {
       setMessages([]);
@@ -96,52 +86,39 @@ const Index: React.FC = () => {
   const onScroll = React.useCallback(
     async (e: React.UIEvent<HTMLElement>) => {
       const el = e.target as HTMLDivElement;
-      const top = el.scrollTop;
-      const scrollBot = el.scrollHeight - el.scrollTop - el.clientHeight;
-      if (current && messages.length >= 20) {
-        setScrollBottom(scrollBot);
-        if (!loading && top < 30) {
+      const { scrollHeight, scrollTop, clientHeight } = el;
+      // 滚动到顶部30个像素触发
+      if (scrollHeight + scrollTop - clientHeight <= 30) {
+        if (current && messages.length >= 20 && !loading) {
           setLoading(true);
-          if (offset > 0) {
+          if (offset.current < current.messages.length) {
             // 从本地加载
-            setMessages((prevState) => {
-              if (current && offset > 0) {
-                let start = 0;
-                if (offset - pageSize > 0) {
-                  start = offset - pageSize;
-                }
-                setOffset(start);
-                return current.messages.slice(start, offset).concat(prevState);
-              }
-              return prevState;
+            offset.current += 20;
+            setMessages(() => {
+              return current.messages.slice(0, offset.current);
             });
           } else if (!noMore) {
             // 从服务器加载
             let mid;
             if (messages.length > 0) {
-              const firstMessage = messages[0];
-              mid = firstMessage.id;
+              const lastMessage = messages[messages.length - 1];
+              mid = lastMessage.id;
             }
             const moreMsg = await fetchMessages(current.id, mid);
-            setMessages((prevState) => {
-              return moreMsg.concat(prevState);
-            });
+            if (moreMsg.length >= 0) {
+              setMessages((prevState) => {
+                return [...prevState].concat(moreMsg);
+              });
+            } else {
+              setNoMore(true);
+            }
           }
           setLoading(false);
         }
       }
     },
-    [current, loading, offset, noMore, messages, fetchMessages],
+    [current, messages, loading, noMore, fetchMessages],
   );
-
-  // 消息列表渲染条数变化时，滚动条到底部的距离保持不变
-  React.useLayoutEffect(() => {
-    if (ref.current != null) {
-      const { scrollHeight, clientHeight } = ref.current;
-      const scrollTop = scrollHeight - clientHeight - scrollBottom;
-      ref.current.scrollTop = scrollTop > 0 ? scrollTop : 0;
-    }
-  }, [scrollBottom, messages]);
 
   const messagesView = React.useMemo(() => {
     return messages.map((v, index) => {
@@ -166,9 +143,9 @@ const Index: React.FC = () => {
               <Spin />
             </div>
           )}
-          {current && offset === 0 && noMore && <Notice>没有更多了</Notice>}
-          {messagesView}
           {current?.disabled && <Notice>已失效，无法发送消息</Notice>}
+          {messagesView}
+          {current && noMore && <Notice>没有更多了</Notice>}
         </>
       )}
     </div>

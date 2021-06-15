@@ -64,7 +64,7 @@ export default function useWebsocketModel() {
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: APP.ActionType): void => {
       updateOnMessage((prevState) => {
-        const newState = lodash.cloneDeep(prevState);
+        const newState = lodash.clone(prevState);
         newState.set(type, callback);
         return newState;
       });
@@ -106,11 +106,14 @@ export default function useWebsocketModel() {
             if (action.data.user_id === current?.id) {
               setCurrent((user) => {
                 if (user) {
-                  const newUser = lodash.cloneDeep(user);
-                  const index = newUser.messages.findIndex((v) => v.req_id === action.data.req_id);
-                  if (index > -1) {
-                    if (newUser.messages[index].is_success === undefined) {
-                      newUser.messages[index].is_success = false;
+                  const newUser = lodash.clone(user);
+                  const { length } = newUser.messages;
+                  for (let i = 0; i < length; i += 1) {
+                    if (newUser.messages[i].req_id === action.data.req_id) {
+                      if (newUser.messages[i].is_success === undefined) {
+                        newUser.messages[i].is_success = false;
+                        break;
+                      }
                     }
                   }
                   return newUser;
@@ -127,7 +130,7 @@ export default function useWebsocketModel() {
                       user.messages[index].is_success = false;
                     }
                   }
-                  return lodash.cloneDeep(prevState);
+                  return lodash.clone(prevState);
                 }
                 return prevState;
               });
