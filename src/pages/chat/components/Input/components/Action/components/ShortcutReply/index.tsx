@@ -30,8 +30,9 @@ const Index = () => {
                   }}
                   actions={[
                     <Button
-                      onClick={async () => {
-                        await deleteShortcutReply(item.id);
+                      onClick={(e) => {
+                        deleteShortcutReply(item.id).then();
+                        e.stopPropagation();
                       }}
                       type={'text'}
                       size={'small'}
@@ -52,7 +53,7 @@ const Index = () => {
                 <AddForm />
               </div>
             }
-          ></List>
+          />
         </div>
       }
     >

@@ -54,8 +54,10 @@ const Index: React.FC = () => {
     if (current) {
       const { length } = current.messages;
       if (prevUser && prevUser.id === current.id) {
+        // 当前用户没有变化
         setMessages(current.messages.slice(0, offset.current));
       } else {
+        offset.current = pageSize;
         if (length < pageSize) {
           getMessages(current.id).then((res) => {
             const msgs = res.data;
@@ -84,7 +86,7 @@ const Index: React.FC = () => {
 
   // 滚动加载更多聊天消息
   const onScroll = React.useCallback(
-    async (e: React.UIEvent<HTMLElement>) => {
+    async (e: React.UIEvent<HTMLDivElement>) => {
       const el = e.target as HTMLDivElement;
       const { scrollHeight, scrollTop, clientHeight } = el;
       // 滚动到顶部30个像素触发
@@ -105,7 +107,7 @@ const Index: React.FC = () => {
               mid = lastMessage.id;
             }
             const moreMsg = await fetchMessages(current.id, mid);
-            if (moreMsg.length >= 0) {
+            if (moreMsg.length > 0) {
               setMessages((prevState) => {
                 return [...prevState].concat(moreMsg);
               });
@@ -121,12 +123,13 @@ const Index: React.FC = () => {
   );
 
   const messagesView = React.useMemo(() => {
+    const { length } = messages;
     return messages.map((v, index) => {
       return (
         <MessageItem
           message={v}
           key={v.req_id}
-          prev={index > 0 ? messages[index - 1] : undefined}
+          prev={index < length - 1 ? messages[index + 1] : undefined}
         />
       );
     });
