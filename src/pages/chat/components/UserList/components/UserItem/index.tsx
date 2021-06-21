@@ -11,7 +11,7 @@ import styles from './index.less';
 const Index: React.FC<{
   user: APP.User;
 }> = (props) => {
-  const { setCurrent, current } = useModel('useCurrentModel');
+  const { setCurrent, current, goTop } = useModel('useCurrentModel');
   const { setUsers } = useModel('useUsersModel');
   const [menuVisible, setMenuVisible] = React.useState(false);
 
@@ -32,10 +32,11 @@ const Index: React.FC<{
         }
         newUsers.delete(id);
         setCurrent(lodash.cloneDeep(user));
+        goTop();
         return newUsers;
       });
     },
-    [current, setCurrent, setUsers],
+    [current, goTop, setCurrent, setUsers],
   );
 
   const { length } = props.user.messages;

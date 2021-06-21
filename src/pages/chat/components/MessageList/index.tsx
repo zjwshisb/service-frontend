@@ -17,7 +17,7 @@ const pageSize = 20;
  * @constructor
  */
 const Index: React.FC = () => {
-  const { current, setCurrent } = useModel('useCurrentModel');
+  const { current, setCurrent, top } = useModel('useCurrentModel');
 
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -83,6 +83,12 @@ const Index: React.FC = () => {
       setMessages([]);
     }
   }, [current, fetchMessages, setCurrent]);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollTop = 0;
+    }
+  }, [top]);
 
   // 滚动加载更多聊天消息
   const onScroll = React.useCallback(

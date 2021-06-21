@@ -17,20 +17,11 @@ const Index: React.FC<{
     let time: JSX.Element = <></>;
     if (props.prev) {
       const prevMoment = moment(props.prev.received_at * 1000);
-      const now = moment();
-      if (isSameDate(prevMoment, currMoment)) {
-        if (props.message.received_at - props.prev.received_at > 60 * 30) {
-          if (isSameDate(currMoment, now)) {
-            time = <Notice>{prevMoment.format('HH:mm:ss')}</Notice>;
-          } else {
-            time = <Notice>{prevMoment.format('YYYY-MM-DD HH:mm:ss')}</Notice>;
-          }
-        }
-      } else {
+      if (!isSameDate(prevMoment, currMoment)) {
         time = <Notice>{currMoment.format('YYYY-MM-DD HH:mm:ss')}</Notice>;
       }
     } else {
-      time = <Notice>{currMoment.format('YYYY-MM-DD HH:mm:ss')}</Notice>;
+      time = <Notice>{currMoment.format('YYYY-MM-DD')}</Notice>;
     }
     return (
       <>

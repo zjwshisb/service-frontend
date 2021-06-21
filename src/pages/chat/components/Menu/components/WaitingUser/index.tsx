@@ -1,7 +1,7 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { Drawer, List, message, Skeleton, Avatar, Badge } from 'antd';
+import { Drawer, List, message, Skeleton, Avatar, Badge, Tag } from 'antd';
 import { timeFormat } from '@/utils';
 import { handleAccept } from '@/services';
 import lodash from 'lodash';
@@ -9,6 +9,7 @@ import styles from '../index.less';
 
 const Index = () => {
   const { waitingUsers } = useModel('useWaitingUserModel');
+  const { current, setCurrent, goTop } = useModel('useCurrentModel');
   const setUsers = useModel('useUsersModel', (model) => model.setUsers);
   const [visible, setVisible] = React.useState(false);
 
@@ -36,11 +37,16 @@ const Index = () => {
                 <a
                   onClick={(e) => {
                     handleAccept(item.id).then((res) => {
-                      setUsers((prevState) => {
-                        const newState = lodash.clone(prevState);
-                        newState.set(res.data.id, res.data);
-                        return newState;
-                      });
+                      if (res.data.id === current?.id) {
+                        goTop();
+                        setCurrent(res.data);
+                      } else {
+                        setUsers((prevState) => {
+                          const newState = lodash.clone(prevState);
+                          newState.set(res.data.id, res.data);
+                          return newState;
+                        });
+                      }
                       message.success('接入成功');
                       e.stopPropagation();
                     });
@@ -54,13 +60,14 @@ const Index = () => {
                 <List.Item.Meta
                   avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
                   title={
-                    <div className="aa">
+                    <div>
                       <span>{item.username}</span>
-                      <span>{timeFormat(item.last_time)}</span>
+                      <span style={{ marginLeft: '20px' }}>{timeFormat(item.last_time)}</span>
                     </div>
                   }
                   description={
                     <div>
+                      <Tag color="red">{item.message_count}</Tag>
                       <span>{item.last_message}</span>
                     </div>
                   }

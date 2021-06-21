@@ -9,7 +9,9 @@ const Index: React.FC<{
     return (
       <>
         {props.isSuccess === undefined && <Spin />}
-        {props.isSuccess === false && <InfoCircleOutlined className={'error'} />}
+        {props.isSuccess === false && (
+          <InfoCircleOutlined className={'error'} style={{ color: '#ff4d4f' }} />
+        )}
       </>
     );
   }, [props.isSuccess]);

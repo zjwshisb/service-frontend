@@ -9,7 +9,6 @@ export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
 
-
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState } = useModel('@@initialState');
 
@@ -68,7 +67,9 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   return (
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} alt="avatar" >{currentUser.username}</Avatar>
+        <Avatar size="small" className={styles.avatar} alt="avatar" src={currentUser.avatar}>
+          {currentUser.username}
+        </Avatar>
         <span className={`${styles.name} anticon`}>{currentUser.username}</span>
       </span>
     </HeaderDropdown>

@@ -8,7 +8,7 @@ import Menu from './components/Menu/index';
 import { useModel } from 'umi';
 import lodash from 'lodash';
 import { message } from 'antd';
-import { getUsers } from '@/services';
+import { getUsers, handleRead } from '@/services';
 import styles from './index.less';
 
 const Index: React.FC = () => {
@@ -17,7 +17,7 @@ const Index: React.FC = () => {
   );
   const { setUsers } = useModel('useUsersModel');
   const { setWaitingUsers } = useModel('useWaitingUserModel');
-  const { current, setCurrent } = useModel('useCurrentModel');
+  const { current, setCurrent, goTop } = useModel('useCurrentModel');
   const initialState = useModel('@@initialState');
   const { fetchShortcutReplies } = useModel('useShortcutReplyModel');
 
@@ -29,9 +29,7 @@ const Index: React.FC = () => {
     setOnOpen(() => () => {
       message.success('连接聊天服务器成功').then();
     });
-    setOnClose(() => () => {
-      // connect()
-    });
+    setOnClose(() => () => {});
   }, [setOnOpen, setOnError, setOnClose]);
 
   React.useEffect(() => {
@@ -41,6 +39,7 @@ const Index: React.FC = () => {
         const msg = action.data;
         msg.avatar = avatar;
         if (current && current.id === action.data.user_id) {
+          goTop();
           setCurrent((prevState) => {
             if (prevState) {
               const newState = lodash.clone(prevState);
@@ -63,7 +62,14 @@ const Index: React.FC = () => {
         }
       };
     });
-  }, [current, initialState.initialState?.currentUser?.avatar, setCurrent, setOnSend, setUsers]);
+  }, [
+    current,
+    goTop,
+    initialState.initialState?.currentUser?.avatar,
+    setCurrent,
+    setOnSend,
+    setUsers,
+  ]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.Receipt>) => {
@@ -93,7 +99,7 @@ const Index: React.FC = () => {
         });
       }
     }, 'receipt');
-  }, [current?.id, setCurrent, setOnMessage, setUsers]);
+  }, [current?.id, goTop, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.WaitingUser[]>) => {
@@ -107,11 +113,12 @@ const Index: React.FC = () => {
     setOnMessage((action: APP.Action<APP.Message>) => {
       const msg = action.data;
       if (msg.user_id === current?.id) {
+        goTop();
+        handleRead(current.id).then();
         setCurrent((prevState) => {
           if (prevState) {
             const newState = lodash.clone(prevState);
             newState.messages.unshift(msg);
-            newState.unread += 1;
             return newState;
           }
           return prevState;
@@ -129,7 +136,7 @@ const Index: React.FC = () => {
         });
       }
     }, 'receive-message');
-  }, [current, setCurrent, setOnMessage, setUsers]);
+  }, [current, goTop, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: APP.Action<APP.OnLine>) => {
