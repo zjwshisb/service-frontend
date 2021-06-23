@@ -9,7 +9,7 @@ import { handleRead } from '@/services';
 import styles from './index.less';
 
 const Index: React.FC<{
-  user: APP.User;
+  user: API.User;
 }> = (props) => {
   const { setCurrent, current, goTop } = useModel('useCurrentModel');
   const { setUsers } = useModel('useUsersModel');
@@ -41,7 +41,7 @@ const Index: React.FC<{
 
   const { length } = props.user.messages;
 
-  const lastMessage: APP.Message | undefined = React.useMemo(() => {
+  const lastMessage: API.Message | undefined = React.useMemo(() => {
     return length > 0 ? props.user.messages[0] : undefined;
   }, [length, props.user.messages]);
 

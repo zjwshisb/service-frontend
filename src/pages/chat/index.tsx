@@ -12,7 +12,7 @@ import { getUsers, handleRead } from '@/services';
 import styles from './index.less';
 
 const Index: React.FC = () => {
-  const { connect, setOnMessage, setOnSend, setOnClose, setOnError, setOnOpen } = useModel(
+  const { connect, setOnMessage, setOnSend, setOnClose, setOnError, setOnOpen, close } = useModel(
     'useWebsocketModel',
   );
   const { setUsers } = useModel('useUsersModel');
@@ -29,12 +29,11 @@ const Index: React.FC = () => {
     setOnOpen(() => () => {
       message.success('连接聊天服务器成功').then();
     });
-    setOnClose(() => () => {});
   }, [setOnOpen, setOnError, setOnClose]);
 
   React.useEffect(() => {
     setOnSend(() => {
-      return (action: APP.Action<APP.Message>) => {
+      return (action: API.Action<API.Message>) => {
         const avatar = initialState.initialState?.currentUser?.avatar || '';
         const msg = action.data;
         msg.avatar = avatar;
@@ -72,7 +71,7 @@ const Index: React.FC = () => {
   ]);
 
   React.useEffect(() => {
-    setOnMessage((action: APP.Action<APP.Receipt>) => {
+    setOnMessage((action: API.Action<API.Receipt>) => {
       if (action.data.user_id === current?.id) {
         setCurrent((user) => {
           if (user) {
@@ -102,7 +101,7 @@ const Index: React.FC = () => {
   }, [current?.id, goTop, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
-    setOnMessage((action: APP.Action<APP.WaitingUser[]>) => {
+    setOnMessage((action: API.Action<API.WaitingUser[]>) => {
       if (action.action === 'waiting-users') {
         setWaitingUsers(action.data);
       }
@@ -110,7 +109,7 @@ const Index: React.FC = () => {
   }, [setOnMessage, setWaitingUsers]);
 
   React.useEffect(() => {
-    setOnMessage((action: APP.Action<APP.Message>) => {
+    setOnMessage((action: API.Action<API.Message>) => {
       const msg = action.data;
       if (msg.user_id === current?.id) {
         goTop();
@@ -139,7 +138,7 @@ const Index: React.FC = () => {
   }, [current, goTop, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
-    setOnMessage((action: APP.Action<APP.OnLine>) => {
+    setOnMessage((action: API.Action<API.OnLine>) => {
       setCurrent((prevState) => {
         if (action.data.user_id === prevState?.id) {
           const newState = lodash.cloneDeep(prevState);
@@ -163,7 +162,7 @@ const Index: React.FC = () => {
   }, [setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
-    setOnMessage((action: APP.Action<APP.OffLine>) => {
+    setOnMessage((action: API.Action<API.OffLine>) => {
       setCurrent((prevState) => {
         if (action.data.user_id === prevState?.id) {
           const newState = lodash.clone(prevState);
@@ -189,7 +188,7 @@ const Index: React.FC = () => {
   React.useEffect(() => {
     getUsers().then((res) => {
       setUsers(() => {
-        const map = new Map<number, APP.User>();
+        const map = new Map<number, API.User>();
         res.data.forEach((v) => {
           map.set(v.id, v);
         });
@@ -197,7 +196,10 @@ const Index: React.FC = () => {
         return map;
       });
     });
-  }, [connect, setUsers]);
+    return () => {
+      close();
+    };
+  }, [close, connect, setUsers]);
 
   return (
     <div className={styles.chat_container}>

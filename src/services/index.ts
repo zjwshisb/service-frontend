@@ -26,6 +26,7 @@ export async function handleAccept(uid: number) {
 export async function getUsers() {
   return request<API.Response<APP.User[]>>('/ws/chat-users');
 }
+
 export async function removeUser(uid: number) {
   return request<API.Response>(`/ws/chat-user/${uid}`, {
     method: 'delete',
@@ -49,4 +50,7 @@ export async function getMessages(uid: number, mid?: number) {
   return request<API.Response<APP.Message[]>>('/ws/messages', {
     params: query,
   });
+}
+export async function getSettings() {
+  return request<API.Response<APP.Setting[]>>('/settings');
 }

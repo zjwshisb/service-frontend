@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Index: React.FC<{
-  message: APP.Message;
+  message: API.Message;
 }> = (props) => {
   const [content, setContent] = React.useState('');
 

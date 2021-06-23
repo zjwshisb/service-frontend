@@ -5,7 +5,7 @@ import { Drawer, Table, Avatar } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import styles from '../index.less';
 
-const columns: ColumnsType<APP.ServiceUser> = [
+const columns: ColumnsType<API.ServiceUser> = [
   {
     dataIndex: 'username',
     title: '客服',
@@ -43,7 +43,7 @@ const Index = () => {
   const setOnMessage = useModel('useWebsocketModel', (model) => model.setOnMessage);
 
   React.useEffect(() => {
-    setOnMessage((action: APP.Action<APP.ServiceUser[]>) => {
+    setOnMessage((action: API.Action<API.ServiceUser[]>) => {
       setUsers(action.data);
     }, 'service-users');
   }, [setOnMessage, setUsers]);
@@ -75,7 +75,7 @@ const Index = () => {
             setVisible(false);
           }}
         >
-          <Table<APP.ServiceUser>
+          <Table<API.ServiceUser>
             rowKey={'id'}
             size={'small'}
             dataSource={sortUsers}

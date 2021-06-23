@@ -21,7 +21,7 @@ const Index: React.FC = () => {
 
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const [messages, setMessages] = React.useState<APP.Message[]>([]);
+  const [messages, setMessages] = React.useState<API.Message[]>([]);
 
   const offset = React.useRef(pageSize);
 
@@ -30,10 +30,10 @@ const Index: React.FC = () => {
   const [noMore, setNoMore] = React.useState(false);
 
   // 保存上一帧的聊天对象
-  const userRef = React.useRef<APP.User>();
+  const userRef = React.useRef<API.User>();
 
   const fetchMessages = React.useCallback(async (uid: number, mid?: number) => {
-    let res: API.Response<APP.Message[]>;
+    let res: API.Response<API.Message[]>;
     if (mid) {
       res = await getMessages(uid, mid);
     } else {

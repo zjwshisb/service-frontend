@@ -3,18 +3,17 @@ import { PictureOutlined } from '@ant-design/icons/lib';
 import Upload from '@/components/Upload/index';
 import { createMsg } from '@/utils';
 import { useModel } from '@@/plugin-model/useModel';
-import type { UploadFile } from 'antd/lib/upload/interface';
 
 const Index = () => {
   const { current } = useModel('useCurrentModel');
   const { send } = useModel('useWebsocketModel');
 
   const onChange = React.useCallback(
-    (file: UploadFile) => {
+    (url: string) => {
+      console.log(url);
       if (current) {
-        if (file.status === 'done') {
-          const resp = file.response;
-          const action = createMsg(resp.data.url, current.id, 'image');
+        if (url !== '') {
+          const action = createMsg(url, current.id, 'image');
           send(action);
         }
       }

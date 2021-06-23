@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Avatar } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import Upload from '@/components/Upload/index';
-import type { UploadFile } from 'antd/lib/upload/interface';
 import 'antd/es/slider/style';
 
 const Index: React.FC = () => {
@@ -10,20 +9,15 @@ const Index: React.FC = () => {
 
   const initialState = useModel('@@initialState');
 
-  const onChange = React.useCallback(
-    (file: UploadFile) => {
-      if (file.status === 'done') {
-        initialState.refresh();
-      }
-    },
-    [initialState],
-  );
+  const onUpload = React.useCallback(() => {
+    initialState.refresh();
+  }, [initialState]);
 
   return (
     <>
       <a onClick={() => setVisible(true)}>更换头像</a>
       <Modal footer={<></>} visible={visible} onCancel={() => setVisible(false)} width={400}>
-        <Upload onChange={onChange} action={`${BASE_URL}/me/avatar`} corp={true}>
+        <Upload onChange={onUpload} action={`${BASE_URL}/me/avatar`} corp={true}>
           <Avatar
             className={'pointer'}
             shape="square"

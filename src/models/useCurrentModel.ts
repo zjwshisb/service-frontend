@@ -4,7 +4,7 @@ import React from 'react';
  * 当前聊天对象
  */
 export default function useCurrentModel() {
-  const [current, setCurrent] = React.useState<APP.User | undefined>();
+  const [current, setCurrent] = React.useState<API.User | undefined>();
 
   const [top, setTop] = React.useState(0);
 

@@ -5,13 +5,14 @@ import { Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import { history } from '@@/core/history';
 
-export type ActionHandle<T = any> = (action: APP.Action<T>) => void;
+export type ActionHandle<T = any> = (action: API.Action<T>) => void;
 export type EventHandle<T extends Event = Event> = (e: T) => void;
 
 export default function useWebsocketModel() {
-  const [websocket, setWebSocket] = React.useState<WebSocket | undefined>();
+  const websocket = React.useRef<WebSocket | undefined>();
+
   const [onSend, setOnSend] = React.useState<ActionHandle | undefined>();
-  const [onMessage, updateOnMessage] = React.useState<Map<APP.ActionType, ActionHandle>>(new Map());
+  const [onMessage, updateOnMessage] = React.useState<Map<API.ActionType, ActionHandle>>(new Map());
   const [onOpen, setOnOpen] = React.useState<EventHandle>();
   const [onError, setOnError] = React.useState<EventHandle>();
   const [onClose, setOnClose] = React.useState<EventHandle<CloseEvent>>();
@@ -22,29 +23,27 @@ export default function useWebsocketModel() {
   const { current, setCurrent } = useModel('useCurrentModel');
 
   const connect = React.useCallback(() => {
-    setWebSocket(() => {
-      const url = `${WS_URL}?token=${getToken()}`;
-      return new WebSocket(url);
-    });
+    const url = `${WS_URL}?token=${getToken()}`;
+    websocket.current = new WebSocket(url);
   }, []);
 
   React.useEffect(() => {
-    if (websocket) {
-      websocket.onopen = (e) => {
+    if (websocket.current) {
+      websocket.current.onopen = (e) => {
         if (onOpen) {
           onOpen(e);
         }
       };
       // 连接服务器失败
-      websocket.onerror = (e: Event) => {
+      websocket.current.onerror = (e: Event) => {
         if (onError) {
           onError(e);
         }
       };
-      websocket.onmessage = (e: MessageEvent) => {
+      websocket.current.onmessage = (e: MessageEvent) => {
         try {
           if (e.data !== '') {
-            const action: APP.Action = JSON.parse(e.data);
+            const action: API.Action = JSON.parse(e.data);
             const handle = onMessage.get(action.action);
             if (handle) {
               handle(action);
@@ -55,14 +54,14 @@ export default function useWebsocketModel() {
         }
       };
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
-      websocket.onclose = () => {
-        setWebSocket(undefined);
+      websocket.current.onclose = () => {
+        websocket.current = undefined;
       };
     }
   }, [connect, hadReConnect, onClose, onError, onMessage, onOpen, websocket]);
 
   const setOnMessage = React.useCallback(
-    <T>(callback: ActionHandle<T>, type: APP.ActionType): void => {
+    <T>(callback: ActionHandle<T>, type: API.ActionType): void => {
       updateOnMessage((prevState) => {
         const newState = lodash.clone(prevState);
         newState.set(type, callback);
@@ -71,6 +70,12 @@ export default function useWebsocketModel() {
     },
     [],
   );
+
+  const close = React.useCallback(() => {
+    if (websocket.current) {
+      websocket.current.close();
+    }
+  }, [websocket]);
 
   React.useEffect(() => {
     setOnMessage(() => {
@@ -96,11 +101,11 @@ export default function useWebsocketModel() {
     }, 'more-than-one');
   }, [setOnMessage]);
 
-  const send: (msg: APP.Action<APP.Message>) => void = React.useCallback(
-    (action: APP.Action<APP.Message>) => {
-      if (websocket) {
+  const send: (msg: API.Action<API.Message>) => void = React.useCallback(
+    (action: API.Action<API.Message>) => {
+      if (websocket.current) {
         try {
-          websocket.send(JSON.stringify(action));
+          websocket.current.send(JSON.stringify(action));
           // 2秒后没有收到回执则把消息状态改成发送失败
           setTimeout(() => {
             if (action.data.user_id === current?.id) {
@@ -164,5 +169,6 @@ export default function useWebsocketModel() {
     setOnOpen,
     setOnError,
     setOnClose,
+    close,
   };
 }

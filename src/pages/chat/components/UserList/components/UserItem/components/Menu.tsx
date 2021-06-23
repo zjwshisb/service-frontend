@@ -5,15 +5,15 @@ import { removeUser } from '@/services';
 import lodash from 'lodash';
 
 const Index: React.FC<{
-  user: APP.User;
+  user: API.User;
 }> = (props) => {
   const { setUsers } = useModel('useUsersModel');
 
   const { current, setCurrent } = useModel('useCurrentModel');
 
   const handleDelete = React.useCallback(
-    (user: APP.User) => {
-      const remove = (u: APP.User) => {
+    (user: API.User) => {
+      const remove = (u: API.User) => {
         removeUser(u.id).then(() => {
           if (current && current.id === u.id) {
             setCurrent(undefined);

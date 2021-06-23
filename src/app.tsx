@@ -118,6 +118,7 @@ export const request: RequestConfig = {
       const token = getToken();
       if (token) {
         const headers = {
+          Accept: 'application/json',
           Authorization: `bearer ${getToken()}`,
           ...options.headers,
         };

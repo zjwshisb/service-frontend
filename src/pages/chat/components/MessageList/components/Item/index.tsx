@@ -9,8 +9,8 @@ import { isSameDate } from '@/utils';
 import Notice from '../Notice';
 
 const Index: React.FC<{
-  message: APP.Message;
-  prev?: APP.Message;
+  message: API.Message;
+  prev?: API.Message;
 }> = (props) => {
   return React.useMemo(() => {
     const currMoment = moment(props.message.received_at * 1000);
