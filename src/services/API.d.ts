@@ -7,11 +7,9 @@ declare namespace API {
 
   export type Pagination<T = any> = {
     success: true;
-    data: {
-      list: T[];
-      total: number;
-      page: number;
-    };
+    data: T[];
+    total: number;
+
     message?: string;
   };
 

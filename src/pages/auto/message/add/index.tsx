@@ -1,17 +1,27 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { FormInstance } from '@ant-design/pro-form';
-import ProForm, { ProFormText, ProFormSelect, ProFormDependency } from '@ant-design/pro-form';
+import ProForm, {
+  ProFormTextArea,
+  ProFormText,
+  ProFormSelect,
+  ProFormDependency,
+} from '@ant-design/pro-form';
 import ProCard from '@ant-design/pro-card';
 import { MessageType } from '@/pages/auto/message';
 import ImageField from './components/Image';
 import NavigatorCardField from './components/NavigatorCard';
+import { storeAutoMessage } from '@/services/auto';
 
 const Index = () => {
   const form = React.useRef<FormInstance<FORM.AutoMessageForm>>();
 
   const submit = React.useCallback(async () => {
-    form.current?.validateFields().then(() => {});
+    // form.current?.validateFields().then(res => {
+    if (form.current) {
+      storeAutoMessage(form.current.getFieldsValue());
+    }
+    // });
   }, []);
 
   return (
@@ -52,8 +62,8 @@ const Index = () => {
               switch (type as API.MessageType) {
                 case 'text': {
                   return (
-                    <ProFormText
-                      rules={[{ required: true }]}
+                    <ProFormTextArea
+                      rules={[{ required: true, max: 512 }]}
                       required={true}
                       name={'content'}
                       label={'回复内容'}
