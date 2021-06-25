@@ -109,7 +109,23 @@ declare namespace API {
     id: number;
     name: string;
     type: MessageType;
-    content: any;
+    content: string;
+    created_at: string;
+    updated_at: string;
+  };
+
+  export type AutoRuleMatchType = 'all' | 'part';
+
+  export type ReplyType = 'message' | 'transfer';
+
+  export type AutoRule = {
+    id: number;
+    name: string;
+    match: string;
+    match_type: AutoRuleMatchType;
+    reply_type: ReplyType;
+    sort: number;
+    count: number;
     created_at: string;
     updated_at: string;
   };

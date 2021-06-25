@@ -7,7 +7,7 @@ declare namespace FORM {
     url?: string;
     title?: string;
   };
-  export type Pagination<T extends Record<any, any>> = {
+  export type Pagination<T = any> = {
     pageSize: number;
     current: number;
   } & T;

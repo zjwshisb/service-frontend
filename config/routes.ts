@@ -39,12 +39,34 @@
             name: '新增',
             component: './auto/message/add/index',
           },
+          {
+            path: '/auto/message/:id/edit',
+            name: '编辑',
+            component: './auto/message/edit/index',
+          },
         ],
       },
       {
         path: 'rule',
         name: '规则设置',
-        component: './auto/rule/index',
+        hideChildrenInMenu: true,
+        routes: [
+          {
+            path: '/auto/rule',
+            name: '消息列表',
+            component: './auto/rule/index',
+          },
+          {
+            path: '/auto/rule/add',
+            name: '新增',
+            component: './auto/rule/add/index',
+          },
+          {
+            path: '/auto/rule/:id/edit',
+            name: '编辑',
+            component: './auto/rule/edit/index',
+          },
+        ],
       },
     ],
   },

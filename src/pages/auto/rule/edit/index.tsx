@@ -2,7 +2,7 @@ import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProCard from '@ant-design/pro-card';
 import { storeAutoMessage } from '@/services/auto';
-import AutoMessageForm from '../components/Form';
+import RuleForm from '../components/Form';
 import { message } from 'antd';
 import { history } from '@@/core/history';
 
@@ -19,7 +19,7 @@ const Index = () => {
   return (
     <PageContainer>
       <ProCard layout={'center'}>
-        <AutoMessageForm submit={submit} />
+        <RuleForm submit={submit} />
       </ProCard>
     </PageContainer>
   );
