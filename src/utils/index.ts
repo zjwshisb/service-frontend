@@ -23,8 +23,8 @@ export function isSameDate(first: moment.Moment, second: moment.Moment) {
 export function createMsg(
   content: string,
   userId: number,
-  type: APP.MessageType = 'text',
-): APP.Action<APP.Message> {
+  type: API.MessageType = 'text',
+): API.Action<API.Message> {
   const id = createReqId();
   return {
     action: 'send-message',
@@ -32,7 +32,7 @@ export function createMsg(
       type,
       user_id: userId,
       content,
-      is_server: true,
+      source: 1,
       req_id: id,
       avatar: '',
       received_at: new Date().getTime() / 1000,

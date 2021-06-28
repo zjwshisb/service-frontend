@@ -1,14 +1,22 @@
 import React from 'react';
-import ProForm, { ProFormSelect, ProFormText } from '@ant-design/pro-form';
-import { MessageType } from '@/pages/auto/message';
+import ProForm, {
+  ProFormDependency,
+  ProFormSelect,
+  ProFormText,
+  ProFormDigit,
+  ProFormSwitch,
+} from '@ant-design/pro-form';
 import type { FormInstance } from 'antd/es';
 
+import { replyTypeLabel, matchTypeLabel } from '@/pages/auto/rule';
+import { getAutoRuleMessages } from '@/services/auto';
+
 const Index: React.FC<{
-  submit: (data: FORM.AutoMessageForm) => Promise<void>;
-  initialValues?: Partial<FORM.AutoMessageForm>;
+  submit: (data: FORM.AutoRuleForm) => Promise<void>;
+  initialValues?: Partial<FORM.AutoRuleForm>;
   readonlyValues?: string[];
 }> = (props) => {
-  const form = React.useRef<FormInstance<FORM.AutoMessageForm>>();
+  const form = React.useRef<FormInstance<FORM.AutoRuleForm>>();
 
   React.useEffect(() => {
     if (props.initialValues && form.current) {
@@ -17,7 +25,7 @@ const Index: React.FC<{
   }, [props.initialValues]);
 
   return (
-    <ProForm<FORM.AutoMessageForm>
+    <ProForm<FORM.AutoRuleForm>
       initialValues={props.initialValues}
       onFinish={(data) => {
         return props.submit(data);
@@ -33,7 +41,7 @@ const Index: React.FC<{
             max: 32,
           },
         ]}
-        label={'消息名称'}
+        label={'规则名称'}
         placeholder={'随便起个名字'}
         name={'name'}
         required={true}
@@ -44,19 +52,68 @@ const Index: React.FC<{
       />
       <ProFormSelect
         rules={[{ required: true }]}
-        valueEnum={MessageType}
-        label={'消息类型'}
-        name={'type'}
-        readonly={props.readonlyValues?.includes('type')}
+        label={'匹配规则'}
+        name={'match_type'}
+        required={true}
+        valueEnum={matchTypeLabel}
+      />
+      <ProFormText
+        rules={[
+          {
+            required: true,
+            max: 32,
+          },
+        ]}
+        label={'匹配文字'}
+        placeholder={'所需要匹配的文字'}
+        name={'match'}
+        required={true}
+      />
+      <ProFormSelect
+        rules={[{ required: true }]}
+        valueEnum={replyTypeLabel}
+        label={'回复类型'}
+        name={'reply_type'}
+        readonly={props.readonlyValues?.includes('reply_type')}
         required={true}
         fieldProps={{
           onChange: () => {
             form.current?.setFieldsValue({
-              content: '',
+              message_id: undefined,
             });
           },
         }}
       />
+      <ProFormDependency name={['reply_type']}>
+        {({ reply_type }) => {
+          switch (reply_type as API.ReplyType) {
+            case 'message':
+              return (
+                <ProFormSelect
+                  name={'message_id'}
+                  required={true}
+                  label={'回复消息'}
+                  request={() => {
+                    return getAutoRuleMessages().then((res) => res.data);
+                  }}
+                />
+              );
+            case 'transfer':
+            default:
+              return <></>;
+          }
+        }}
+      </ProFormDependency>
+      <ProFormDigit
+        label={'排序'}
+        required={true}
+        name={'sort'}
+        min={0}
+        max={128}
+        rules={[{ required: true }]}
+        tooltip={'从小到大，当多个符合条件的规则时取最小的'}
+      ></ProFormDigit>
+      <ProFormSwitch label={'启用'} name={'is_open'} />
     </ProForm>
   );
 };

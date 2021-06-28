@@ -4,12 +4,14 @@ import type { ProColumnType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button } from 'antd';
 import { history } from '@@/core/history';
+import { getAutoRules } from '@/services/auto';
+import MessageContent from '../components/MessageContent';
 
-export const ReplyTypeLabel: Record<API.ReplyType, string> = {
+export const replyTypeLabel: Record<API.ReplyType, string> = {
   message: '回复消息',
   transfer: '转人工客服',
 };
-export const MatchTypeLabel: Record<API.AutoRuleMatchType, string> = {
+export const matchTypeLabel: Record<API.AutoRuleMatchType, string> = {
   all: '全匹配',
   part: '包含',
 };
@@ -21,6 +23,8 @@ const Index = () => {
         dataIndex: 'name',
         title: '名称',
         search: false,
+        width: 200,
+        ellipsis: true,
       },
       {
         dataIndex: 'match',
@@ -30,24 +34,52 @@ const Index = () => {
       {
         dataIndex: 'match_type',
         title: '匹配类型',
-        valueEnum: MatchTypeLabel,
+        valueEnum: matchTypeLabel,
       },
       {
-        dataIndex: 'reply_type',
-        title: '回复类型',
-        valueEnum: ReplyTypeLabel,
-      },
-      {
-        dataIndex: 'reply_content',
         title: '回复内容',
+        search: false,
+        dataIndex: 'message',
+        ellipsis: true,
+        width: 300,
+        render(dom, record) {
+          if (record.reply_type === 'message' && record.message) {
+            return <MessageContent message={record.message} />;
+          }
+          return '转人工客服';
+        },
+      },
+      {
+        dataIndex: 'is_open',
+        title: '启用',
+        valueType: 'switch',
       },
       {
         dataIndex: 'sort',
         title: '排序',
+        search: false,
       },
       {
         dataIndex: 'count',
         title: '触发次数',
+        search: false,
+      },
+      {
+        dataIndex: 'id',
+        title: '操作',
+        valueType: 'option',
+        render(_, record) {
+          return [
+            <Button
+              type={'primary'}
+              size={'small'}
+              key={1}
+              onClick={() => history.push(`/auto/rule/${record.id}/edit`)}
+            >
+              编辑
+            </Button>,
+          ];
+        },
       },
     ];
   }, []);
@@ -55,9 +87,11 @@ const Index = () => {
   return (
     <PageContainer>
       <ProTable<API.AutoRule>
+        request={getAutoRules}
         columns={columns}
+        rowKey={'id'}
         toolBarRender={() => [
-          <Button type={'primary'} onClick={() => history.push('/auto/message/add')}>
+          <Button type={'primary'} onClick={() => history.push('/auto/rule/add')}>
             新增
           </Button>,
         ]}

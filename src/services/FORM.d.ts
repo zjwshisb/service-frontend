@@ -11,4 +11,14 @@ declare namespace FORM {
     pageSize: number;
     current: number;
   } & T;
+
+  export type AutoRuleForm = {
+    name: string;
+    match: string;
+    match_type: API.AutoRuleMatchType;
+    reply_type: API.ReplyType;
+    sort: number;
+    is_open: boolean;
+    message_id?: number;
+  };
 }

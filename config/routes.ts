@@ -48,7 +48,7 @@
       },
       {
         path: 'rule',
-        name: '规则设置',
+        name: '自定义规则设置',
         hideChildrenInMenu: true,
         routes: [
           {
@@ -67,6 +67,12 @@
             component: './auto/rule/edit/index',
           },
         ],
+      },
+      {
+        path: 'system-rule',
+        name: '系统规则设置',
+        hideChildrenInMenu: true,
+        component: './auto/system-rule/index',
       },
     ],
   },

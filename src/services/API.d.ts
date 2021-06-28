@@ -13,6 +13,11 @@ declare namespace API {
     message?: string;
   };
 
+  export type Option = {
+    label: string;
+    value: number | string;
+  };
+
   export type ActionType =
     | 'send-message'
     | 'user-offline'
@@ -43,7 +48,7 @@ declare namespace API {
     service_id?: number;
     id?: number;
     content: string;
-    is_server: boolean;
+    source: number;
     is_success?: boolean;
     req_id: number;
     received_at: number;
@@ -128,5 +133,8 @@ declare namespace API {
     count: number;
     created_at: string;
     updated_at: string;
+    message?: AutoMessage;
+    message_id: number;
+    is_open: boolean;
   };
 }

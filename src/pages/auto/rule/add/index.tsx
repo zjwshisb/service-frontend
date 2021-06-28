@@ -1,25 +1,22 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProCard from '@ant-design/pro-card';
-import { storeAutoMessage } from '@/services/auto';
-import AutoMessageForm from '../components/Form';
+import AutoRuleForm from '../components/Form';
 import { message } from 'antd';
 import { history } from '@@/core/history';
+import { storeAutoRule } from '@/services/auto';
 
 const Index = () => {
-  const submit = React.useCallback(async (data) => {
-    return storeAutoMessage(data)
-      .then(() => {
-        message.success('操作成功');
-        history.goBack();
-      })
-      .catch();
+  const submit = React.useCallback(async (data: FORM.AutoRuleForm) => {
+    await storeAutoRule(data);
+    message.success('操作成功');
+    history.goBack();
   }, []);
 
   return (
     <PageContainer>
       <ProCard layout={'center'}>
-        <AutoMessageForm submit={submit} />
+        <AutoRuleForm submit={submit} />
       </ProCard>
     </PageContainer>
   );

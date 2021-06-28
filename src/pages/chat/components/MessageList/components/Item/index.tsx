@@ -25,7 +25,7 @@ const Index: React.FC<{
     }
     return (
       <>
-        <div className={styles.item} data-right={props.message.is_server}>
+        <div className={styles.item} data-right={props.message.source === 0}>
           <div className={styles.avatar}>
             <Avatar src={props.message.avatar} />
           </div>
@@ -33,7 +33,7 @@ const Index: React.FC<{
             {props.message.type === 'text' && <Text content={props.message.content} />}
             {props.message.type === 'image' && <Image content={props.message.content} />}
           </div>
-          {props.message.is_server && <Spin isSuccess={props.message.is_success} />}
+          {props.message.source === 1 && <Spin isSuccess={props.message.is_success} />}
         </div>
         {time}
       </>
@@ -41,7 +41,7 @@ const Index: React.FC<{
   }, [
     props.message.avatar,
     props.message.content,
-    props.message.is_server,
+    props.message.source,
     props.message.is_success,
     props.message.received_at,
     props.message.type,

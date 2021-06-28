@@ -5,8 +5,7 @@ import ProTable from '@ant-design/pro-table';
 import { Button, message, Modal } from 'antd';
 import { history } from '@@/core/history';
 import { getAutoMessage, deleteAutoMessage } from '@/services/auto';
-import { Image, Card } from 'antd';
-import styles from './index.less';
+import MessageContent from '../components/MessageContent';
 
 export const MessageType: Record<API.MessageType, string> = {
   text: '文本',
@@ -40,27 +39,7 @@ const Index = () => {
         search: false,
         ellipsis: true,
         render(text, record) {
-          let navigator: MessageNavigator;
-          switch (record.type) {
-            case 'navigator':
-              navigator = JSON.parse(record.content);
-              return (
-                <Card
-                  hoverable
-                  bodyStyle={{ padding: '5px' }}
-                  className={styles.navigator}
-                  cover={<img alt="example" src={navigator.content} className={styles.cover} />}
-                >
-                  <Card.Meta title={navigator.title} />
-                </Card>
-              );
-            case 'image':
-              return <Image src={record.content} className={styles.image} width={'300px'} />;
-            case 'text':
-              return text;
-            default:
-              return '';
-          }
+          return <MessageContent message={record} />;
         },
       },
       {
@@ -81,10 +60,18 @@ const Index = () => {
         valueType: 'option',
         render(_, record) {
           return [
-            <a key={1} onClick={() => history.push(`/auto/message/${record.id}/edit`)}>
+            <Button
+              type={'primary'}
+              size={'small'}
+              key={1}
+              onClick={() => history.push(`/auto/message/${record.id}/edit`)}
+            >
               编辑
-            </a>,
-            <a
+            </Button>,
+            <Button
+              type={'primary'}
+              size={'small'}
+              danger={true}
               key={2}
               onClick={() => {
                 Modal.confirm({
@@ -102,7 +89,7 @@ const Index = () => {
               }}
             >
               删除
-            </a>,
+            </Button>,
           ];
         },
       },

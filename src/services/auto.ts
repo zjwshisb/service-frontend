@@ -25,8 +25,43 @@ export async function updateAutoMessage(data: FORM.AutoMessageForm, id: React.Re
     data,
   });
 }
+
 export async function deleteAutoMessage(id: React.ReactText) {
   return request<API.Response>(`/auto-message/${id}`, {
     method: 'Delete',
+  });
+}
+
+export async function getAutoRuleMessages() {
+  return request<API.Response<API.Option[]>>('/auto-rules/options/messages');
+}
+
+export async function getAutoRules(params: FORM.Pagination) {
+  return request<API.Pagination<API.AutoRule>>('/auto-rules', {
+    params,
+  });
+}
+export async function storeAutoRule(data: FORM.AutoRuleForm) {
+  return request<API.Response<API.AutoRule>>('/auto-rule', {
+    method: 'POST',
+    data,
+  });
+}
+export async function showAutoRule(id: string) {
+  return request<API.Response<API.AutoRule>>(`/auto-rule/${id}`);
+}
+export async function updateAutoRule(data: FORM.AutoRuleForm, id: string) {
+  return request<API.Response>(`/auto-rule/${id}`, {
+    method: 'PUT',
+    data,
+  });
+}
+export async function getSystemAutoRule() {
+  return request<API.Response<API.AutoRule[]>>('/system-auto-rules');
+}
+export async function updateSystemAutoRule(data: Record<string, number>) {
+  return request<API.Response>('/system-auto-rules', {
+    method: 'PUT',
+    data,
   });
 }
