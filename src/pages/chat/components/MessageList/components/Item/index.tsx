@@ -25,7 +25,7 @@ const Index: React.FC<{
     }
     return (
       <>
-        <div className={styles.item} data-right={props.message.source === 0}>
+        <div className={styles.item} data-right={props.message.source === 1}>
           <div className={styles.avatar}>
             <Avatar src={props.message.avatar} />
           </div>

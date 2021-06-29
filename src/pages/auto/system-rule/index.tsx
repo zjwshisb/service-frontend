@@ -3,6 +3,7 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import { getSystemAutoRule, getAutoRuleMessages, updateSystemAutoRule } from '@/services/auto';
 import ProCard from '@ant-design/pro-card';
+import { message } from 'antd';
 
 const Index = () => {
   const [rules, setRules] = React.useState<API.AutoRule[]>([]);
@@ -27,8 +28,9 @@ const Index = () => {
         <ProForm
           style={{ width: '600px' }}
           onFinish={(data) => {
-            console.log(data);
-            return updateSystemAutoRule(data).then();
+            return updateSystemAutoRule(data).then(() => {
+              message.success('修改成功');
+            });
           }}
         >
           {rules.map((v) => {
