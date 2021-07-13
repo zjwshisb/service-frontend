@@ -4,6 +4,7 @@ import Avatar from '../components/Avatar';
 import Spin from '../components/Spin';
 import Text from '../components/Text';
 import Image from '../components/Image';
+import Navigator from '../components/Navigator';
 import moment from 'moment';
 import { isSameDate } from '@/utils';
 import Notice from '../Notice';
@@ -32,6 +33,7 @@ const Index: React.FC<{
           <div className={styles.content} data-msg-type={props.message.type}>
             {props.message.type === 'text' && <Text content={props.message.content} />}
             {props.message.type === 'image' && <Image content={props.message.content} />}
+            {props.message.type === 'navigator' && <Navigator content={props.message.content} />}
           </div>
           {props.message.source === 1 && <Spin isSuccess={props.message.is_success} />}
         </div>

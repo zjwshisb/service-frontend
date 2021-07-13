@@ -42,6 +42,12 @@ declare namespace API {
 
   export type MessageType = 'text' | 'image' | 'navigator';
 
+  export type NavigatorContent = {
+    title: string;
+    content: string;
+    url: string;
+  };
+
   export type Message = {
     type: MessageType;
     user_id: number;

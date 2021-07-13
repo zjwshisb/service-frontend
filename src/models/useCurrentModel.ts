@@ -6,11 +6,11 @@ import React from 'react';
 export default function useCurrentModel() {
   const [current, setCurrent] = React.useState<API.User | undefined>();
 
-  const [top, setTop] = React.useState(0);
+  const [top, setTop] = React.useState<boolean>(false);
 
   // 消息列表滚动到最底部
   const goTop = React.useCallback(() => {
-    setTop((prevState) => prevState + 1);
+    setTop((prevState) => !prevState);
   }, []);
 
   return {

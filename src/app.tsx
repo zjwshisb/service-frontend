@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { PageLoading } from '@ant-design/pro-layout';
-import { notification } from 'antd';
+import { notification, Modal } from 'antd';
 import type { RequestConfig, RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import RightContent from '@/components/RightContent';
@@ -88,7 +88,7 @@ const codeMessage = {
  * 异常处理程序
  */
 const errorHandler = (error: ResponseError) => {
-  const { response } = error;
+  const { response, data } = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
@@ -96,6 +96,21 @@ const errorHandler = (error: ResponseError) => {
       case 401: {
         break;
       }
+      case 404: {
+        Modal.error({
+          title: '提示',
+          content: '数据不见啦',
+        });
+        break;
+      }
+      case 422: {
+        Modal.error({
+          title: '提示',
+          content: data.message,
+        });
+        break;
+      }
+
       case 500: {
         break;
       }

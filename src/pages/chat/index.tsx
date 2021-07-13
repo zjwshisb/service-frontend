@@ -19,11 +19,6 @@ const Index: React.FC = () => {
   const { setWaitingUsers } = useModel('useWaitingUserModel');
   const { current, setCurrent, goTop } = useModel('useCurrentModel');
   const initialState = useModel('@@initialState');
-  const { fetchShortcutReplies } = useModel('useShortcutReplyModel');
-
-  React.useEffect(() => {
-    fetchShortcutReplies();
-  }, [fetchShortcutReplies]);
 
   React.useEffect(() => {
     setOnOpen(() => () => {
