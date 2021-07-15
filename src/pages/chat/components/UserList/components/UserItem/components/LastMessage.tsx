@@ -1,4 +1,5 @@
 import React from 'react';
+import { getMessageTypeLabel } from '@/pages/chat/util';
 
 const Index: React.FC<{
   message: API.Message;
@@ -6,23 +7,7 @@ const Index: React.FC<{
   const [content, setContent] = React.useState('');
 
   React.useEffect(() => {
-    switch (props.message.type) {
-      case 'text': {
-        setContent(props.message.content);
-        break;
-      }
-      case 'image': {
-        setContent('[图片]');
-        break;
-      }
-      case 'navigator': {
-        setContent('[导航卡片]');
-        break;
-      }
-      default: {
-        setContent('');
-      }
-    }
+    setContent(getMessageTypeLabel(props.message.content, props.message.type));
   }, [props.message]);
   return React.useMemo(() => {
     return <>{content}</>;

@@ -1,12 +1,15 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { List, message, Skeleton, Avatar, Badge, Tag } from 'antd';
+import { List, message, Skeleton, Avatar, Badge } from 'antd';
 import { timeFormat } from '@/utils';
 import { handleAccept } from '@/services';
 import lodash from 'lodash';
 import styles from '../index.less';
+import myStyles from './index.less';
 import DraggableView from '@/components/DraggableView';
+import { getMessageTypeLabel } from '@/pages/chat/util';
+import { Typography } from 'antd';
 
 const Index = () => {
   const { waitingUsers } = useModel('useWaitingUserModel');
@@ -57,18 +60,26 @@ const Index = () => {
           >
             <Skeleton avatar title={false} active loading={false}>
               <List.Item.Meta
+                className={myStyles.listItem}
                 avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
                 title={
                   <div>
                     <span>{item.username}</span>
-                    <span style={{ marginLeft: '20px' }}>{timeFormat(item.last_time)}</span>
+                    <span className={myStyles.time} style={{ marginLeft: '20px' }}>
+                      {timeFormat(item.last_time)}
+                    </span>
                   </div>
                 }
                 description={
-                  <div>
-                    <Tag color="red">{item.message_count}</Tag>
-                    <span>{item.last_message}</span>
-                  </div>
+                  <Badge
+                    count={item.message_count}
+                    size={'small'}
+                    className={myStyles.messageContent}
+                  >
+                    <Typography.Text ellipsis={true} className={myStyles.messageContent}>
+                      {getMessageTypeLabel(item.last_message, item.last_type)}
+                    </Typography.Text>
+                  </Badge>
                 }
               />
             </Skeleton>

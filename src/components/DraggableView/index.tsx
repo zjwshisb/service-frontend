@@ -6,6 +6,7 @@ import style from './index.less';
 const Index: React.FC<{
   trigger: (visible: boolean) => React.ReactNode;
   triggerClass?: string;
+  width?: string;
 }> = (props) => {
   const [visible, setVisible] = React.useState(true);
   return (
@@ -14,10 +15,10 @@ const Index: React.FC<{
         {props.trigger(visible)}
       </div>
       <Draggable handle={'.icon'}>
-        <div className={style.index} data-display={visible}>
+        <div className={style.index} style={{ width: props.width }} data-display={visible}>
           <div className={style.header}>
             <div className={style.left}>
-              <div className={style.dot} onClick={() => setVisible(false)}></div>
+              <div className={style.dot} onClick={() => setVisible(false)} />
             </div>
             <div className={style.right}>
               <DragOutlined size={16} id={'drag'} className={`${style.drag} icon`} />
@@ -28,5 +29,8 @@ const Index: React.FC<{
       </Draggable>
     </div>
   );
+};
+Index.defaultProps = {
+  width: '300px',
 };
 export default Index;

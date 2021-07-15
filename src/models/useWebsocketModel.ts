@@ -17,8 +17,6 @@ export default function useWebsocketModel() {
   const [onError, setOnError] = React.useState<EventHandle>();
   const [onClose, setOnClose] = React.useState<EventHandle<CloseEvent>>();
 
-  const [hadReConnect, setHadReConnect] = React.useState(false);
-
   const { setUsers } = useModel('useUsersModel');
   const { current, setCurrent } = useModel('useCurrentModel');
 
@@ -58,7 +56,7 @@ export default function useWebsocketModel() {
         setWebsocket(undefined);
       };
     }
-  }, [connect, hadReConnect, onClose, onError, onMessage, onOpen, websocket]);
+  }, [connect, onClose, onError, onMessage, onOpen, websocket]);
 
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: API.ActionType): void => {
@@ -154,13 +152,12 @@ export default function useWebsocketModel() {
           content: '聊天服务器已断开',
           okText: '重新连接连接聊天服务器',
           onOk() {
-            setHadReConnect(true);
-            connect();
+            window.location.reload();
           },
         });
       }
     },
-    [connect, current?.id, onSend, setCurrent, setUsers, websocket],
+    [current?.id, onSend, setCurrent, setUsers, websocket],
   );
   return {
     connect,

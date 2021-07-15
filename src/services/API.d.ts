@@ -75,6 +75,7 @@ declare namespace API {
     avatar: string;
     last_message: string;
     last_time: number;
+    last_type: MessageType;
     message_count: number;
   };
 

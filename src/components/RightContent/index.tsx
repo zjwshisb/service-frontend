@@ -29,7 +29,7 @@ const GlobalHeaderRight: React.FC = () => {
   return (
     <Space className={className}>
       <Link to={'/chat'} target={'_blank'}>
-        聊天系统
+        客服面板
       </Link>
       <Avatar menu={true} />
       {REACT_APP_ENV && (
