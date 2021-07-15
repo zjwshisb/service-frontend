@@ -35,6 +35,7 @@ const Index = () => {
         dataIndex: 'match_type',
         title: '匹配类型',
         valueEnum: matchTypeLabel,
+        search: false,
       },
       {
         title: '回复内容',
@@ -43,8 +44,11 @@ const Index = () => {
         ellipsis: true,
         width: 300,
         render(dom, record) {
-          if (record.reply_type === 'message' && record.message) {
-            return <MessageContent message={record.message} />;
+          if (record.reply_type === 'message') {
+            if (record.message) {
+              return <MessageContent message={record.message} />;
+            }
+            return <div>无</div>;
           }
           return '转人工客服';
         },
@@ -53,6 +57,7 @@ const Index = () => {
         dataIndex: 'is_open',
         title: '启用',
         valueType: 'switch',
+        search: false,
       },
       {
         dataIndex: 'sort',

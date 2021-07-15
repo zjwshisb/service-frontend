@@ -10,9 +10,9 @@ const Settings: LayoutSettings & {
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
-  title: 'Ant Design Pro',
+  title: '客服系统',
   pwa: false,
-  iconfontUrl: '',
+  iconfontUrl: undefined,
   menu: {
     locale: false,
   },

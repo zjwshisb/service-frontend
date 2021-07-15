@@ -16,7 +16,7 @@ export async function queryCurrent() {
 }
 
 export async function handleAccept(uid: number) {
-  return request<API.Response<APP.User>>('/ws/chat-user', {
+  return request<API.Response<API.User>>('/ws/chat-user', {
     method: 'post',
     data: {
       uid,
@@ -24,7 +24,7 @@ export async function handleAccept(uid: number) {
   });
 }
 export async function getUsers() {
-  return request<API.Response<APP.User[]>>('/ws/chat-users');
+  return request<API.Response<API.User[]>>('/ws/chat-users');
 }
 
 export async function removeUser(uid: number) {
@@ -47,10 +47,18 @@ export async function getMessages(uid: number, mid?: number) {
   if (mid) {
     query.mid = mid;
   }
-  return request<API.Response<APP.Message[]>>('/ws/messages', {
+  return request<API.Response<API.Message[]>>('/ws/messages', {
     params: query,
   });
 }
 export async function getSettings() {
-  return request<API.Response<APP.Setting[]>>('/settings');
+  return request<API.Response<API.Setting[]>>('/settings');
+}
+export async function updateSetting(name: string, value: string) {
+  return request<API.Response>(`/settings/${name}`, {
+    method: 'put',
+    data: {
+      value,
+    },
+  });
 }

@@ -3,6 +3,7 @@ import React from 'react';
 import { useModel } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
+import { Link } from 'umi';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -27,6 +28,9 @@ const GlobalHeaderRight: React.FC = () => {
   }
   return (
     <Space className={className}>
+      <Link to={'/chat'} target={'_blank'}>
+        聊天系统
+      </Link>
       <Avatar menu={true} />
       {REACT_APP_ENV && (
         <span>

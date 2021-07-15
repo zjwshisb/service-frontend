@@ -98,22 +98,16 @@ declare namespace API {
   };
 
   export type Setting = {
-    id: string;
     name: string;
     value: string;
-    created_at: string;
-    updated_at: string;
+    options: Record<string, string>;
+    title: string;
   };
 
   export type CurrentUser = {
     username: string;
     id: number;
     avatar: string;
-  };
-
-  export type ShortcutReply = {
-    content: string;
-    id: number;
   };
 
   export type AutoMessage = {
