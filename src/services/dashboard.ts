@@ -1,5 +1,8 @@
 import { request } from 'umi';
 
 export async function getQueryInfo() {
-  return request<API.Response>('/dashboard/query-info');
+  return request<API.Response<API.Dashboard.QueryInfo>>('/dashboard/query-info');
+}
+export async function getOnlineInfo() {
+  return request<API.Response<API.Dashboard.OnlineInfo>>('/dashboard/online-info');
 }

@@ -3,6 +3,7 @@ import type { ProColumnType } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { getSettings, updateSetting } from '@/services';
 import { PageContainer } from '@ant-design/pro-layout';
+import { message } from 'antd';
 
 const Index = () => {
   const columns = React.useMemo((): ProColumnType<API.Setting>[] => {
@@ -44,8 +45,13 @@ const Index = () => {
         recordCreatorProps={false}
         editable={{
           type: 'single',
+          actionRender: (row, config, defaultDoms) => {
+            return [defaultDoms.save, defaultDoms.cancel];
+          },
           onSave: async (name, row) => {
-            return await updateSetting(name.toString(), row.value);
+            await updateSetting(name.toString(), row.value);
+            message.success('修改成功');
+            return true;
           },
         }}
         rowKey={'name'}

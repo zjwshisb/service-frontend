@@ -43,6 +43,7 @@ const Index: React.FC<{
 
   const handleClick = React.useCallback(
     (event) => {
+      event.domEvent.stopPropagation();
       if (event.key === 'remove') {
         handleDelete(props.user);
       }

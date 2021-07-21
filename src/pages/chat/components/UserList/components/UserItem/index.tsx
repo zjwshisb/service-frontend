@@ -7,13 +7,13 @@ import LastMessage from './components/LastMessage';
 import Menu from './components/Menu';
 import { handleRead } from '@/services';
 import styles from './index.less';
+import { UnorderedListOutlined } from '@ant-design/icons/lib';
 
 const Index: React.FC<{
   user: API.User;
 }> = (props) => {
   const { setCurrent, current, goTop } = useModel('useCurrentModel');
   const { setUsers } = useModel('useUsersModel');
-  const [menuVisible, setMenuVisible] = React.useState(false);
 
   const onClick = React.useCallback(
     (id) => {
@@ -47,42 +47,45 @@ const Index: React.FC<{
 
   return React.useMemo(() => {
     return (
-      <Dropdown
-        overlay={<Menu user={props.user} />}
-        onVisibleChange={setMenuVisible}
-        trigger={['contextMenu']}
+      <div
+        className={styles.item}
+        onClick={() => onClick(props.user.id)}
+        data-active={current && current.id === props.user.id}
       >
-        <div
-          data-menu-visible={menuVisible}
-          className={styles.item}
-          onClick={() => onClick(props.user.id)}
-          data-active={current && current.id === props.user.id}
-        >
-          <div className={styles.avatar}>
-            <Badge count={props.user.unread} size={'small'}>
-              <Avatar size={50} shape="square">
-                {props.user.username}
-              </Avatar>
-            </Badge>
-          </div>
-          <div className={styles.info}>
-            <div className={styles.first}>
-              <div className={styles.name} data-online={props.user.online}>
-                {props.user.username}
-              </div>
-              <div className={styles.time}>
-                {lastMessage && <LastTime time={lastMessage.received_at} />}
-              </div>
+        <div className={styles.avatar}>
+          <Badge count={props.user.unread} size={'small'}>
+            <Avatar
+              size={50}
+              shape="square"
+              src={props.user.avatar}
+              style={{ opacity: props.user.online ? 1 : 0.3 }}
+            >
+              {props.user.username}
+            </Avatar>
+          </Badge>
+        </div>
+        <div className={styles.info}>
+          <div className={styles.first}>
+            <div className={styles.name} data-online={props.user.online}>
+              {props.user.username}
             </div>
-            <div className={styles.last}>
-              <div className={styles.message}>
-                {lastMessage && <LastMessage message={lastMessage} />}
-              </div>
+            <div className={styles.time}>
+              {lastMessage && <LastTime time={lastMessage.received_at} />}
+            </div>
+          </div>
+          <div className={styles.last}>
+            <div className={styles.message}>
+              {lastMessage && <LastMessage message={lastMessage} />}
+            </div>
+            <div className={styles.action}>
+              <Dropdown overlay={<Menu user={props.user} />} trigger={['hover']}>
+                <UnorderedListOutlined />
+              </Dropdown>
             </div>
           </div>
         </div>
-      </Dropdown>
+      </div>
     );
-  }, [current, lastMessage, menuVisible, onClick, props.user]);
+  }, [current, lastMessage, onClick, props.user]);
 };
 export default Index;

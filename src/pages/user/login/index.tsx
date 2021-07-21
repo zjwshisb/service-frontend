@@ -17,7 +17,7 @@ const goto = () => {
   setTimeout(() => {
     const { query } = history.location;
     const { redirect } = query as { redirect: string };
-    history.push(redirect || '/chat');
+    history.push(redirect || '/');
   }, 10);
 };
 

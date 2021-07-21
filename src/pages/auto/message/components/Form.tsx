@@ -29,7 +29,6 @@ const Index: React.FC<{
       onFinish={(data) => {
         return props.submit(data);
       }}
-      labelCol={{ span: 5 }}
       style={{ width: '600px' }}
       formRef={form}
     >

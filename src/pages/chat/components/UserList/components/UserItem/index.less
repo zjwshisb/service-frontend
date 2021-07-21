@@ -7,9 +7,6 @@
   &[data-active='true'] {
     background-color: #dedede;
   }
-  &[data-menu-visible='true'] {
-    border: 2px solid #03c160;
-  }
   & > .avatar {
     flex-shrink: 0;
     width: 50px;
@@ -51,6 +48,16 @@
       text-overflow: ellipsis;
       & > .message {
         flex: 1;
+      }
+      & > .action {
+        flex-shrink: 0;
+        width: 50px;
+        text-align: right;
+        & > * {
+          &:hover {
+            cursor: pointer;
+          }
+        }
       }
     }
   }

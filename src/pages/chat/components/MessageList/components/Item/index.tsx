@@ -6,7 +6,6 @@ import Text from '../components/Text';
 import Image from '../components/Image';
 import Navigator from '../components/Navigator';
 import moment from 'moment';
-import { isSameDate } from '@/utils';
 import Notice from '../Notice';
 
 const Index: React.FC<{
@@ -17,12 +16,12 @@ const Index: React.FC<{
     const currMoment = moment(props.message.received_at * 1000);
     let time: JSX.Element = <></>;
     if (props.prev) {
-      const prevMoment = moment(props.prev.received_at * 1000);
-      if (!isSameDate(prevMoment, currMoment)) {
+      const duration = props.message.received_at - props.prev.received_at;
+      if (duration > 30 * 60) {
         time = <Notice>{currMoment.format('YYYY-MM-DD HH:mm:ss')}</Notice>;
       }
     } else {
-      time = <Notice>{currMoment.format('YYYY-MM-DD')}</Notice>;
+      time = <Notice>{currMoment.format('YYYY-MM-DD HH:mm:ss')}</Notice>;
     }
     return (
       <>

@@ -138,4 +138,22 @@ declare namespace API {
     message_id: number;
     is_open: boolean;
   };
+  declare namespace Dashboard {
+    export type QueryInfo = {
+      user_count: number;
+      message_count: number;
+      max_time: number;
+      avg_time: number;
+      chart: {
+        label: string;
+        count: number;
+        category: string;
+      }[];
+    };
+    export type OnlineInfo = {
+      user_count: number;
+      waiting_user_count: number;
+      service_count: number;
+    };
+  }
 }

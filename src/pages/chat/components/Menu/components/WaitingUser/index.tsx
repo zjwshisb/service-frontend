@@ -12,9 +12,20 @@ import { getMessageTypeLabel } from '@/pages/chat/util';
 import { Typography } from 'antd';
 
 const Index = () => {
-  const { waitingUsers } = useModel('useWaitingUserModel');
+  const { setOnMessage } = useModel('useWebsocketModel');
+
+  const { waitingUsers, setWaitingUsers } = useModel('useWaitingUserModel');
   const { current, setCurrent, goTop } = useModel('useCurrentModel');
   const setUsers = useModel('useUsersModel', (model) => model.setUsers);
+
+  React.useEffect(() => {
+    setOnMessage((action: API.Action<API.WaitingUser[]>) => {
+      if (action.action === 'waiting-users') {
+        setWaitingUsers(action.data);
+      }
+    }, 'waiting-users');
+  }, [setOnMessage, setWaitingUsers]);
+
   return (
     <DraggableView
       trigger={(visible) => (

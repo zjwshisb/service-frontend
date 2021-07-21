@@ -16,7 +16,7 @@
     ],
   },
   {
-    path: '/dashboard',
+    path: '/',
     component: './dashboard',
     name: 'dashboard',
   },

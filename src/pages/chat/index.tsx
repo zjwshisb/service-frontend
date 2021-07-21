@@ -7,24 +7,14 @@ import Header from './components/Header/index';
 import Menu from './components/Menu/index';
 import { useModel } from 'umi';
 import lodash from 'lodash';
-import { message } from 'antd';
 import { getUsers, handleRead } from '@/services';
 import styles from './index.less';
 
 const Index: React.FC = () => {
-  const { connect, setOnMessage, setOnSend, setOnClose, setOnError, setOnOpen, close } = useModel(
-    'useWebsocketModel',
-  );
+  const { connect, setOnMessage, setOnSend, close } = useModel('useWebsocketModel');
   const { setUsers } = useModel('useUsersModel');
-  const { setWaitingUsers } = useModel('useWaitingUserModel');
   const { current, setCurrent, goTop } = useModel('useCurrentModel');
   const initialState = useModel('@@initialState');
-
-  React.useEffect(() => {
-    setOnOpen(() => () => {
-      message.success('连接聊天服务器成功').then();
-    });
-  }, [setOnOpen, setOnError, setOnClose]);
 
   React.useEffect(() => {
     setOnSend(() => {
@@ -45,7 +35,7 @@ const Index: React.FC = () => {
           });
         } else {
           setUsers((prevState) => {
-            const newState = lodash.cloneDeep(prevState);
+            const newState = lodash.clone(prevState);
             const user = newState.get(msg.user_id);
             if (user) {
               user.messages.push(msg);
@@ -94,14 +84,6 @@ const Index: React.FC = () => {
       }
     }, 'receipt');
   }, [current?.id, goTop, setCurrent, setOnMessage, setUsers]);
-
-  React.useEffect(() => {
-    setOnMessage((action: API.Action<API.WaitingUser[]>) => {
-      if (action.action === 'waiting-users') {
-        setWaitingUsers(action.data);
-      }
-    }, 'waiting-users');
-  }, [setOnMessage, setWaitingUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.Message>) => {

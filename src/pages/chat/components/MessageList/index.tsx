@@ -135,7 +135,7 @@ const Index: React.FC = () => {
         <MessageItem
           message={v}
           key={v.req_id}
-          prev={index < length - 1 ? messages[index + 1] : undefined}
+          prev={index + 1 < length ? messages[index + 1] : undefined}
         />
       );
     });

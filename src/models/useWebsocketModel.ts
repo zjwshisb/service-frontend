@@ -1,7 +1,7 @@
 import React from 'react';
 import { getToken, removeToken } from '@/utils/auth';
 import lodash from 'lodash';
-import { Modal } from 'antd';
+import { message, Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import { history } from '@@/core/history';
 
@@ -10,7 +10,6 @@ export type EventHandle<T extends Event = Event> = (e: T) => void;
 
 export default function useWebsocketModel() {
   const [websocket, setWebsocket] = React.useState<WebSocket | undefined>();
-
   const [onSend, setOnSend] = React.useState<ActionHandle | undefined>();
   const [onMessage, updateOnMessage] = React.useState<Map<API.ActionType, ActionHandle>>(new Map());
   const [onOpen, setOnOpen] = React.useState<EventHandle>();
@@ -28,11 +27,12 @@ export default function useWebsocketModel() {
   React.useEffect(() => {
     if (websocket) {
       websocket.onopen = (e) => {
+        message.success('连接聊天服务器成功');
+        Modal.destroyAll();
         if (onOpen) {
           onOpen(e);
         }
       };
-      // 连接服务器失败
       websocket.onerror = (e: Event) => {
         if (onError) {
           onError(e);
@@ -53,6 +53,14 @@ export default function useWebsocketModel() {
       };
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = () => {
+        Modal.error({
+          title: '提示',
+          content: '聊天服务器已断开',
+          okText: '重新连接连接聊天服务器',
+          onOk() {
+            window.location.reload();
+          },
+        });
         setWebsocket(undefined);
       };
     }
@@ -99,6 +107,8 @@ export default function useWebsocketModel() {
       });
     }, 'more-than-one');
   }, [setOnMessage]);
+
+  React.useEffect(() => {}, [websocket]);
 
   const send: (msg: API.Action<API.Message>) => void = React.useCallback(
     (action: API.Action<API.Message>) => {
@@ -159,6 +169,7 @@ export default function useWebsocketModel() {
     },
     [current?.id, onSend, setCurrent, setUsers, websocket],
   );
+
   return {
     connect,
     send,
@@ -168,5 +179,6 @@ export default function useWebsocketModel() {
     setOnError,
     setOnClose,
     close,
+    websocket,
   };
 }
