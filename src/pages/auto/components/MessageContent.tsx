@@ -1,12 +1,11 @@
 import React from 'react';
 import { Card, Image } from 'antd';
 import styles from './index.less';
-import type { MessageNavigator } from '@/pages/auto/message';
 
 const Index: React.FC<{
   message: API.AutoMessage;
 }> = (props) => {
-  let navigator: MessageNavigator;
+  let navigator: API.NavigatorContent;
   switch (props.message.type) {
     case 'navigator':
       navigator = JSON.parse(props.message.content);

@@ -1,0 +1,26 @@
+.container {
+  display: inline-block;
+  & > .item {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 200px;
+    & > .avatar {
+      flex-shrink: 0;
+      padding-top: 10px;
+    }
+    & > .content {
+      flex: 1;
+      padding: 0 5px;
+      & > .time {
+        color: #666666;
+        font-size: 14px;
+      }
+    }
+  }
+  & > .item.right {
+    flex-direction: row-reverse;
+    & > .content {
+    }
+  }
+}

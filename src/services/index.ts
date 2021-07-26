@@ -62,3 +62,17 @@ export async function updateSetting(name: string, value: string) {
     },
   });
 }
+export async function getChatSessions(params: FORM.Pagination) {
+  return request<API.Pagination<API.ChatSession>>('/chat-sessions', {
+    params,
+  });
+}
+export async function getChatSessionDetail(id: React.ReactText) {
+  return request<
+    API.Response<{
+      messages: API.Message[];
+      session: API.ChatSession;
+      total: number;
+    }>
+  >(`/chat-sessions/${id}`);
+}

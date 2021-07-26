@@ -12,11 +12,6 @@ export const MessageType: Record<API.MessageType, string> = {
   image: '图片',
   navigator: '导航卡片',
 };
-export type MessageNavigator = {
-  title: string;
-  content: string;
-  url: string;
-};
 
 const Index = () => {
   const actionRef = React.useRef<ActionType>();

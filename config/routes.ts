@@ -82,9 +82,21 @@
     name: '系统设置',
   },
   {
-    path: '/message',
-    name: '消息记录',
-    component: './message/index',
+    path: '/session',
+    name: '会话记录',
+    hideChildrenInMenu: true,
+    routes: [
+      {
+        path: '/session',
+        name: '会话记录',
+        component: './session/list/index',
+      },
+      {
+        path: '/session/:id',
+        name: '会话详情',
+        component: './session/detail/index',
+      },
+    ],
   },
   {
     path: '/chat',

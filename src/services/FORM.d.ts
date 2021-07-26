@@ -8,8 +8,8 @@ declare namespace FORM {
     title?: string;
   };
   export type Pagination<T = any> = {
-    pageSize: number;
-    current: number;
+    pageSize?: number;
+    current?: number;
   } & T;
 
   export type AutoRuleForm = {

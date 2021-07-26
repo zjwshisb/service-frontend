@@ -48,13 +48,19 @@ declare namespace API {
     url: string;
   };
 
+  export type SourceUser = 0;
+
+  export type SourceService = 1;
+
+  export type SourceSystem = 2;
+
   export type Message = {
     type: MessageType;
     user_id: number;
     service_id?: number;
     id?: number;
     content: string;
-    source: number;
+    source: SourceUser | SourceService | SourceSystem;
     is_success?: boolean;
     req_id: number;
     received_at: number;
@@ -156,4 +162,13 @@ declare namespace API {
       service_count: number;
     };
   }
+
+  export type ChatSession = {
+    id: number;
+    service_name: string;
+    user_name: string;
+    queried_at: number;
+    accepted_at: number;
+    broke_at: number;
+  };
 }
