@@ -159,13 +159,13 @@ declare namespace API {
     export type OnlineInfo = {
       user_count: number;
       waiting_user_count: number;
-      service_count: number;
+      admin_count: number;
     };
   }
 
   export type ChatSession = {
     id: number;
-    service_name: string;
+    admin_name: string;
     user_name: string;
     queried_at: number;
     accepted_at: number;

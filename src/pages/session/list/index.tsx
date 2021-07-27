@@ -5,6 +5,7 @@ import ProTable from '@ant-design/pro-table';
 import { Button } from 'antd';
 import { history } from '@@/core/history';
 import { getChatSessions } from '@/services';
+import moment from 'moment';
 
 const Index = () => {
   const columns: ProColumnType<API.ChatSession>[] = React.useMemo((): ProColumnType<API.ChatSession>[] => {
@@ -17,9 +18,11 @@ const Index = () => {
       {
         dataIndex: 'queried_at',
         title: '询问时间',
-        search: false,
         width: 200,
-        valueType: 'dateTime',
+        valueType: 'dateTimeRange',
+        render(_, record) {
+          return moment(record.queried_at).format('YYYY-MM-DD HH:mm:ss');
+        },
       },
       {
         dataIndex: 'accepted_at',
@@ -28,9 +31,8 @@ const Index = () => {
         valueType: 'dateTime',
       },
       {
-        dataIndex: 'service_name',
+        dataIndex: 'admin_name',
         title: '客服',
-        search: false,
       },
       {
         dataIndex: 'broke_at',

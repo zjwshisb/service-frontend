@@ -55,7 +55,7 @@ const Index = () => {
             <StatisticCard
               title={<span>在线客服</span>}
               statistic={{
-                value: onlineInfo.service_count,
+                value: onlineInfo.admin_count,
                 prefix: '',
                 status: 'success',
               }}
