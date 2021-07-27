@@ -53,7 +53,7 @@ const Index: React.FC<{
 
   return (
     <Menu onClick={handleClick}>
-      <Menu.Item key="remove">移除</Menu.Item>
+      <Menu.Item key="remove">断开会话</Menu.Item>
     </Menu>
   );
 };

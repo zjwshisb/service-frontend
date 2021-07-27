@@ -118,7 +118,7 @@ const Index: React.FC = () => {
     setOnMessage((action: API.Action<API.OnLine>) => {
       setCurrent((prevState) => {
         if (action.data.user_id === prevState?.id) {
-          const newState = lodash.cloneDeep(prevState);
+          const newState = lodash.clone(prevState);
           newState.online = true;
           return newState;
         }

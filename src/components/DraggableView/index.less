@@ -23,6 +23,16 @@
     height: 30px;
     background-color: #f6f6f6;
     border-bottom: 1px solid #eaeaea;
+    & > div {
+      flex: 1;
+    }
+    & > .center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666666;
+      font-size: 12px;
+    }
     & > .left {
       display: flex;
       align-items: center;
@@ -47,6 +57,7 @@
     & > .right {
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       padding-right: 10px;
     }
   }

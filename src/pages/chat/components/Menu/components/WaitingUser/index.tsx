@@ -26,8 +26,28 @@ const Index = () => {
     }, 'waiting-users');
   }, [setOnMessage, setWaitingUsers]);
 
+  const accept = React.useCallback(
+    (user: API.WaitingUser) => {
+      handleAccept(user.id).then((res) => {
+        if (res.data.id === current?.id) {
+          goTop();
+          setCurrent(res.data);
+        } else {
+          setUsers((prevState) => {
+            const newState = lodash.clone(prevState);
+            newState.set(res.data.id, res.data);
+            return newState;
+          });
+        }
+        message.success('接入成功');
+      });
+    },
+    [current?.id, goTop, setCurrent, setUsers],
+  );
+
   return (
     <DraggableView
+      title={'待接入用户'}
       trigger={(visible) => (
         <div className={styles.item}>
           <Badge count={waitingUsers.length} size={'small'}>
@@ -42,27 +62,15 @@ const Index = () => {
         rowKey={'id'}
         size={'small'}
         locale={{
-          emptyText: '暂无待接入用户',
+          emptyText: '暂无数据',
         }}
         renderItem={(item) => (
           <List.Item
             actions={[
               <a
                 onClick={(e) => {
-                  handleAccept(item.id).then((res) => {
-                    if (res.data.id === current?.id) {
-                      goTop();
-                      setCurrent(res.data);
-                    } else {
-                      setUsers((prevState) => {
-                        const newState = lodash.clone(prevState);
-                        newState.set(res.data.id, res.data);
-                        return newState;
-                      });
-                    }
-                    message.success('接入成功');
-                    e.stopPropagation();
-                  });
+                  accept(item);
+                  e.stopPropagation();
                 }}
               >
                 接入

@@ -57,7 +57,7 @@ declare namespace API {
   export type Message = {
     type: MessageType;
     user_id: number;
-    service_id?: number;
+    admin_id?: number;
     id?: number;
     content: string;
     source: SourceUser | SourceService | SourceSystem;

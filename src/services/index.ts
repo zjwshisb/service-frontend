@@ -23,6 +23,11 @@ export async function handleAccept(uid: number) {
     },
   });
 }
+
+export async function getUserInfo(uid: number) {
+  return request<API.Response<Record<string, string>>>(`/ws/user/${uid}`);
+}
+
 export async function getUsers() {
   return request<API.Response<API.User[]>>('/ws/chat-users');
 }

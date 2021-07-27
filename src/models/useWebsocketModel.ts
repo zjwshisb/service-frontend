@@ -53,14 +53,6 @@ export default function useWebsocketModel() {
       };
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = () => {
-        Modal.error({
-          title: '提示',
-          content: '聊天服务器已断开',
-          okText: '重新连接连接聊天服务器',
-          onOk() {
-            window.location.reload();
-          },
-        });
         setWebsocket(undefined);
       };
     }
@@ -110,7 +102,7 @@ export default function useWebsocketModel() {
 
   React.useEffect(() => {}, [websocket]);
 
-  const send: (msg: API.Action<API.Message>) => void = React.useCallback(
+  const send: (msg: API.Action<API.Message>) => boolean = React.useCallback(
     (action: API.Action<API.Message>) => {
       if (websocket) {
         try {
@@ -153,8 +145,10 @@ export default function useWebsocketModel() {
           if (onSend) {
             onSend(action);
           }
+          return true;
         } catch (e) {
           console.log(e);
+          return false;
         }
       } else {
         Modal.error({
@@ -165,6 +159,7 @@ export default function useWebsocketModel() {
             window.location.reload();
           },
         });
+        return false;
       }
     },
     [current?.id, onSend, setCurrent, setUsers, websocket],

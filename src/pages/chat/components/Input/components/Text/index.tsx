@@ -17,8 +17,9 @@ const Index: React.FC = () => {
         if (current) {
           if (text !== '') {
             const action = createMsg(text, current.id);
-            send(action);
-            clear();
+            if (send(action)) {
+              clear();
+            }
           }
           event.preventDefault();
         }
