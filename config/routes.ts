@@ -26,12 +26,12 @@
     routes: [
       {
         path: 'message',
-        name: '消息列表',
+        name: '快捷回复',
         hideChildrenInMenu: true,
         routes: [
           {
             path: '/auto/message',
-            name: '消息列表',
+            name: '快捷回复',
             component: './auto/message/index',
           },
           {
@@ -48,12 +48,12 @@
       },
       {
         path: 'rule',
-        name: '自定义规则设置',
+        name: '自定义规则',
         hideChildrenInMenu: true,
         routes: [
           {
             path: '/auto/rule',
-            name: '消息列表',
+            name: '自定义规则',
             component: './auto/rule/index',
           },
           {
@@ -70,7 +70,7 @@
       },
       {
         path: 'system-rule',
-        name: '系统规则设置',
+        name: '系统规则',
         hideChildrenInMenu: true,
         component: './auto/system-rule/index',
       },

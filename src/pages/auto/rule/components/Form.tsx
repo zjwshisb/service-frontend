@@ -90,12 +90,22 @@ const Index: React.FC<{
             case 'message':
               return (
                 <ProFormSelect
+                  rules={[{ required: true }]}
                   name={'message_id'}
                   required={true}
                   label={'回复消息'}
                   request={() => {
                     return getAutoRuleMessages().then((res) => res.data);
                   }}
+                />
+              );
+            case 'event':
+              return (
+                <ProFormText
+                  rules={[{ required: true, max: 20 }]}
+                  name={'key'}
+                  required={true}
+                  label={'事件key值'}
                 />
               );
             case 'transfer':
@@ -112,7 +122,7 @@ const Index: React.FC<{
         max={128}
         rules={[{ required: true }]}
         tooltip={'从小到大，当多个符合条件的规则时取最小的'}
-      ></ProFormDigit>
+      />
       <ProFormSwitch label={'启用'} name={'is_open'} />
     </ProForm>
   );

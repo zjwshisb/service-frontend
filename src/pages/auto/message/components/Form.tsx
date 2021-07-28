@@ -49,7 +49,7 @@ const Index: React.FC<{
         }}
       />
       <ProFormSelect
-        rules={[{ required: true }]}
+        rules={[{ required: true, message: '请选择消息类型' }]}
         valueEnum={MessageType}
         label={'消息类型'}
         name={'type'}

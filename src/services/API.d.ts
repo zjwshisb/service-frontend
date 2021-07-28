@@ -96,12 +96,18 @@ declare namespace API {
     disabled: boolean;
   };
 
-  export type ServiceUser = {
+  export type Admin = {
     id: number;
     username: string;
     avatar: string;
     online: boolean;
-    today_accept_count: number;
+    accepted_count: number;
+  };
+
+  export type AdminChatSetting = {
+    background: string;
+    is_auto_accept: boolean;
+    welcome_content: string;
   };
 
   export type Setting = {
@@ -128,7 +134,7 @@ declare namespace API {
 
   export type AutoRuleMatchType = 'all' | 'part';
 
-  export type ReplyType = 'message' | 'transfer';
+  export type ReplyType = 'message' | 'transfer' | 'event';
 
   export type AutoRule = {
     id: number;
@@ -143,6 +149,7 @@ declare namespace API {
     message?: AutoMessage;
     message_id: number;
     is_open: boolean;
+    key: string;
   };
   declare namespace Dashboard {
     export type QueryInfo = {

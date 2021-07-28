@@ -6,6 +6,7 @@ import ImgCrop from 'antd-img-crop';
 import type { UploadChangeParam } from 'antd/es/upload';
 import { PlusOutlined } from '@ant-design/icons';
 import styles from './index.less';
+import { CloseCircleOutlined } from '@ant-design/icons/lib';
 
 const maxSize = 1024 * 1024 * 5;
 
@@ -62,12 +63,28 @@ const Index: React.FC<{
     [props],
   );
 
+  const clear = React.useCallback(() => {
+    setUrl('');
+    if (props.onChange) {
+      props.onChange('');
+    }
+  }, [props]);
+
   const uploadButton = props.children ? (
     props.children
   ) : (
-    <div>
+    <div className={styles.content}>
       {url ? (
-        <img className={styles.img} src={url} />
+        <>
+          <img className={styles.img} src={url} width={props.width} height={props.height}></img>
+          <CloseCircleOutlined
+            className={styles.delete}
+            onClick={(e) => {
+              clear();
+              e.stopPropagation();
+            }}
+          />
+        </>
       ) : (
         <div
           className={styles.upload}

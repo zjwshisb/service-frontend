@@ -19,6 +19,10 @@ const Index = () => {
   const columns: ProColumnType<API.AutoMessage>[] = React.useMemo((): ProColumnType<API.AutoMessage>[] => {
     return [
       {
+        title: '#',
+        valueType: 'index',
+      },
+      {
         dataIndex: 'name',
         title: '消息名称',
         search: false,
@@ -33,6 +37,7 @@ const Index = () => {
         title: '消息内容',
         search: false,
         ellipsis: true,
+        width: 300,
         render(text, record) {
           return <MessageContent message={record} />;
         },

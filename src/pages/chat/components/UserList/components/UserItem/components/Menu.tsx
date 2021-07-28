@@ -31,7 +31,7 @@ const Index: React.FC<{
       } else {
         Modal.confirm({
           title: '提示',
-          content: '确定移除该用户?',
+          content: '确定断开与该用户的会话?',
           onOk() {
             remove(user);
           },

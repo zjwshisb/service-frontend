@@ -16,6 +16,8 @@ const Index: React.FC = () => {
   const { current, setCurrent, goTop } = useModel('useCurrentModel');
   const initialState = useModel('@@initialState');
 
+  const { setting } = useModel('useSettingModel');
+
   React.useEffect(() => {
     setOnSend(() => {
       return (action: API.Action<API.Message>) => {
@@ -179,7 +181,10 @@ const Index: React.FC = () => {
   }, [close, connect, setUsers]);
 
   return (
-    <div className={styles.chat_container}>
+    <div
+      className={styles.chat_container}
+      style={setting?.background ? { backgroundImage: `url(${setting.background})` } : {}}
+    >
       <div className={styles.chat}>
         <div className={styles.left}>
           <Menu />

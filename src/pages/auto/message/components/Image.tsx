@@ -4,7 +4,12 @@ import Upload from '@/components/Upload/index';
 
 const Index = () => {
   return (
-    <ProForm.Item rules={[{ required: true }]} name={'content'} label={'图片'} required={true}>
+    <ProForm.Item
+      rules={[{ required: true, message: '请选择图片' }]}
+      name={'content'}
+      label={'图片'}
+      required={true}
+    >
       <Upload action={`${BASE_URL}/auto-message/image`} corp={false} />
     </ProForm.Item>
   );

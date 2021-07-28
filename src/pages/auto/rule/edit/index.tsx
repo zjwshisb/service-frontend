@@ -34,6 +34,7 @@ const Index = () => {
         sort: res.data.sort,
         is_open: res.data.is_open,
         message_id: res.data.message_id,
+        key: res.data.key,
       });
     });
   }, [id]);

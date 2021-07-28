@@ -16,8 +16,12 @@ const Index = () => {
         search: false,
       },
       {
+        dataIndex: 'admin_name',
+        title: '客服',
+      },
+      {
         dataIndex: 'queried_at',
-        title: '询问时间',
+        title: '咨询时间',
         width: 200,
         valueType: 'dateTimeRange',
         render(_, record) {
@@ -27,16 +31,6 @@ const Index = () => {
       {
         dataIndex: 'accepted_at',
         title: '接入时间',
-        search: false,
-        valueType: 'dateTime',
-      },
-      {
-        dataIndex: 'admin_name',
-        title: '客服',
-      },
-      {
-        dataIndex: 'broke_at',
-        title: '断开时间',
         search: false,
         valueType: 'dateTime',
       },

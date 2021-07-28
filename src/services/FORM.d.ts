@@ -20,5 +20,6 @@ declare namespace FORM {
     sort: number;
     is_open: boolean;
     message_id?: number;
+    key: string;
   };
 }

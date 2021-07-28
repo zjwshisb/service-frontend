@@ -14,7 +14,15 @@ export async function index(params: LoginParamsType) {
 export async function queryCurrent() {
   return request<API.Response<API.CurrentUser>>('/me');
 }
-
+export async function getChatSetting() {
+  return request<API.Response<API.AdminChatSetting>>('/me/settings');
+}
+export async function updateChatSetting(data: API.AdminChatSetting) {
+  return request<API.Response>('/me/settings', {
+    data,
+    method: 'PUT',
+  });
+}
 export async function handleAccept(uid: number) {
   return request<API.Response<API.User>>('/ws/chat-user', {
     method: 'post',

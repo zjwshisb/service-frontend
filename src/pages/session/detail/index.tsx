@@ -44,7 +44,7 @@ const Index = () => {
           <ProCard colSpan={9}>
             <Descriptions column={1}>
               <Descriptions.Item label="用户">{info.session.user_name}</Descriptions.Item>
-              <Descriptions.Item label="客服">{info.session.service_name}</Descriptions.Item>
+              <Descriptions.Item label="客服">{info.session.admin_name}</Descriptions.Item>
               <Descriptions.Item label="询问时间">
                 {moment(info.session.queried_at).format('YYYY-MM-DD HH:mm:ss')}
               </Descriptions.Item>

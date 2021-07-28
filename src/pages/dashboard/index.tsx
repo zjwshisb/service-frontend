@@ -31,7 +31,7 @@ const Index = () => {
 
   return (
     <ProCard split="vertical">
-      <ProCard split="horizontal" colSpan={12}>
+      <ProCard split="horizontal" colSpan={24}>
         {onlineInfo && (
           <ProCard colSpan={24}>
             <StatisticCard
@@ -120,7 +120,6 @@ const Index = () => {
           </ProCard>
         )}
       </ProCard>
-      <ProCard />
     </ProCard>
   );
 };
