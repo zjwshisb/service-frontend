@@ -1,22 +1,20 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { List, message, Skeleton, Avatar, Badge } from 'antd';
+import { List, Skeleton, Avatar, Badge } from 'antd';
 import { timeFormat } from '@/utils';
-import { handleAccept } from '@/services';
-import lodash from 'lodash';
 import styles from '../index.less';
 import myStyles from './index.less';
 import DraggableView from '@/components/DraggableView';
 import { getMessageTypeLabel } from '@/pages/chat/util';
 import { Typography } from 'antd';
+import useAcceptUser from '@/hooks/useAcceptUser';
 
 const Index = () => {
   const { setOnMessage } = useModel('useWebsocketModel');
 
   const { waitingUsers, setWaitingUsers } = useModel('useWaitingUserModel');
-  const { current, setCurrent, goTop } = useModel('useCurrentModel');
-  const setUsers = useModel('useUsersModel', (model) => model.setUsers);
+  const { setting } = useModel('useSettingModel');
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.WaitingUser[]>) => {
@@ -26,24 +24,15 @@ const Index = () => {
     }, 'waiting-users');
   }, [setOnMessage, setWaitingUsers]);
 
-  const accept = React.useCallback(
-    (user: API.WaitingUser) => {
-      handleAccept(user.id).then((res) => {
-        if (res.data.id === current?.id) {
-          goTop();
-          setCurrent(res.data);
-        } else {
-          setUsers((prevState) => {
-            const newState = lodash.clone(prevState);
-            newState.set(res.data.id, res.data);
-            return newState;
-          });
-        }
-        message.success('接入成功');
-      });
-    },
-    [current?.id, goTop, setCurrent, setUsers],
-  );
+  const accept = useAcceptUser();
+
+  React.useEffect(() => {
+    if (setting?.is_auto_accept) {
+      if (waitingUsers.length > 0) {
+        accept(waitingUsers[0].id);
+      }
+    }
+  }, [accept, setting, waitingUsers]);
 
   return (
     <DraggableView
@@ -69,7 +58,7 @@ const Index = () => {
             actions={[
               <a
                 onClick={(e) => {
-                  accept(item);
+                  accept(item.id);
                   e.stopPropagation();
                 }}
               >

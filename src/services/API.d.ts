@@ -24,10 +24,11 @@ declare namespace API {
     | 'user-online'
     | 'receipt'
     | 'waiting-users'
-    | 'service-users'
+    | 'admins'
     | 'receive-message'
     | 'other-login'
-    | 'more-than-one';
+    | 'more-than-one'
+    | 'user-transfer';
 
   export type Action<T = any> = {
     action: ActionType;
@@ -83,6 +84,16 @@ declare namespace API {
     last_time: number;
     last_type: MessageType;
     message_count: number;
+  };
+
+  export type Transfer = {
+    id: number;
+    username: string;
+    user_id: number;
+    from_admin_name: string;
+    created_at: string;
+    accepted_at: string;
+    remark: string;
   };
 
   export type User = {

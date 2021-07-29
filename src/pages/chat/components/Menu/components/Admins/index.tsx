@@ -5,7 +5,7 @@ import { Drawer, Table, Avatar } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import styles from '../index.less';
 
-const columns: ColumnsType<API.ServiceUser> = [
+const columns: ColumnsType<API.Admin> = [
   {
     dataIndex: 'username',
     title: '客服',
@@ -38,27 +38,27 @@ const columns: ColumnsType<API.ServiceUser> = [
 ];
 
 const Index = () => {
-  const { users, setUsers } = useModel('useServiceUserModel');
+  const { admins, setAdmins } = useModel('useAdminModel');
 
   const setOnMessage = useModel('useWebsocketModel', (model) => model.setOnMessage);
 
   React.useEffect(() => {
-    setOnMessage((action: API.Action<API.ServiceUser[]>) => {
-      setUsers(action.data);
-    }, 'service-users');
-  }, [setOnMessage, setUsers]);
+    setOnMessage((action: API.Action<API.Admin[]>) => {
+      setAdmins(action.data);
+    }, 'admins');
+  }, [setOnMessage, setAdmins]);
 
   const sortUsers = React.useMemo(() => {
-    return users.sort((a, b) => {
+    return admins.sort((a, b) => {
       if (a.online && !b.online) {
         return -1;
       }
       if (a.online === b.online) {
-        return a.today_accept_count > b.today_accept_count ? -1 : 1;
+        // return a.today_accept_count > b.today_accept_count ? -1 : 1;
       }
       return 1;
     });
-  }, [users]);
+  }, [admins]);
 
   const [visible, setVisible] = React.useState(false);
 
@@ -75,7 +75,7 @@ const Index = () => {
             setVisible(false);
           }}
         >
-          <Table<API.ServiceUser>
+          <Table<API.Admin>
             rowKey={'id'}
             size={'small'}
             dataSource={sortUsers}

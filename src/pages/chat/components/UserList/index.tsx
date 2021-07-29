@@ -3,6 +3,7 @@ import UserItem from './components/UserItem/index';
 import { useModel } from '@@/plugin-model/useModel';
 import styles from './index.less';
 import { Helmet } from 'umi';
+import TransferForm from './components/TransferForm/index';
 
 const Index: React.FC = () => {
   const { users } = useModel('useUsersModel');
@@ -17,11 +18,14 @@ const Index: React.FC = () => {
       unread += v[1].unread;
       return v[1];
     });
-    if (current && users.get(current.id) === undefined) {
+    if (current) {
       u = [current].concat(u);
       unread += current.unread;
     }
     u = u.sort((a, b) => {
+      if (a.last_chat_time === b.last_chat_time) {
+        return a.id > b.id ? -1 : 1;
+      }
       return a.last_chat_time > b.last_chat_time ? -1 : 1;
     });
     setTile(`客服-未读消息(${unread})`);
@@ -32,6 +36,7 @@ const Index: React.FC = () => {
 
   return (
     <div className={styles.list}>
+      <TransferForm />
       <Helmet defer={false}>
         <title>{title}</title>
       </Helmet>

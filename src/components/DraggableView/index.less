@@ -1,17 +1,19 @@
 .index {
+  position: fixed;
+  top: 100px;
+  left: 0px;
+  z-index: 5;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 0 5px #999999;
   &[data-display='true'] {
     visibility: visible;
   }
   &[data-display='false'] {
     visibility: hidden;
   }
-  position: fixed;
-  top: 100px;
-  left: 0px;
-  z-index: 5;
-  overflow: hidden;
-  background-color: #ffffff;
-  border-radius: 6px;
   .drag {
     &:hover {
       cursor: pointer;

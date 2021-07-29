@@ -20,7 +20,7 @@ const Index: React.FC<{
   });
 
   return (
-    <div>
+    <div className={style.body}>
       <div className={props.triggerClass} onClick={() => setVisible((prevState) => !prevState)}>
         {props.trigger(visible)}
       </div>

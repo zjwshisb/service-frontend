@@ -28,7 +28,7 @@ const Index: React.FC = () => {
           goTop();
           setCurrent((prevState) => {
             if (prevState) {
-              const newState = lodash.clone(prevState);
+              const newState = lodash.cloneDeep(prevState);
               newState.last_chat_time = msg.received_at;
               newState.messages.unshift(msg);
               return newState;
@@ -37,10 +37,11 @@ const Index: React.FC = () => {
           });
         } else {
           setUsers((prevState) => {
-            const newState = lodash.clone(prevState);
+            const newState = lodash.cloneDeep(prevState);
             const user = newState.get(msg.user_id);
             if (user) {
-              user.messages.push(msg);
+              user.messages.unshift(msg);
+              user.last_chat_time = msg.received_at;
               return newState;
             }
             return prevState;
@@ -166,6 +167,7 @@ const Index: React.FC = () => {
 
   React.useEffect(() => {
     getUsers().then((res) => {
+      setCurrent(undefined);
       setUsers(() => {
         const map = new Map<number, API.User>();
         res.data.forEach((v) => {
@@ -178,7 +180,7 @@ const Index: React.FC = () => {
     return () => {
       close();
     };
-  }, [close, connect, setUsers]);
+  }, [close, connect, setCurrent, setUsers]);
 
   return (
     <div

@@ -29,7 +29,6 @@ const Index = () => {
       {
         dataIndex: 'name',
         title: '名称',
-        search: false,
         width: 200,
         ellipsis: true,
       },

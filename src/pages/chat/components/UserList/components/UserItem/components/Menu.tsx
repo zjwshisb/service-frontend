@@ -1,59 +1,53 @@
 import React from 'react';
 import { Menu, Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
-import { removeUser } from '@/services';
-import lodash from 'lodash';
+import useRemoveUser from '@/hooks/useRemoveUser';
 
 const Index: React.FC<{
   user: API.User;
 }> = (props) => {
-  const { setUsers } = useModel('useUsersModel');
+  const { setUser, setVisible } = useModel('useTransferModel');
 
-  const { current, setCurrent } = useModel('useCurrentModel');
+  const handleRemove = useRemoveUser();
 
   const handleDelete = React.useCallback(
     (user: API.User) => {
-      const remove = (u: API.User) => {
-        removeUser(u.id).then(() => {
-          if (current && current.id === u.id) {
-            setCurrent(undefined);
-          } else {
-            setUsers((prevState) => {
-              const newState = lodash.cloneDeep(prevState);
-              newState.delete(u.id);
-              return newState;
-            });
-          }
-        });
-      };
       if (user.disabled) {
-        remove(user);
+        handleRemove(user).then();
       } else {
         Modal.confirm({
           title: '提示',
           content: '确定断开与该用户的会话?',
           onOk() {
-            remove(user);
+            handleRemove(user).then();
           },
         });
       }
     },
-    [current, setCurrent, setUsers],
+    [handleRemove],
   );
 
   const handleClick = React.useCallback(
     (event) => {
       event.domEvent.stopPropagation();
-      if (event.key === 'remove') {
-        handleDelete(props.user);
+      switch (event.key) {
+        case 'remove':
+          handleDelete(props.user);
+          break;
+        case 'transfer':
+          setUser(props.user);
+          setVisible(true);
+          break;
+        default:
       }
     },
-    [handleDelete, props.user],
+    [handleDelete, props.user, setUser, setVisible],
   );
 
   return (
     <Menu onClick={handleClick}>
       <Menu.Item key="remove">断开会话</Menu.Item>
+      {!props.user.disabled && <Menu.Item key="transfer">转接其他客服</Menu.Item>}
     </Menu>
   );
 };

@@ -94,6 +94,13 @@ const errorHandler = (error: ResponseError) => {
     const { status, url } = response;
     switch (response.status) {
       case 401: {
+        Modal.error({
+          title: '提示',
+          content: '登录已失效',
+          onOk() {
+            history.push('/user/login');
+          },
+        });
         break;
       }
       case 404: {

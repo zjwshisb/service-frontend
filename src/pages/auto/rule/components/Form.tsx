@@ -44,8 +44,8 @@ const Index: React.FC<{
         label={'规则名称'}
         placeholder={'随便起个名字'}
         name={'name'}
-        required={true}
-        readonly={props.readonlyValues?.includes('name')}
+        // required={true}
+        // readonly={props.readonlyValues?.includes('name')}
         fieldProps={{
           maxLength: 32,
         }}
@@ -54,7 +54,6 @@ const Index: React.FC<{
         rules={[{ required: true }]}
         label={'匹配规则'}
         name={'match_type'}
-        required={true}
         valueEnum={matchTypeLabel}
       />
       <ProFormText
@@ -67,7 +66,6 @@ const Index: React.FC<{
         label={'匹配文字'}
         placeholder={'所需要匹配的文字'}
         name={'match'}
-        required={true}
       />
       <ProFormSelect
         rules={[{ required: true }]}
@@ -75,7 +73,6 @@ const Index: React.FC<{
         label={'回复类型'}
         name={'reply_type'}
         readonly={props.readonlyValues?.includes('reply_type')}
-        required={true}
         fieldProps={{
           onChange: () => {
             form.current?.setFieldsValue({
@@ -92,7 +89,6 @@ const Index: React.FC<{
                 <ProFormSelect
                   rules={[{ required: true }]}
                   name={'message_id'}
-                  required={true}
                   label={'回复消息'}
                   request={() => {
                     return getAutoRuleMessages().then((res) => res.data);
@@ -104,7 +100,6 @@ const Index: React.FC<{
                 <ProFormText
                   rules={[{ required: true, max: 20 }]}
                   name={'key'}
-                  required={true}
                   label={'事件key值'}
                 />
               );
