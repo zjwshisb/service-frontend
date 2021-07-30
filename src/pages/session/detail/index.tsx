@@ -2,10 +2,10 @@ import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { useParams } from 'umi';
 import { getChatSessionDetail } from '@/services';
-import { Timeline, Descriptions } from 'antd';
-import Item from './components/Item';
+import { Descriptions } from 'antd';
 import ProCard from '@ant-design/pro-card';
 import moment from 'moment';
+import MessageLine from '@/components/MessageLine/index';
 
 const Index = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,19 +27,7 @@ const Index = () => {
       {info && (
         <ProCard split="vertical">
           <ProCard colSpan={15}>
-            <Timeline mode="alternate">
-              {info?.messages.map((v) => {
-                return (
-                  <Timeline.Item
-                    color={v.source === 0 ? 'red' : 'green'}
-                    key={v.id}
-                    position={v.source === 0 ? 'left' : 'right'}
-                  >
-                    <Item item={v} key={v.id} />
-                  </Timeline.Item>
-                );
-              })}
-            </Timeline>
+            <MessageLine messages={info.messages} />
           </ProCard>
           <ProCard colSpan={9}>
             <Descriptions column={1}>

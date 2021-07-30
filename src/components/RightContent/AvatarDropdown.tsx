@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
@@ -12,18 +12,18 @@ export type GlobalHeaderRightProps = {
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   const { initialState } = useModel('@@initialState');
 
-  const onMenuClick = useCallback(
-    (event: {
-      key: React.Key;
-      keyPath: React.Key[];
-      item: React.ReactInstance;
-      domEvent: React.MouseEvent<HTMLElement>;
-    }) => {
-      const { key } = event;
-      history.push(`/account/${key}`);
-    },
-    [],
-  );
+  // const onMenuClick = useCallback(
+  //   (event: {
+  //     key: React.Key;
+  //     keyPath: React.Key[];
+  //     item: React.ReactInstance;
+  //     domEvent: React.MouseEvent<HTMLElement>;
+  //   }) => {
+  //     const { key } = event;
+  //     history.push(`/account/${key}`);
+  //   },
+  //   [],
+  // );
 
   const loading = (
     <span className={`${styles.action} ${styles.account}`}>
@@ -48,7 +48,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   }
 
   const menuHeaderDropdown = (
-    <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
+    <Menu className={styles.menu} selectedKeys={[]}>
       {menu && (
         <Menu.Item key="center">
           <UserOutlined />

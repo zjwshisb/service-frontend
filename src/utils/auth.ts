@@ -1,14 +1,14 @@
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
-const name = "api_token"
+const name = 'Admin-Token';
 export function getToken(): string {
-  return Cookies.get(name) ?? ''
+  return Cookies.get(name) ?? '';
 }
 
 export function setToken(token: string) {
-  Cookies.set(name, token)
+  Cookies.set(name, token);
 }
 
 export function removeToken() {
-  Cookies.remove(name)
+  Cookies.remove(name);
 }

@@ -9,6 +9,7 @@ import { useModel } from 'umi';
 import lodash from 'lodash';
 import { getUsers, handleRead } from '@/services';
 import styles from './index.less';
+import BackgroundImg from '@/assets/images/background.png';
 
 const Index: React.FC = () => {
   const { connect, setOnMessage, setOnSend, close } = useModel('useWebsocketModel');
@@ -182,11 +183,20 @@ const Index: React.FC = () => {
     };
   }, [close, connect, setCurrent, setUsers]);
 
+  const [bgImg, setBgImg] = React.useState(() => {
+    return BackgroundImg;
+  });
+
+  React.useEffect(() => {
+    if (setting?.background) {
+      setBgImg(setting?.background);
+    } else {
+      setBgImg(BackgroundImg);
+    }
+  }, [setting]);
+
   return (
-    <div
-      className={styles.chat_container}
-      style={setting?.background ? { backgroundImage: `url(${setting.background})` } : {}}
-    >
+    <div className={styles.chat_container} style={{ backgroundImage: `url(${bgImg})` }}>
       <div className={styles.chat}>
         <div className={styles.left}>
           <Menu />

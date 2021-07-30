@@ -41,7 +41,9 @@ export async function handleTransfer(uid: number, toId: number, remark = '') {
     },
   });
 }
-
+export async function getTransferMessage(id: number) {
+  return request<API.Response<API.Message[]>>(`/ws/transfer/${id}/messages`);
+}
 export async function getUserInfo(uid: number) {
   return request<API.Response<Record<string, string>>>(`/ws/user/${uid}`);
 }

@@ -35,6 +35,11 @@ const Index = () => {
         valueType: 'dateTime',
       },
       {
+        dataIndex: 'type_label',
+        title: '类型',
+        search: false,
+      },
+      {
         dataIndex: 'id',
         title: '操作',
         valueType: 'option',

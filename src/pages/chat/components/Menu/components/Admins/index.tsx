@@ -9,7 +9,6 @@ const columns: ColumnsType<API.Admin> = [
   {
     dataIndex: 'username',
     title: '客服',
-    align: 'center',
     render(value, record) {
       return (
         <span>
@@ -18,22 +17,6 @@ const columns: ColumnsType<API.Admin> = [
         </span>
       );
     },
-  },
-  {
-    dataIndex: 'online',
-    title: '状态',
-    align: 'center',
-    render(value) {
-      if (value) {
-        return <span>在线</span>;
-      }
-      return <span>离线</span>;
-    },
-  },
-  {
-    dataIndex: 'today_accept_count',
-    align: 'center',
-    title: '今日接待数',
   },
 ];
 
@@ -47,18 +30,6 @@ const Index = () => {
       setAdmins(action.data);
     }, 'admins');
   }, [setOnMessage, setAdmins]);
-
-  const sortUsers = React.useMemo(() => {
-    return admins.sort((a, b) => {
-      if (a.online && !b.online) {
-        return -1;
-      }
-      if (a.online === b.online) {
-        // return a.today_accept_count > b.today_accept_count ? -1 : 1;
-      }
-      return 1;
-    });
-  }, [admins]);
 
   const [visible, setVisible] = React.useState(false);
 
@@ -78,7 +49,7 @@ const Index = () => {
           <Table<API.Admin>
             rowKey={'id'}
             size={'small'}
-            dataSource={sortUsers}
+            dataSource={admins}
             pagination={false}
             columns={columns}
           />
@@ -86,6 +57,6 @@ const Index = () => {
         <CustomerServiceFilled className={styles.icon} data-active={visible} />
       </div>
     );
-  }, [sortUsers, visible]);
+  }, [admins, visible]);
 };
 export default Index;

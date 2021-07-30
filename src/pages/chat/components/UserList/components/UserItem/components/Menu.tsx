@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import useRemoveUser from '@/hooks/useRemoveUser';
+import { removeUser } from '@/services';
 
 const Index: React.FC<{
   user: API.User;
@@ -13,13 +14,17 @@ const Index: React.FC<{
   const handleDelete = React.useCallback(
     (user: API.User) => {
       if (user.disabled) {
-        handleRemove(user).then();
+        removeUser(user.id).then(() => {
+          handleRemove(user);
+        });
       } else {
         Modal.confirm({
           title: '提示',
           content: '确定断开与该用户的会话?',
           onOk() {
-            handleRemove(user).then();
+            removeUser(user.id).then(() => {
+              handleRemove(user);
+            });
           },
         });
       }

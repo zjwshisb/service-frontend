@@ -3,7 +3,7 @@ import { handleAccept } from '@/services';
 import lodash from 'lodash';
 import { useModel } from '@@/plugin-model/useModel';
 import { createMsg } from '@/utils';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 
 export default function useAccept() {
   const { setUsers } = useModel('useUsersModel');
@@ -29,7 +29,14 @@ export default function useAccept() {
           }
           message.success('接入成功');
         })
-        .catch(() => {});
+        .catch((err) => {
+          if (err.data.success === false) {
+            Modal.error({
+              title: '提示',
+              content: err.data.message,
+            });
+          }
+        });
     },
     [current?.id, goTop, setCurrent, setUsers, setting?.welcome_content, send],
   );

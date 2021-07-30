@@ -59,7 +59,7 @@ const Index = () => {
         title: '操作',
         valueType: 'option',
         render(_, record) {
-          return [
+          const action = [
             <Button
               type={'primary'}
               size={'small'}
@@ -68,29 +68,34 @@ const Index = () => {
             >
               编辑
             </Button>,
-            <Button
-              type={'primary'}
-              size={'small'}
-              danger={true}
-              key={2}
-              onClick={() => {
-                Modal.confirm({
-                  title: '提示',
-                  content: '确定删除该消息?',
-                  onOk() {
-                    deleteAutoMessage(record.id)
-                      .then(() => {
-                        message.success('操作成功');
-                        actionRef.current?.reload();
-                      })
-                      .catch();
-                  },
-                });
-              }}
-            >
-              删除
-            </Button>,
           ];
+          if (record.rules_count <= 0) {
+            action.push(
+              <Button
+                type={'primary'}
+                size={'small'}
+                danger={true}
+                key={2}
+                onClick={() => {
+                  Modal.confirm({
+                    title: '提示',
+                    content: '确定删除该消息?',
+                    onOk() {
+                      deleteAutoMessage(record.id)
+                        .then(() => {
+                          message.success('操作成功');
+                          actionRef.current?.reload();
+                        })
+                        .catch();
+                    },
+                  });
+                }}
+              >
+                删除
+              </Button>,
+            );
+          }
+          return action;
         },
       },
     ];

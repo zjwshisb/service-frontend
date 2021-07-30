@@ -51,7 +51,7 @@ const Index: React.FC<{
         }}
       />
       <ProFormSelect
-        rules={[{ required: true }]}
+        rules={[{ required: true, message: '请选择' }]}
         label={'匹配规则'}
         name={'match_type'}
         valueEnum={matchTypeLabel}
@@ -68,7 +68,7 @@ const Index: React.FC<{
         name={'match'}
       />
       <ProFormSelect
-        rules={[{ required: true }]}
+        rules={[{ required: true, message: '请选择' }]}
         valueEnum={replyTypeLabel}
         label={'回复类型'}
         name={'reply_type'}
@@ -87,7 +87,7 @@ const Index: React.FC<{
             case 'message':
               return (
                 <ProFormSelect
-                  rules={[{ required: true }]}
+                  rules={[{ required: true, message: '请选择' }]}
                   name={'message_id'}
                   label={'回复消息'}
                   request={() => {

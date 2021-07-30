@@ -7,7 +7,6 @@ import { message } from 'antd';
 
 const Index: React.FC = () => {
   const { visible, setVisible, user, setUser } = useModel('useTransferModel');
-  const { initialState } = useModel('@@initialState');
 
   const { admins } = useModel('useAdminModel');
   const handleRemoveUser = useRemoveUser();
@@ -16,11 +15,10 @@ const Index: React.FC = () => {
     (toId: number, remark = '') => {
       if (user?.id) {
         handleTransfer(user.id, toId, remark).then(() => {
-          handleRemoveUser(user).then(() => {
-            setVisible(false);
-            setUser(undefined);
-            message.success('转接成功');
-          });
+          handleRemoveUser(user);
+          setVisible(false);
+          setUser(undefined);
+          message.success('转接成功');
         });
       }
     },
@@ -45,15 +43,13 @@ const Index: React.FC = () => {
       <ProFormSelect
         name={'to_id'}
         label={'转接给'}
-        rules={[{ required: true }]}
-        options={admins
-          .filter((v) => v.online && v.id !== initialState?.currentUser?.id)
-          .map((v) => {
-            return {
-              label: v.username,
-              value: v.id,
-            };
-          })}
+        rules={[{ required: true, message: '请选择' }]}
+        options={admins.map((v) => {
+          return {
+            label: v.username,
+            value: v.id,
+          };
+        })}
       />
       <ProFormTextArea
         rules={[{ max: 255 }]}

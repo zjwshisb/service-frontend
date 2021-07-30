@@ -25,6 +25,12 @@ const Login: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const { initialState, setInitialState } = useModel('@@initialState');
 
+  React.useEffect(() => {
+    if (initialState?.currentUser?.id) {
+      goto();
+    }
+  }, [initialState?.currentUser?.id]);
+
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
@@ -61,10 +67,10 @@ const Login: React.FC = () => {
           <div className={styles.header}>
             <Link to="/">
               <img alt="logo" className={styles.logo} src="/logo.svg" />
-              <span className={styles.title}>Ant Design</span>
+              <span className={styles.title}>客服系统</span>
             </Link>
           </div>
-          <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+          <div className={styles.desc}>基于Ant Design Pro的简易客服系统</div>
         </div>
 
         <div className={styles.main}>

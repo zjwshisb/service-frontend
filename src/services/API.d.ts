@@ -141,6 +141,7 @@ declare namespace API {
     content: string;
     created_at: string;
     updated_at: string;
+    rules_count: number;
   };
 
   export type AutoRuleMatchType = 'all' | 'part';
@@ -188,5 +189,6 @@ declare namespace API {
     queried_at: number;
     accepted_at: number;
     broke_at: number;
+    type_label: string;
   };
 }
