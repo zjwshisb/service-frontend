@@ -12,8 +12,9 @@ export default defineConfig({
     babelPlugins: [],
     babelOptions: {},
   },
+  publicPath: '/admin/',
   define: {
-    BASE_URL: 'http://localhost:9090/backend',
-    WS_URL: 'ws://localhost:9090/backend/ws',
+    BASE_URL: 'http://119.29.196.153:9090/backend',
+    WS_URL: 'ws://119.29.196.153:9090/backend/ws',
   },
 });
