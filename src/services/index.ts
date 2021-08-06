@@ -87,6 +87,9 @@ export async function updateSetting(name: string, value: string) {
     },
   });
 }
+export async function getHistorySessions(uid: number) {
+  return request<API.Response<API.ChatSession[]>>(`/ws/sessions/${uid}`);
+}
 export async function getChatSessions(params: FORM.Pagination) {
   return request<API.Pagination<API.ChatSession>>('/chat-sessions', {
     params,
