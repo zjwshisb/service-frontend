@@ -31,7 +31,12 @@ export async function deleteAutoMessage(id: React.ReactText) {
 export async function getAutoRuleMessages() {
   return request<API.Response<API.Option[]>>('/options/messages');
 }
-
+export async function getAutoRuleScenes() {
+  return request<API.Response<API.Option[]>>('/options/scenes');
+}
+export async function getAutoRuleEvents() {
+  return request<API.Response<API.Option[]>>('/options/events');
+}
 export async function getAutoRules(params: FORM.Pagination) {
   return request<API.Pagination<API.AutoRule>>('/auto-rules', {
     params,

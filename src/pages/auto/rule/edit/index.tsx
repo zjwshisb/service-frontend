@@ -35,6 +35,7 @@ const Index = () => {
         is_open: res.data.is_open,
         message_id: res.data.message_id,
         key: res.data.key,
+        scenes: res.data.scenes,
       });
     });
   }, [id]);

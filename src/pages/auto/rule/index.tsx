@@ -4,7 +4,7 @@ import type { ActionType, ProColumnType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { Button, message, Modal } from 'antd';
 import { history } from '@@/core/history';
-import { getAutoRules, deleteAutoRule } from '@/services/auto';
+import { getAutoRules, deleteAutoRule, getAutoRuleScenes } from '@/services/auto';
 import MessageContent from '../components/MessageContent';
 
 export const replyTypeLabel: Record<API.ReplyType, string> = {
@@ -52,7 +52,7 @@ const Index = () => {
         render(dom, record) {
           switch (record.reply_type) {
             case 'event':
-              return '触发事件';
+              return `触发事件(${record.event_label})`;
             case 'message':
               if (record.message) {
                 return <MessageContent message={record.message} />;
@@ -63,6 +63,16 @@ const Index = () => {
             default:
               return '无';
           }
+        },
+      },
+      {
+        dataIndex: 'scenes',
+        title: '触发场景',
+        request() {
+          return getAutoRuleScenes().then((res) => res.data);
+        },
+        render(_, record) {
+          return record.scenes_label;
         },
       },
       {

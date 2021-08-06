@@ -5,11 +5,12 @@ import ProForm, {
   ProFormText,
   ProFormDigit,
   ProFormSwitch,
+  ProFormCheckbox,
 } from '@ant-design/pro-form';
 import type { FormInstance } from 'antd/es';
 
 import { replyTypeLabel, matchTypeLabel } from '@/pages/auto/rule';
-import { getAutoRuleMessages } from '@/services/auto';
+import { getAutoRuleMessages, getAutoRuleScenes, getAutoRuleEvents } from '@/services/auto';
 
 const Index: React.FC<{
   submit: (data: FORM.AutoRuleForm) => Promise<void>;
@@ -44,8 +45,6 @@ const Index: React.FC<{
         label={'规则名称'}
         placeholder={'随便起个名字'}
         name={'name'}
-        // required={true}
-        // readonly={props.readonlyValues?.includes('name')}
         fieldProps={{
           maxLength: 32,
         }}
@@ -89,7 +88,7 @@ const Index: React.FC<{
                 <ProFormSelect
                   rules={[{ required: true, message: '请选择' }]}
                   name={'message_id'}
-                  label={'回复消息'}
+                  label={'回复的消息'}
                   request={() => {
                     return getAutoRuleMessages().then((res) => res.data);
                   }}
@@ -97,11 +96,27 @@ const Index: React.FC<{
               );
             case 'event':
               return (
-                <ProFormText
-                  rules={[{ required: true, max: 20 }]}
-                  name={'key'}
-                  label={'事件key值'}
-                />
+                <>
+                  <ProFormSelect
+                    rules={[{ required: true, message: '请选择' }]}
+                    name={'key'}
+                    label={'触发的事件'}
+                    fieldProps={{}}
+                    request={() => {
+                      return getAutoRuleEvents().then((res) => res.data);
+                    }}
+                  />
+                  <ProFormSelect
+                    rules={[{ required: true, message: '请选择' }]}
+                    name={'message_id'}
+                    label={'回复的消息'}
+                    tooltip={'事件触发后并且回复的消息'}
+                    fieldProps={{}}
+                    request={() => {
+                      return getAutoRuleMessages().then((res) => res.data);
+                    }}
+                  />
+                </>
               );
             case 'transfer':
             default:
@@ -109,6 +124,31 @@ const Index: React.FC<{
           }
         }}
       </ProFormDependency>
+      <ProFormDependency name={['reply_type']}>
+        {({ reply_type }) => {
+          switch (reply_type as API.ReplyType) {
+            case 'message':
+            case 'event':
+              return (
+                <>
+                  <ProFormCheckbox.Group
+                    rules={[{ required: true, message: '请选择' }]}
+                    name={'scenes'}
+                    label={'触发场景'}
+                    tooltip={'指在什么场景下触发'}
+                    request={() => {
+                      return getAutoRuleScenes().then((res) => res.data);
+                    }}
+                  />
+                </>
+              );
+            case 'transfer':
+            default:
+              return <></>;
+          }
+        }}
+      </ProFormDependency>
+
       <ProFormDigit
         label={'排序'}
         required={true}

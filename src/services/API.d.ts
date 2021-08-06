@@ -119,6 +119,7 @@ declare namespace API {
     background: string;
     is_auto_accept: boolean;
     welcome_content: string;
+    offline_content: string;
   };
 
   export type Setting = {
@@ -162,6 +163,9 @@ declare namespace API {
     message_id: number;
     is_open: boolean;
     key: string;
+    event_label: string;
+    scenes_label: string;
+    scenes: string[];
   };
   declare namespace Dashboard {
     export type QueryInfo = {

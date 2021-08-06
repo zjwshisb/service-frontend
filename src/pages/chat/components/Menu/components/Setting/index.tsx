@@ -40,6 +40,13 @@ const Index = () => {
             label={'欢迎语'}
             tooltip={'接入用户后自动发送的欢迎语'}
           />
+          <ProFormTextArea
+            fieldProps={{ autoSize: true }}
+            rules={[{ max: 512 }]}
+            name={'offline_content'}
+            label={'离线时的回复'}
+            tooltip={'不在线时用户发送消息的自动回复'}
+          />
           <ProForm.Item name={'background'} label={'背景图片'} tooltip={'此界面的背景图片'}>
             <ImageSelect action={`${BASE_URL}/me/settings/image`} corp={false} width={'200px'} />
           </ProForm.Item>

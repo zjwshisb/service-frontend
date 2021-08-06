@@ -21,5 +21,6 @@ declare namespace FORM {
     is_open: boolean;
     message_id?: number;
     key: string;
+    scenes: string[];
   };
 }
