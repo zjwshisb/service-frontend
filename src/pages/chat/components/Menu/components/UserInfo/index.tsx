@@ -16,6 +16,8 @@ const Index = () => {
       getUserInfo(current.id).then((res) => {
         setInfo(res.data);
       });
+    } else {
+      setInfo({});
     }
   }, [current]);
 

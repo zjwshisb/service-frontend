@@ -24,7 +24,7 @@ const Index = () => {
     },
     {
       dataIndex: 'id',
-      title: '详情',
+      title: '操作',
       render(val) {
         return (
           <Button

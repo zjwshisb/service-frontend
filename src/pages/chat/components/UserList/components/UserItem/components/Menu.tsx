@@ -3,11 +3,14 @@ import { Menu, Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import useRemoveUser from '@/hooks/useRemoveUser';
 import { removeUser } from '@/services';
+import HistorySession from './HistorySession';
 
 const Index: React.FC<{
   user: API.User;
 }> = (props) => {
   const { setUser, setVisible } = useModel('useTransferModel');
+
+  const show = useModel('useHistorySessionModal', (model) => model.show);
 
   const handleRemove = useRemoveUser();
 
@@ -43,17 +46,24 @@ const Index: React.FC<{
           setUser(props.user);
           setVisible(true);
           break;
+        case 'other-session':
+          show(props.user.id);
+          break;
         default:
       }
     },
-    [handleDelete, props.user, setUser, setVisible],
+    [handleDelete, props.user, setUser, setVisible, show],
   );
 
   return (
-    <Menu onClick={handleClick}>
-      <Menu.Item key="remove">断开会话</Menu.Item>
-      {!props.user.disabled && <Menu.Item key="transfer">转接其他客服</Menu.Item>}
-    </Menu>
+    <>
+      <HistorySession />
+      <Menu onClick={handleClick}>
+        <Menu.Item key="remove">断开会话</Menu.Item>
+        {!props.user.disabled && <Menu.Item key="transfer">转接其他客服</Menu.Item>}
+        <Menu.Item key="other-session">历史对话</Menu.Item>
+      </Menu>
+    </>
   );
 };
 export default Index;
