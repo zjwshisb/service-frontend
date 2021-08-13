@@ -8,7 +8,7 @@ import DraggableView from '@/components/DraggableView';
 import type { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import useAcceptUser from '@/hooks/useAcceptUser';
-import { getTransferMessage } from '@/services';
+import { getTransferMessage, handleCancelTransfer } from '@/services';
 import MessageLine from '@/components/MessageLine/index';
 
 const Index = () => {
@@ -58,6 +58,21 @@ const Index = () => {
             <Space>
               <Button size={'small'} type={'primary'} onClick={() => handleAccept(record.user_id)}>
                 接入
+              </Button>
+              <Button
+                size={'small'}
+                danger
+                onClick={() => {
+                  Modal.confirm({
+                    title: '提示',
+                    content: '确定取消该转接?',
+                    onOk: async () => {
+                      await handleCancelTransfer(record.id).then();
+                    },
+                  });
+                }}
+              >
+                取消
               </Button>
               <Button
                 size={'small'}

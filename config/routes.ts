@@ -82,6 +82,11 @@
     name: '系统设置',
   },
   {
+    path: '/transfer',
+    component: './transfer',
+    name: '转接记录',
+  },
+  {
     path: '/session',
     name: '会话记录',
     hideChildrenInMenu: true,

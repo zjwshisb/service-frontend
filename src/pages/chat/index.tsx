@@ -10,6 +10,7 @@ import lodash from 'lodash';
 import { getUsers, handleRead } from '@/services';
 import styles from './index.less';
 import BackgroundImg from '@/assets/images/background.png';
+import { Modal } from 'antd';
 
 const Index: React.FC = () => {
   const { connect, setOnMessage, setOnSend, close } = useModel('useWebsocketModel');
@@ -18,6 +19,15 @@ const Index: React.FC = () => {
   const initialState = useModel('@@initialState');
 
   const { setting } = useModel('useSettingModel');
+
+  React.useEffect(() => {
+    setOnMessage((action: API.Action<string>) => {
+      Modal.error({
+        title: '提示',
+        content: action.data,
+      });
+    }, 'error-message');
+  }, [setOnMessage]);
 
   React.useEffect(() => {
     setOnSend(() => {

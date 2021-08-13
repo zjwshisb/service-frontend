@@ -23,6 +23,11 @@ export async function updateChatSetting(data: API.AdminChatSetting) {
     method: 'PUT',
   });
 }
+export async function handleCancelTransfer(id: React.ReactText) {
+  return request<API.Response>(`/ws/transfer/${id}/cancel`, {
+    method: 'POST',
+  });
+}
 export async function handleAccept(uid: number) {
   return request<API.Response<API.User>>('/ws/chat-user', {
     method: 'post',
@@ -103,4 +108,12 @@ export async function getChatSessionDetail(id: React.ReactText) {
       total: number;
     }>
   >(`/chat-sessions/${id}`);
+}
+export async function getTransfers() {
+  return request<API.Pagination<API.Transfer>>(`/transfers`);
+}
+export async function cancelTransfer(id: React.ReactText) {
+  return request<API.Pagination<API.Transfer>>(`/transfers/${id}/cancel`, {
+    method: 'post',
+  });
 }

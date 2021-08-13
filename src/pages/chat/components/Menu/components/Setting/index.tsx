@@ -2,7 +2,12 @@ import React from 'react';
 import { SettingOutlined } from '@ant-design/icons/lib';
 import styles from '../index.less';
 import { useModel } from '@@/plugin-model/useModel';
-import ProForm, { ModalForm, ProFormSwitch, ProFormTextArea } from '@ant-design/pro-form';
+import ProForm, {
+  ModalForm,
+  ProFormSwitch,
+  ProFormTextArea,
+  ProFormText,
+} from '@ant-design/pro-form';
 import { updateChatSetting } from '@/services';
 import ImageSelect from '@/components/Upload/index';
 import { message } from 'antd';
@@ -28,6 +33,7 @@ const Index = () => {
           layout="horizontal"
           initialValues={setting}
         >
+          <ProFormText name={'name'} label={'客服名称'} rules={[{ max: 8, required: true }]} />
           <ProFormSwitch
             name={'is_auto_accept'}
             label={'是否自动接入'}

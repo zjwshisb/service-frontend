@@ -28,7 +28,8 @@ declare namespace API {
     | 'receive-message'
     | 'other-login'
     | 'more-than-one'
-    | 'user-transfer';
+    | 'user-transfer'
+    | 'error-message';
 
   export type Action<T = any> = {
     action: ActionType;
@@ -93,6 +94,7 @@ declare namespace API {
     from_admin_name: string;
     created_at: string;
     accepted_at: string;
+    canceled_at: string;
     remark: string;
   };
 
@@ -120,6 +122,7 @@ declare namespace API {
     is_auto_accept: boolean;
     welcome_content: string;
     offline_content: string;
+    name: strings;
   };
 
   export type Setting = {
