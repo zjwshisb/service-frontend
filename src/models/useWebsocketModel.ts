@@ -34,6 +34,7 @@ export default function useWebsocketModel() {
         }
       };
       websocket.onerror = (e: Event) => {
+        message.error('连接服务器失败');
         if (onError) {
           onError(e);
         }

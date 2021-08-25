@@ -14,6 +14,6 @@ export default defineConfig({
   },
   define: {
     BASE_URL: 'http://localhost:9090/backend',
-    WS_URL: 'ws://localhost/backend/ws',
+    WS_URL: 'ws://localhost:9090/backend/ws',
   },
 });
