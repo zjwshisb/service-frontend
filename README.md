@@ -12,5 +12,5 @@
 ### 演示地址
 
 小水管: [http://119.29.196.153/admin](http://119.29.196.153/admin)  
-账号: admin(1-20) #admin1~admin20  
-密码: admin(1-20) #admin1~admin20
+账号: admin(1-20) #admin1-admin20  
+密码: admin(1-20) #admin1-admin20
