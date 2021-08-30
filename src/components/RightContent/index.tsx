@@ -29,7 +29,7 @@ const GlobalHeaderRight: React.FC = () => {
   return (
     <Space className={className}>
       <Tooltip title={'聊天界面在这里'} defaultVisible={true}>
-        <Link to={'/chat'} target={'_blank'} onClick={() => setVisible(false)}>
+        <Link to={'/chat'} target={'_blank'}>
           客服面板
         </Link>
       </Tooltip>
