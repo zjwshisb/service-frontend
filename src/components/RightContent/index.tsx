@@ -1,4 +1,4 @@
-import { Tag, Space } from 'antd';
+import { Tag, Space, Tooltip } from 'antd';
 import React from 'react';
 import { useModel } from 'umi';
 import Avatar from './AvatarDropdown';
@@ -28,9 +28,11 @@ const GlobalHeaderRight: React.FC = () => {
   }
   return (
     <Space className={className}>
-      <Link to={'/chat'} target={'_blank'}>
-        客服面板
-      </Link>
+      <Tooltip title={'聊天界面在这里'} defaultVisible={true}>
+        <Link to={'/chat'} target={'_blank'} onClick={() => setVisible(false)}>
+          客服面板
+        </Link>
+      </Tooltip>
       <Avatar menu={true} />
       {REACT_APP_ENV && (
         <span>

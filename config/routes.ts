@@ -104,11 +104,6 @@
     ],
   },
   {
-    path: '/chat',
-    component: './chat/index',
-    layout: false,
-  },
-  {
     path: '/404',
     component: './404',
   },

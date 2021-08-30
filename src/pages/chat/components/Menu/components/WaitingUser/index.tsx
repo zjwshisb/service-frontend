@@ -37,6 +37,7 @@ const Index = () => {
   return (
     <DraggableView
       title={'待接入用户'}
+      width={'350px'}
       trigger={(visible) => (
         <div className={styles.item}>
           <Badge count={waitingUsers.length} size={'small'}>

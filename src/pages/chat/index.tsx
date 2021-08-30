@@ -177,6 +177,10 @@ const Index: React.FC = () => {
   }, [setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
+    console.log('test');
+  }, []);
+
+  React.useEffect(() => {
     getUsers().then((res) => {
       setCurrent(undefined);
       setUsers(() => {
