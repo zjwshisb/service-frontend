@@ -34,68 +34,70 @@ const Index = () => {
     }
   }, [accept, setting, waitingUsers]);
 
-  return (
-    <DraggableView
-      title={'待接入用户'}
-      width={'350px'}
-      trigger={(visible) => (
-        <div className={styles.item}>
-          <Badge count={waitingUsers.length} size={'small'}>
-            <MessageOutlined className={styles.icon} data-active={visible} />
-          </Badge>
-        </div>
-      )}
-    >
-      <List
-        itemLayout="horizontal"
-        dataSource={waitingUsers}
-        rowKey={'id'}
-        size={'small'}
-        locale={{
-          emptyText: '暂无数据',
-        }}
-        renderItem={(item) => (
-          <List.Item
-            actions={[
-              <a
-                onClick={(e) => {
-                  accept(item.id);
-                  e.stopPropagation();
-                }}
-              >
-                接入
-              </a>,
-            ]}
-          >
-            <Skeleton avatar title={false} active loading={false}>
-              <List.Item.Meta
-                className={myStyles.listItem}
-                avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
-                title={
-                  <div>
-                    <span>{item.username}</span>
-                    <span className={myStyles.time} style={{ marginLeft: '20px' }}>
-                      {timeFormat(item.last_time)}
-                    </span>
-                  </div>
-                }
-                description={
-                  <Badge
-                    count={item.message_count}
-                    size={'small'}
-                    className={myStyles.messageContent}
-                  >
-                    <Typography.Text ellipsis={true} className={myStyles.messageContent}>
-                      {getMessageTypeLabel(item.last_message, item.last_type)}
-                    </Typography.Text>
-                  </Badge>
-                }
-              />
-            </Skeleton>
-          </List.Item>
+  return React.useMemo(() => {
+    return (
+      <DraggableView
+        title={'待接入用户'}
+        width={'350px'}
+        trigger={(visible) => (
+          <div className={styles.item}>
+            <Badge count={waitingUsers.length} size={'small'}>
+              <MessageOutlined className={styles.icon} data-active={visible} />
+            </Badge>
+          </div>
         )}
-      />
-    </DraggableView>
-  );
+      >
+        <List
+          itemLayout="horizontal"
+          dataSource={waitingUsers}
+          rowKey={'id'}
+          size={'small'}
+          locale={{
+            emptyText: '暂无数据',
+          }}
+          renderItem={(item) => (
+            <List.Item
+              actions={[
+                <a
+                  onClick={(e) => {
+                    accept(item.id);
+                    e.stopPropagation();
+                  }}
+                >
+                  接入
+                </a>,
+              ]}
+            >
+              <Skeleton avatar title={false} active loading={false}>
+                <List.Item.Meta
+                  className={myStyles.listItem}
+                  avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
+                  title={
+                    <div>
+                      <span>{item.username}</span>
+                      <span className={myStyles.time} style={{ marginLeft: '20px' }}>
+                        {timeFormat(item.last_time)}
+                      </span>
+                    </div>
+                  }
+                  description={
+                    <Badge
+                      count={item.message_count}
+                      size={'small'}
+                      className={myStyles.messageContent}
+                    >
+                      <Typography.Text ellipsis={true} className={myStyles.messageContent}>
+                        {getMessageTypeLabel(item.last_message, item.last_type)}
+                      </Typography.Text>
+                    </Badge>
+                  }
+                />
+              </Skeleton>
+            </List.Item>
+          )}
+        />
+      </DraggableView>
+    );
+  }, [accept, waitingUsers]);
 };
 export default Index;
