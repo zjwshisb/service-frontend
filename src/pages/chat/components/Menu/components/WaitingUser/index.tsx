@@ -34,6 +34,10 @@ const Index = () => {
     }
   }, [accept, setting, waitingUsers]);
 
+  const reverseData = React.useMemo(() => {
+    return [...waitingUsers].reverse();
+  }, [waitingUsers]);
+
   return React.useMemo(() => {
     return (
       <DraggableView
@@ -41,7 +45,7 @@ const Index = () => {
         width={'350px'}
         trigger={(visible) => (
           <div className={styles.item}>
-            <Badge count={waitingUsers.length} size={'small'}>
+            <Badge count={reverseData.length} size={'small'}>
               <MessageOutlined className={styles.icon} data-active={visible} />
             </Badge>
           </div>
@@ -49,7 +53,7 @@ const Index = () => {
       >
         <List
           itemLayout="horizontal"
-          dataSource={waitingUsers}
+          dataSource={reverseData}
           rowKey={'id'}
           size={'small'}
           locale={{
@@ -98,6 +102,6 @@ const Index = () => {
         />
       </DraggableView>
     );
-  }, [accept, waitingUsers]);
+  }, [accept, reverseData]);
 };
 export default Index;
