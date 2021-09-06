@@ -1,3 +1,4 @@
+import type React from 'react';
 import { request } from 'umi';
 
 export type LoginParamsType = {
@@ -115,5 +116,13 @@ export async function getTransfers() {
 export async function cancelTransfer(id: React.ReactText) {
   return request<API.Pagination<API.Transfer>>(`/transfers/${id}/cancel`, {
     method: 'post',
+  });
+}
+export async function getAdmins() {
+  return request<API.Pagination<API.Admin>>(`/admins`);
+}
+export async function getAdminDetail(id: React.ReactText, params: Record<any, any>) {
+  return request<API.Response>(`/admins/${id}`, {
+    params,
   });
 }

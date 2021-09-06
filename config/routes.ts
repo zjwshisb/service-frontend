@@ -21,6 +21,23 @@
     name: 'dashboard',
   },
   {
+    path: '/admin',
+    name: '客服',
+    hideChildrenInMenu: true,
+    routes: [
+      {
+        path: '/admin',
+        component: './admin/index/index',
+        name: '客服',
+      },
+      {
+        path: '/admin/:id',
+        component: './admin/show/index',
+        name: '详情',
+      },
+    ],
+  },
+  {
     path: '/auto',
     name: '自动回复',
     routes: [

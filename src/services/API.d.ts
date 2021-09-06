@@ -198,4 +198,10 @@ declare namespace API {
     broke_at: number;
     type_label: string;
   };
+
+  export type Line = {
+    value: number;
+    label: string;
+    category: string;
+  };
 }

@@ -134,7 +134,7 @@ const Index = () => {
   }, []);
 
   return (
-    <PageContainer extraContent="此处规则只有用户没有转接到人工客服才起效">
+    <PageContainer>
       <ProTable<API.AutoRule>
         actionRef={action}
         request={getAutoRules}
