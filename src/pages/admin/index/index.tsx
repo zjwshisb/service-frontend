@@ -18,7 +18,6 @@ const Index = () => {
       {
         dataIndex: 'username',
         title: '用户名',
-        search: false,
       },
       {
         dataIndex: 'avatar',
@@ -46,6 +45,7 @@ const Index = () => {
       {
         dataIndex: 'id',
         title: '操作',
+        search: false,
         render(_, record) {
           return (
             <Button size={'small'} onClick={() => history.push(`/admin/${record.id}`)}>

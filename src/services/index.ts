@@ -118,8 +118,10 @@ export async function cancelTransfer(id: React.ReactText) {
     method: 'post',
   });
 }
-export async function getAdmins() {
-  return request<API.Pagination<API.Admin>>(`/admins`);
+export async function getAdmins(params: FORM.Pagination) {
+  return request<API.Pagination<API.Admin>>(`/admins`, {
+    params,
+  });
 }
 export async function getAdminDetail(id: React.ReactText, params: Record<any, any>) {
   return request<API.Response>(`/admins/${id}`, {

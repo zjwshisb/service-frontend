@@ -17,7 +17,6 @@ const Index = () => {
       month: month?.format('YYYY-MM-DD'),
     }).then((res) => {
       setInfo(res.data);
-      console.log(res.data);
     });
   }, [id, month]);
 
