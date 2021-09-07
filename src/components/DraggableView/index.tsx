@@ -1,7 +1,7 @@
 import React from 'react';
 import Draggable from 'react-draggable';
-import { DragOutlined } from '@ant-design/icons/lib';
 import style from './index.less';
+import usePortal from '@/hooks/usePortal';
 
 const Index: React.FC<{
   trigger: (visible: boolean) => React.ReactNode;
@@ -18,30 +18,30 @@ const Index: React.FC<{
     }
     return props.defaultVisible;
   });
-
   return (
     <div className={style.body}>
       <div className={props.triggerClass} onClick={() => setVisible((prevState) => !prevState)}>
         {props.trigger(visible)}
       </div>
-      <Draggable handle={'.icon'}>
-        <div
-          className={style.index}
-          style={{ width: props.width, top: props.top, left: props.left }}
-          data-display={visible}
-        >
-          <div className={style.header}>
-            <div className={style.left}>
-              <div className={style.dot} onClick={() => setVisible(false)} />
+      {usePortal(
+        <Draggable handle={'.header'}>
+          <div
+            className={style.index}
+            style={{ width: props.width, top: props.top, left: props.left }}
+            data-display={visible}
+          >
+            <div className={`${style.header} header`}>
+              <div className={style.left}>
+                <div className={style.dot} onClick={() => setVisible(false)} />
+              </div>
+              <div className={style.center}>{props.title}</div>
+              <div className={style.right}></div>
             </div>
-            <div className={style.center}>{props.title}</div>
-            <div className={style.right}>
-              <DragOutlined size={16} id={'drag'} className={`${style.drag} icon`} />
-            </div>
+            <div>{props.children}</div>
           </div>
-          <div>{props.children}</div>
-        </div>
-      </Draggable>
+        </Draggable>,
+        'chat',
+      )}
     </div>
   );
 };

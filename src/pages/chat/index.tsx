@@ -11,6 +11,7 @@ import { getUsers, handleRead } from '@/services';
 import styles from './index.less';
 import BackgroundImg from '@/assets/images/background.png';
 import { Modal } from 'antd';
+import Draggable from 'react-draggable';
 
 const Index: React.FC = () => {
   const { connect, setOnMessage, setOnSend, close } = useModel('useWebsocketModel');
@@ -177,10 +178,6 @@ const Index: React.FC = () => {
   }, [setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
-    console.log('test');
-  }, []);
-
-  React.useEffect(() => {
     getUsers().then((res) => {
       setCurrent(undefined);
       setUsers(() => {
@@ -210,24 +207,26 @@ const Index: React.FC = () => {
   }, [setting]);
 
   return (
-    <div className={styles.chat_container} style={{ backgroundImage: `url(${bgImg})` }}>
-      <div className={styles.chat}>
-        <div className={styles.left}>
-          <Menu />
-        </div>
-        <div className={styles.right}>
-          <div className={styles.header}>
-            <Header />
+    <div id="chat" className={styles.chat_container} style={{ backgroundImage: `url(${bgImg})` }}>
+      <Draggable handle={'#header'}>
+        <div className={styles.chat}>
+          <div className={styles.left}>
+            <Menu />
           </div>
-          <div className={styles.body}>
-            <UserList />
-            <div className={styles.message}>
-              <MessageList />
-              <InputArea />
+          <div className={styles.right}>
+            <div className={styles.header} id={'header'}>
+              <Header />
+            </div>
+            <div className={styles.body}>
+              <UserList />
+              <div className={styles.message}>
+                <MessageList />
+                <InputArea />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </Draggable>
     </div>
   );
 };
