@@ -56,7 +56,11 @@ const Index = () => {
         render(value, record) {
           return (
             <Space>
-              <Button size={'small'} type={'primary'} onClick={() => handleAccept(record.user_id)}>
+              <Button
+                size={'small'}
+                type={'primary'}
+                onClick={() => handleAccept(record.session_id)}
+              >
                 接入
               </Button>
               <Button

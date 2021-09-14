@@ -29,11 +29,11 @@ export async function handleCancelTransfer(id: React.ReactText) {
     method: 'POST',
   });
 }
-export async function handleAccept(uid: number) {
+export async function handleAccept(sid: number) {
   return request<API.Response<API.User>>('/ws/chat-user', {
     method: 'post',
     data: {
-      uid,
+      sid,
     },
   });
 }
@@ -99,6 +99,11 @@ export async function getHistorySessions(uid: number) {
 export async function getChatSessions(params: FORM.Pagination) {
   return request<API.Pagination<API.ChatSession>>('/chat-sessions', {
     params,
+  });
+}
+export async function cancelChatSessions(id: React.ReactText) {
+  return request<API.Pagination>(`/chat-sessions/${id}/cancel`, {
+    method: 'POST',
   });
 }
 export async function getChatSessionDetail(id: React.ReactText) {

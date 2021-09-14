@@ -78,7 +78,8 @@ declare namespace API {
   };
 
   export type WaitingUser = {
-    id: number;
+    session_id: number;
+    user_id: number;
     username: string;
     avatar: string;
     last_message: string;
@@ -96,6 +97,7 @@ declare namespace API {
     accepted_at: string;
     canceled_at: string;
     remark: string;
+    session_id: number;
   };
 
   export type User = {
@@ -189,6 +191,8 @@ declare namespace API {
     };
   }
 
+  export type ChatSessionStatus = 'cancel' | 'accept' | 'wait';
+
   export type ChatSession = {
     id: number;
     admin_name: string;
@@ -197,6 +201,8 @@ declare namespace API {
     accepted_at: number;
     broke_at: number;
     type_label: string;
+    status: ChatSessionStatus;
+    canceled_at: number;
   };
 
   export type Line = {

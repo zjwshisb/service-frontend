@@ -45,9 +45,12 @@ const Index = () => {
       },
       {
         title: '回复内容',
-        search: false,
-        dataIndex: 'message',
+        dataIndex: 'reply_type',
+        valueEnum: replyTypeLabel,
         ellipsis: true,
+        formItemProps: {
+          label: '回复类型',
+        },
         width: 300,
         render(dom, record) {
           switch (record.reply_type) {

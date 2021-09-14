@@ -29,7 +29,7 @@ const Index = () => {
   React.useEffect(() => {
     if (setting?.is_auto_accept) {
       if (waitingUsers.length > 0) {
-        accept(waitingUsers[0].id);
+        accept(waitingUsers[0].session_id);
       }
     }
   }, [accept, setting, waitingUsers]);
@@ -64,7 +64,7 @@ const Index = () => {
               actions={[
                 <a
                   onClick={(e) => {
-                    accept(item.id);
+                    accept(item.session_id);
                     e.stopPropagation();
                   }}
                 >

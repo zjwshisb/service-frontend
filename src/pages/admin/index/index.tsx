@@ -16,17 +16,17 @@ const Index = () => {
         valueType: 'index',
       },
       {
-        dataIndex: 'username',
-        title: '用户名',
-      },
-      {
         dataIndex: 'avatar',
         title: '头像',
         valueType: 'image',
         search: false,
       },
       {
-        title: '在线',
+        dataIndex: 'username',
+        title: '用户名',
+      },
+      {
+        title: '在线情况',
         dataIndex: 'online',
         search: false,
         render(_, record) {

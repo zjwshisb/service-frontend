@@ -1,27 +1,30 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import type { ProColumnType } from '@ant-design/pro-table';
+import type { ProColumnType, ActionType } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Button } from 'antd';
+import { Button, message, Modal } from 'antd';
 import { history } from '@@/core/history';
-import { getChatSessions } from '@/services';
+import { getChatSessions, cancelChatSessions } from '@/services';
 import moment from 'moment';
 
+const Status: Record<API.ChatSessionStatus, string> = {
+  cancel: '已取消',
+  accept: '已接入',
+  wait: '待接入',
+};
+
 const Index = () => {
+  const action = React.useRef<ActionType>();
+
   const columns: ProColumnType<API.ChatSession>[] = React.useMemo((): ProColumnType<API.ChatSession>[] => {
     return [
       {
         dataIndex: 'user_name',
         title: '用户',
-        search: false,
-      },
-      {
-        dataIndex: 'admin_name',
-        title: '客服',
       },
       {
         dataIndex: 'queried_at',
-        title: '咨询时间',
+        title: '询问时间',
         width: 200,
         valueType: 'dateTimeRange',
         render(_, record) {
@@ -29,14 +32,38 @@ const Index = () => {
         },
       },
       {
-        dataIndex: 'accepted_at',
-        title: '接入时间',
-        search: false,
-        valueType: 'dateTime',
+        dataIndex: 'status',
+        title: '状态',
+        valueEnum: Status,
+      },
+      {
+        dataIndex: 'admin_name',
+        title: '详情',
+        formItemProps: {
+          label: '客服',
+        },
+        render(_, record) {
+          if (record.accepted_at > 0) {
+            return (
+              <>
+                <div>客服：{_}</div>
+                <div>接入时间：{moment(record.queried_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+              </>
+            );
+          }
+          if (record.canceled_at > 0) {
+            return (
+              <>
+                <div>取消时间：{moment(record.canceled_at).format('YYYY-MM-DD HH:mm:ss')}</div>
+              </>
+            );
+          }
+          return '';
+        },
       },
       {
         dataIndex: 'type_label',
-        title: '类型',
+        title: '来源类型  ',
         search: false,
       },
       {
@@ -44,7 +71,7 @@ const Index = () => {
         title: '操作',
         valueType: 'option',
         render(_, record) {
-          return [
+          const buttons = [
             <Button
               type={'primary'}
               size={'small'}
@@ -54,6 +81,37 @@ const Index = () => {
               详情
             </Button>,
           ];
+          if (record.status !== 'wait') {
+            buttons.push(
+              <Button
+                size={'small'}
+                key={2}
+                danger={true}
+                onClick={() => {
+                  Modal.confirm({
+                    title: '提示',
+                    content: '确定取消该待接入会话？',
+                    async onOk() {
+                      try {
+                        await cancelChatSessions(record.id);
+                        message.success('操作成功');
+                        action.current?.reload();
+                        return true;
+                      } catch (e) {
+                        if (e.name === 'BizError') {
+                          message.error(e.data.message);
+                        }
+                        return false;
+                      }
+                    },
+                  });
+                }}
+              >
+                取消
+              </Button>,
+            );
+          }
+          return buttons;
         },
       },
     ];
@@ -61,7 +119,12 @@ const Index = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.ChatSession> request={getChatSessions} columns={columns} rowKey={'id'} />
+      <ProTable<API.ChatSession>
+        actionRef={action}
+        request={getChatSessions}
+        columns={columns}
+        rowKey={'id'}
+      />
     </PageContainer>
   );
 };
