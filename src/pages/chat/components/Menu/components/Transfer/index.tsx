@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { Badge, Table, Button, Space, Modal } from 'antd';
+import { Badge, Table, Button, Space, Modal, Tooltip } from 'antd';
 import styles from '../index.less';
 import myStyles from './index.less';
 import DraggableView from '@/components/DraggableView';
@@ -104,11 +104,13 @@ const Index = () => {
         title={'转接用户'}
         defaultVisible={false}
         trigger={(visible) => (
-          <div className={styles.item}>
-            <Badge count={transfers.length} size={'small'}>
-              <InfoCircleOutlined className={styles.icon} data-active={visible} />
-            </Badge>
-          </div>
+          <Tooltip title={'转接用户'} placement={'left'}>
+            <div className={styles.item}>
+              <Badge count={transfers.length} size={'small'}>
+                <InfoCircleOutlined className={styles.icon} data-active={visible} />
+              </Badge>
+            </div>
+          </Tooltip>
         )}
       >
         <Table

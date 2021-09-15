@@ -1,5 +1,5 @@
 import React from 'react';
-import { handleAccept } from '@/services';
+import { handleAccept, handleRead } from '@/services';
 import lodash from 'lodash';
 import { useModel } from '@@/plugin-model/useModel';
 import { createMsg } from '@/utils';
@@ -17,6 +17,7 @@ export default function useAccept() {
           if (res.data.id === current?.id) {
             goTop();
             setCurrent(res.data);
+            handleRead(res.data.id).then().catch();
           } else {
             setUsers((prevState) => {
               const newState = lodash.clone(prevState);

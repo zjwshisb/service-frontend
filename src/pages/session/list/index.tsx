@@ -81,7 +81,7 @@ const Index = () => {
               详情
             </Button>,
           ];
-          if (record.status !== 'wait') {
+          if (record.status === 'wait') {
             buttons.push(
               <Button
                 size={'small'}

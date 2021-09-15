@@ -1,7 +1,7 @@
 import React from 'react';
 import { CustomerServiceFilled } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { Drawer, Table, Avatar } from 'antd';
+import { Drawer, Table, Avatar, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import styles from '../index.less';
 
@@ -39,7 +39,12 @@ const Index = () => {
 
   return React.useMemo(() => {
     return (
-      <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
+      <>
+        <Tooltip title={'在线客服'} placement={'left'}>
+          <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
+            <CustomerServiceFilled className={styles.icon} data-active={visible} />
+          </div>
+        </Tooltip>
         <Drawer
           visible={visible}
           placement={'right'}
@@ -58,8 +63,7 @@ const Index = () => {
             columns={columns}
           />
         </Drawer>
-        <CustomerServiceFilled className={styles.icon} data-active={visible} />
-      </div>
+      </>
     );
   }, [admins, visible]);
 };

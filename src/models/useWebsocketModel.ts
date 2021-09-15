@@ -14,7 +14,6 @@ export default function useWebsocketModel() {
   const [onMessage, updateOnMessage] = React.useState<Map<API.ActionType, ActionHandle>>(new Map());
   const [onOpen, setOnOpen] = React.useState<EventHandle>();
   const [onError, setOnError] = React.useState<EventHandle>();
-  const [onClose, setOnClose] = React.useState<EventHandle<CloseEvent>>();
 
   const { setUsers } = useModel('useUsersModel');
   const { current, setCurrent } = useModel('useCurrentModel');
@@ -54,10 +53,17 @@ export default function useWebsocketModel() {
       };
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = () => {
+        Modal.error({
+          title: '提示',
+          content: '服务器连接已断开',
+          onOk() {
+            window.location.reload();
+          },
+        });
         setWebsocket(undefined);
       };
     }
-  }, [connect, onClose, onError, onMessage, onOpen, websocket]);
+  }, [connect, onError, onMessage, onOpen, websocket]);
 
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: API.ActionType): void => {
@@ -148,7 +154,6 @@ export default function useWebsocketModel() {
           }
           return true;
         } catch (e) {
-          console.log(e);
           return false;
         }
       } else {
@@ -173,8 +178,7 @@ export default function useWebsocketModel() {
     setOnMessage,
     setOnOpen,
     setOnError,
-    setOnClose,
-    close,
     websocket,
+    close,
   };
 }

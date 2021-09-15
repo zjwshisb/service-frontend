@@ -3,12 +3,11 @@ import { AuditOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
 import styles from '../index.less';
 import DraggableView from '@/components/DraggableView';
-import { Descriptions, Empty } from 'antd';
+import { Descriptions, Empty, Tooltip } from 'antd';
 import { getUserInfo } from '@/services';
 
 const Index = () => {
   const { current } = useModel('useCurrentModel');
-
   const [info, setInfo] = useState<Record<string, any>>({});
 
   React.useEffect(() => {
@@ -27,9 +26,11 @@ const Index = () => {
       defaultVisible={false}
       top="300px"
       trigger={(visible) => (
-        <div className={styles.item}>
-          <AuditOutlined className={styles.icon} data-active={visible} />
-        </div>
+        <Tooltip placement={'left'} title={'用户信息'}>
+          <div className={styles.item}>
+            <AuditOutlined className={styles.icon} data-active={visible} />
+          </div>
+        </Tooltip>
       )}
     >
       <div>

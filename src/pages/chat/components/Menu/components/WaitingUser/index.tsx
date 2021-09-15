@@ -1,7 +1,7 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { List, Skeleton, Avatar, Badge } from 'antd';
+import { List, Skeleton, Avatar, Badge, Tooltip, Modal, Popover } from 'antd';
 import { timeFormat } from '@/utils';
 import styles from '../index.less';
 import myStyles from './index.less';
@@ -9,6 +9,7 @@ import DraggableView from '@/components/DraggableView';
 import { getMessageTypeLabel } from '@/pages/chat/util';
 import { Typography } from 'antd';
 import useAcceptUser from '@/hooks/useAcceptUser';
+import { cancelChatSessions } from '@/services';
 
 const Index = () => {
   const { setOnMessage } = useModel('useWebsocketModel');
@@ -44,11 +45,13 @@ const Index = () => {
         title={'待接入用户'}
         width={'350px'}
         trigger={(visible) => (
-          <div className={styles.item}>
-            <Badge count={reverseData.length} size={'small'}>
-              <MessageOutlined className={styles.icon} data-active={visible} />
-            </Badge>
-          </div>
+          <Tooltip title={'待接入用户'} placement={'left'}>
+            <div className={styles.item}>
+              <Badge count={reverseData.length} size={'small'}>
+                <MessageOutlined className={styles.icon} data-active={visible} />
+              </Badge>
+            </div>
+          </Tooltip>
         )}
       >
         <List
@@ -70,32 +73,73 @@ const Index = () => {
                 >
                   接入
                 </a>,
+                <a
+                  className={'red-6'}
+                  onClick={(e) => {
+                    Modal.confirm({
+                      title: '提示',
+                      content: '确定拒绝该会话?',
+                      onOk() {
+                        cancelChatSessions(item.session_id).then().catch();
+                      },
+                    });
+                    e.stopPropagation();
+                  }}
+                >
+                  拒绝
+                </a>,
               ]}
             >
               <Skeleton avatar title={false} active loading={false}>
-                <List.Item.Meta
-                  className={myStyles.listItem}
-                  avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
-                  title={
-                    <div>
-                      <span>{item.username}</span>
-                      <span className={myStyles.time} style={{ marginLeft: '20px' }}>
-                        {timeFormat(item.last_time)}
-                      </span>
-                    </div>
-                  }
-                  description={
-                    <Badge
-                      count={item.message_count}
+                <Popover
+                  content={
+                    <List
+                      dataSource={[...item.messages].reverse()}
                       size={'small'}
-                      className={myStyles.messageContent}
-                    >
-                      <Typography.Text ellipsis={true} className={myStyles.messageContent}>
-                        {getMessageTypeLabel(item.last_message, item.last_type)}
-                      </Typography.Text>
-                    </Badge>
+                      className={myStyles.simpleMessage}
+                      renderItem={(i) => {
+                        return (
+                          <List.Item>
+                            <span className={myStyles.time}>{timeFormat(i.time)}</span>
+                            <span className={myStyles.msg}>
+                              {getMessageTypeLabel(i.content, i.type)}
+                            </span>
+                          </List.Item>
+                        );
+                      }}
+                    ></List>
                   }
-                />
+                  placement={'bottom'}
+                >
+                  <List.Item.Meta
+                    className={myStyles.listItem}
+                    avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
+                    title={
+                      <div>
+                        <span>{item.username}</span>
+                        <span className={myStyles.time} style={{ marginLeft: '20px' }}>
+                          {timeFormat(item.last_time)}
+                        </span>
+                      </div>
+                    }
+                    description={
+                      <Badge
+                        count={item.message_count}
+                        size={'small'}
+                        className={myStyles.messageContent}
+                      >
+                        <Typography.Text ellipsis={true} className={myStyles.messageContent}>
+                          {item.messages.length > 0
+                            ? getMessageTypeLabel(
+                                item.messages[item.messages.length - 1].content,
+                                item.messages[item.messages.length - 1].type,
+                              )
+                            : ''}
+                        </Typography.Text>
+                      </Badge>
+                    }
+                  />
+                </Popover>
               </Skeleton>
             </List.Item>
           )}

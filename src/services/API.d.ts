@@ -82,9 +82,12 @@ declare namespace API {
     user_id: number;
     username: string;
     avatar: string;
-    last_message: string;
     last_time: number;
-    last_type: MessageType;
+    messages: {
+      type: MessageType;
+      time: number;
+      content: string;
+    }[];
     message_count: number;
   };
 
@@ -105,7 +108,7 @@ declare namespace API {
     username: string;
     avatar?: string;
     online: boolean;
-    messages: APP.Message[];
+    messages: API.Message[];
     last_chat_time: number;
     unread: number;
     disabled: boolean;

@@ -11,6 +11,14 @@ const Index: React.FC = () => {
 
   const { text, setText, clear, append } = useModel('useInputModel');
 
+  const ref = React.useRef<any>();
+
+  React.useEffect(() => {
+    if (!current?.disabled) {
+      ref.current?.focus();
+    }
+  }, [current?.disabled, current?.id]);
+
   const sendMsg = React.useCallback(
     (event: React.KeyboardEvent) => {
       if (event.code === 'Enter' && !event.shiftKey) {
@@ -34,6 +42,7 @@ const Index: React.FC = () => {
   return (
     <div className={styles.input}>
       <Input.TextArea
+        ref={ref}
         showCount={true}
         maxLength={512}
         value={text}

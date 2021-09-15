@@ -4,6 +4,7 @@ import { useModel } from '@@/plugin-model/useModel';
 import styles from './index.less';
 import { Helmet } from 'umi';
 import TransferForm from './components/TransferForm/index';
+import { Empty } from 'antd';
 
 const Index: React.FC = () => {
   const { users } = useModel('useUsersModel');
@@ -40,7 +41,11 @@ const Index: React.FC = () => {
       <Helmet defer={false}>
         <title>{title}</title>
       </Helmet>
-      {userList}
+      {userList.length > 0 ? (
+        userList
+      ) : (
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={'暂无会话'} />
+      )}
     </div>
   );
 };

@@ -10,7 +10,7 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import { updateChatSetting } from '@/services';
 import ImageSelect from '@/components/Upload/index';
-import { message } from 'antd';
+import { message, Tooltip } from 'antd';
 
 const Index = () => {
   const [visible, setVisible] = React.useState(false);
@@ -18,8 +18,12 @@ const Index = () => {
 
   return React.useMemo(() => {
     return (
-      <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
-        <SettingOutlined className={styles.icon} data-active={visible} />
+      <>
+        <Tooltip title={'客服设置'} placement={'left'}>
+          <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
+            <SettingOutlined className={styles.icon} data-active={visible} />
+          </div>
+        </Tooltip>
         <ModalForm
           visible={visible}
           title={'基本设置'}
@@ -57,7 +61,7 @@ const Index = () => {
             <ImageSelect action={`${BASE_URL}/me/settings/image`} corp={false} width={'200px'} />
           </ProForm.Item>
         </ModalForm>
-      </div>
+      </>
     );
   }, [refresh, setting, visible]);
 };
