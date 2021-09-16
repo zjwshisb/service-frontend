@@ -17,14 +17,20 @@ const Index = () => {
 
   const { waitingUsers, setWaitingUsers } = useModel('useWaitingUserModel');
   const { setting } = useModel('useSettingModel');
+  const { notify } = useModel('useNotificationModel');
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.WaitingUser[]>) => {
       if (action.action === 'waiting-users') {
-        setWaitingUsers(action.data);
+        setWaitingUsers((prevState) => {
+          if (prevState.length < action.data.length) {
+            notify('有新的用户待接入', {});
+          }
+          return action.data;
+        });
       }
     }, 'waiting-users');
-  }, [setOnMessage, setWaitingUsers]);
+  }, [notify, setOnMessage, setWaitingUsers]);
 
   const accept = useAcceptUser();
 

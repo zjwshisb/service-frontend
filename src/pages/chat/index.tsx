@@ -23,6 +23,12 @@ const Index: React.FC = () => {
 
   const { setting } = useModel('useSettingModel');
 
+  const { notifyMessage, requestPermission } = useModel('useNotificationModel');
+
+  React.useEffect(() => {
+    requestPermission();
+  }, [requestPermission]);
+
   React.useEffect(() => {
     setOnMessage((action: API.Action<string>) => {
       Modal.error({
@@ -112,6 +118,7 @@ const Index: React.FC = () => {
           if (prevState) {
             const newState = lodash.clone(prevState);
             newState.messages.unshift(msg);
+            notifyMessage(newState.username, msg);
             return newState;
           }
           return prevState;
@@ -123,13 +130,14 @@ const Index: React.FC = () => {
           if (user) {
             user.messages.unshift(action.data);
             user.unread += 1;
+            notifyMessage(user.username, msg);
             return newState;
           }
           return prevState;
         });
       }
     }, 'receive-message');
-  }, [current, goTop, setCurrent, setOnMessage, setUsers]);
+  }, [current, goTop, notifyMessage, setCurrent, setOnMessage, setUsers]);
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.OnLine>) => {
