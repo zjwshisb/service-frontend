@@ -6,6 +6,7 @@ import { Button, message, Modal } from 'antd';
 import { history } from '@@/core/history';
 import { getAutoMessage, deleteAutoMessage } from '@/services/auto';
 import MessageContent from '../components/MessageContent';
+import { KeepAlive, useActivate } from 'umi';
 
 export const MessageType: Record<API.MessageType, string> = {
   text: '文本',
@@ -13,8 +14,12 @@ export const MessageType: Record<API.MessageType, string> = {
   navigator: '导航卡片',
 };
 
-const Index = () => {
+const Table = () => {
   const actionRef = React.useRef<ActionType>();
+
+  useActivate(() => {
+    actionRef.current?.reload();
+  });
 
   const columns: ProColumnType<API.AutoMessage>[] = React.useMemo((): ProColumnType<API.AutoMessage>[] => {
     return [
@@ -100,23 +105,30 @@ const Index = () => {
       },
     ];
   }, []);
+  return (
+    <ProTable
+      form={{
+        labelWidth: 100,
+      }}
+      actionRef={actionRef}
+      rowKey={'id'}
+      columns={columns}
+      request={getAutoMessage}
+      toolBarRender={() => [
+        <Button type={'primary'} onClick={() => history.push('/auto/message/add')}>
+          新增
+        </Button>,
+      ]}
+    />
+  );
+};
 
+const Index = () => {
   return (
     <PageContainer>
-      <ProTable
-        form={{
-          labelWidth: 100,
-        }}
-        actionRef={actionRef}
-        rowKey={'id'}
-        columns={columns}
-        request={getAutoMessage}
-        toolBarRender={() => [
-          <Button type={'primary'} onClick={() => history.push('/auto/message/add')}>
-            新增
-          </Button>,
-        ]}
-      />
+      <KeepAlive>
+        <Table />
+      </KeepAlive>
     </PageContainer>
   );
 };

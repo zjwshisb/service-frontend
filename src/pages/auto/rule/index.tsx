@@ -6,6 +6,7 @@ import { Button, message, Modal } from 'antd';
 import { history } from '@@/core/history';
 import { getAutoRules, deleteAutoRule, getAutoRuleScenes } from '@/services/auto';
 import MessageContent from '../components/MessageContent';
+import { KeepAlive, useActivate } from 'umi';
 
 export const replyTypeLabel: Record<API.ReplyType, string> = {
   message: '回复消息',
@@ -17,8 +18,12 @@ export const matchTypeLabel: Record<API.AutoRuleMatchType, string> = {
   part: '包含',
 };
 
-const Index = () => {
+const Table = () => {
   const action = React.useRef<ActionType>();
+
+  useActivate(() => {
+    action.current?.reload();
+  });
 
   const columns: ProColumnType<API.AutoRule>[] = React.useMemo((): ProColumnType<API.AutoRule>[] => {
     return [
@@ -135,20 +140,27 @@ const Index = () => {
       },
     ];
   }, []);
+  return (
+    <ProTable<API.AutoRule>
+      actionRef={action}
+      request={getAutoRules}
+      columns={columns}
+      rowKey={'id'}
+      toolBarRender={() => [
+        <Button type={'primary'} onClick={() => history.push('/auto/rule/add')}>
+          新增
+        </Button>,
+      ]}
+    />
+  );
+};
 
+const Index = () => {
   return (
     <PageContainer>
-      <ProTable<API.AutoRule>
-        actionRef={action}
-        request={getAutoRules}
-        columns={columns}
-        rowKey={'id'}
-        toolBarRender={() => [
-          <Button type={'primary'} onClick={() => history.push('/auto/rule/add')}>
-            新增
-          </Button>,
-        ]}
-      />
+      <KeepAlive>
+        <Table />
+      </KeepAlive>
     </PageContainer>
   );
 };

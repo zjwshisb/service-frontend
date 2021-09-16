@@ -5,10 +5,10 @@ import ProTable from '@ant-design/pro-table';
 import { getAdmins } from '@/services';
 import { Button } from 'antd';
 import { history } from '@@/core/history';
+import { KeepAlive, useActivate } from 'umi';
 
-const Index = () => {
+const Table = () => {
   const action = React.useRef<ActionType>();
-
   const columns: ProColumnType<API.Admin>[] = React.useMemo((): ProColumnType<API.Admin>[] => {
     return [
       {
@@ -57,9 +57,21 @@ const Index = () => {
     ];
   }, []);
 
+  useActivate(() => {
+    action.current?.reload();
+  });
+
+  return (
+    <ProTable<API.Admin> actionRef={action} request={getAdmins} columns={columns} rowKey={'id'} />
+  );
+};
+
+const Index = () => {
   return (
     <PageContainer>
-      <ProTable<API.Admin> actionRef={action} request={getAdmins} columns={columns} rowKey={'id'} />
+      <KeepAlive>
+        <Table />
+      </KeepAlive>
     </PageContainer>
   );
 };

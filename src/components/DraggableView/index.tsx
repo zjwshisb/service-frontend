@@ -35,7 +35,7 @@ const Index: React.FC<{
                 <div className={style.dot} onClick={() => setVisible(false)} />
               </div>
               <div className={style.center}>{props.title}</div>
-              <div className={style.right}></div>
+              <div className={style.right} />
             </div>
             <div>{props.children}</div>
           </div>

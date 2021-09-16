@@ -69,6 +69,7 @@
     "react-helmet-async": "^1.0.4",
     "react-resizable": "^3.0.4",
     "umi": "^3.2.14",
+    "umi-plugin-keep-alive": "0.0.1-beta.29",
     "umi-request": "^1.0.8"
   },
   "devDependencies": {

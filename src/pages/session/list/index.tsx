@@ -6,14 +6,14 @@ import { Button, message, Modal } from 'antd';
 import { history } from '@@/core/history';
 import { getChatSessions, cancelChatSessions } from '@/services';
 import moment from 'moment';
+import { KeepAlive, useActivate } from 'umi';
 
 const Status: Record<API.ChatSessionStatus, string> = {
   cancel: '已取消',
   accept: '已接入',
   wait: '待接入',
 };
-
-const Index = () => {
+const Table = () => {
   const action = React.useRef<ActionType>();
 
   const columns: ProColumnType<API.ChatSession>[] = React.useMemo((): ProColumnType<API.ChatSession>[] => {
@@ -116,15 +116,24 @@ const Index = () => {
       },
     ];
   }, []);
-
+  useActivate(() => {
+    action.current?.reload(false);
+  });
+  return (
+    <ProTable<API.ChatSession>
+      actionRef={action}
+      request={getChatSessions}
+      columns={columns}
+      rowKey={'id'}
+    />
+  );
+};
+const Index = () => {
   return (
     <PageContainer>
-      <ProTable<API.ChatSession>
-        actionRef={action}
-        request={getChatSessions}
-        columns={columns}
-        rowKey={'id'}
-      />
+      <KeepAlive>
+        <Table />
+      </KeepAlive>
     </PageContainer>
   );
 };
