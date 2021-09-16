@@ -12,6 +12,8 @@ import styles from './index.less';
 import BackgroundImg from '@/assets/images/background.png';
 import { Modal } from 'antd';
 import Draggable from 'react-draggable';
+import { Resizable } from 'react-resizable';
+import 'react-resizable/css/styles.css';
 
 const Index: React.FC = () => {
   const { connect, setOnMessage, setOnSend, close } = useModel('useWebsocketModel');
@@ -206,26 +208,49 @@ const Index: React.FC = () => {
     }
   }, [setting]);
 
+  const [style, setStyle] = React.useState({
+    width: 1080,
+    height: 700,
+  });
+
+  const handleResize = React.useCallback((e, s) => {
+    setStyle({
+      width: s.size.width <= 1080 ? 1080 : s.size.width,
+      height: s.size.height <= 700 ? 700 : s.size.height,
+    });
+  }, []);
+
   return (
     <div id="chat" className={styles.chat_container} style={{ backgroundImage: `url(${bgImg})` }}>
       <Draggable handle={'#header'}>
-        <div className={styles.chat}>
-          <div className={styles.left}>
-            <Menu />
-          </div>
-          <div className={styles.right}>
-            <div className={styles.header} id={'header'}>
-              <Header />
+        <Resizable
+          className={'box'}
+          height={style.height}
+          width={style.width}
+          resizeHandles={['se', 'sw', 'ne', 'nw']}
+          onResize={handleResize}
+        >
+          <div
+            className={styles.chat}
+            style={{ width: `${style.width}px`, height: `${style.height}px` }}
+          >
+            <div className={styles.left}>
+              <Menu />
             </div>
-            <div className={styles.body}>
-              <UserList />
-              <div className={styles.message}>
-                <MessageList />
-                <InputArea />
+            <div className={styles.right}>
+              <div className={styles.header} id={'header'}>
+                <Header />
+              </div>
+              <div className={styles.body}>
+                <UserList />
+                <div className={styles.message}>
+                  <MessageList />
+                  <InputArea />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Resizable>
       </Draggable>
     </div>
   );

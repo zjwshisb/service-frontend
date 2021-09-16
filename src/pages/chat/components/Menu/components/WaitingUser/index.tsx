@@ -10,6 +10,7 @@ import { getMessageTypeLabel } from '@/pages/chat/util';
 import { Typography } from 'antd';
 import useAcceptUser from '@/hooks/useAcceptUser';
 import { cancelChatSessions } from '@/services';
+import moment from 'moment';
 
 const Index = () => {
   const { setOnMessage } = useModel('useWebsocketModel');
@@ -43,7 +44,7 @@ const Index = () => {
     return (
       <DraggableView
         title={'待接入用户'}
-        width={'350px'}
+        width={'400px'}
         trigger={(visible) => (
           <Tooltip title={'待接入用户'} placement={'left'}>
             <div className={styles.item}>
@@ -99,15 +100,17 @@ const Index = () => {
                       className={myStyles.simpleMessage}
                       renderItem={(i) => {
                         return (
-                          <List.Item>
-                            <span className={myStyles.time}>{timeFormat(i.time)}</span>
+                          <List.Item className={myStyles.msgItem}>
+                            <span className={myStyles.time}>
+                              {moment(i.time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+                            </span>
                             <span className={myStyles.msg}>
                               {getMessageTypeLabel(i.content, i.type)}
                             </span>
                           </List.Item>
                         );
                       }}
-                    ></List>
+                    />
                   }
                   placement={'bottom'}
                 >

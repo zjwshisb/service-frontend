@@ -9,7 +9,6 @@
   background-size: 100% 100%;
   & > .chat {
     display: flex;
-    height: 700px;
     overflow: hidden;
     border-radius: 5px;
     box-shadow: 0 0 5px #999999;
@@ -22,8 +21,8 @@
     }
     & > .right {
       display: flex;
+      flex: 1;
       flex-direction: column;
-      width: 1020px;
       height: 100%;
       overflow: hidden;
       background-color: #fff;
@@ -35,6 +34,9 @@
         height: 60px;
         background-color: #f3f3f3;
         border-bottom: 1px solid #e0e0e0;
+        &:hover {
+          cursor: move;
+        }
       }
       & > .body {
         display: flex;
