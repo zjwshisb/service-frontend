@@ -28,7 +28,7 @@ const Index = () => {
     showAutoRule(id).then((res) => {
       setInitialValues({
         name: res.data.name,
-        match: res.data.name,
+        match: res.data.match,
         match_type: res.data.match_type,
         reply_type: res.data.reply_type,
         sort: res.data.sort,
