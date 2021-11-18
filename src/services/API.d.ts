@@ -31,8 +31,8 @@ declare namespace API {
     | 'user-transfer'
     | 'error-message';
 
-  export type Action<T = any> = {
-    action: ActionType;
+  export type Action<T = any, A = ActionType> = {
+    action: A;
     data: T;
     time: number;
   };
@@ -56,13 +56,15 @@ declare namespace API {
 
   export type SourceSystem = 2;
 
+  export type Source = SourceUser | SourceService | SourceSystem;
+
   export type Message = {
     type: MessageType;
     user_id: number;
     admin_id?: number;
     id?: number;
     content: string;
-    source: SourceUser | SourceService | SourceSystem;
+    source: Source;
     is_success?: boolean;
     req_id: number;
     received_at: number;

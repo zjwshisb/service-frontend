@@ -18,7 +18,7 @@ const Index = () => {
     } else {
       setInfo({});
     }
-  }, [current]);
+  }, [current?.id]);
 
   return (
     <DraggableView

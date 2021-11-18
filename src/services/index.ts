@@ -71,6 +71,15 @@ export async function handleRead(uid: number) {
     },
   });
 }
+export async function getReqId() {
+  return request<
+    API.Response<{
+      reqId: number;
+    }>
+  >('/ws/req-id', {
+    method: 'post',
+  });
+}
 export async function getMessages(uid: number, mid?: number) {
   const query: Record<any, any> = {
     uid,
