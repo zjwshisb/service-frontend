@@ -10,13 +10,17 @@ export type EventHandle<T extends Event = Event> = (e: T) => void;
 
 export default function useWebsocketModel() {
   const [websocket, setWebsocket] = React.useState<WebSocket | undefined>();
+
   const [onSend, setOnSend] = React.useState<ActionHandle | undefined>();
+
   const [onMessage, updateOnMessage] = React.useState<Map<API.ActionType, ActionHandle>>(new Map());
+
   const [onOpen, setOnOpen] = React.useState<EventHandle>();
+
   const [onError, setOnError] = React.useState<EventHandle>();
 
   const { setUsers } = useModel('useUsersModel');
-  const { current, setCurrent } = useModel('useCurrentModel');
+  const { setCurrent } = useModel('useCurrentModel');
 
   const connect = React.useCallback(() => {
     const url = `${WS_URL}?token=${getToken()}`;
@@ -116,38 +120,35 @@ export default function useWebsocketModel() {
           websocket.send(JSON.stringify(action));
           // 2秒后没有收到回执则把消息状态改成发送失败
           setTimeout(() => {
-            if (action.data.user_id === current?.id) {
-              setCurrent((user) => {
-                if (user) {
-                  const newUser = lodash.clone(user);
-                  const { length } = newUser.messages;
-                  for (let i = 0; i < length; i += 1) {
-                    if (newUser.messages[i].req_id === action.data.req_id) {
-                      if (newUser.messages[i].is_success === undefined) {
-                        newUser.messages[i].is_success = false;
-                        break;
-                      }
+            setCurrent((user) => {
+              if (user && user.id === action.data.user_id) {
+                const newUser = lodash.clone(user);
+                const { length } = newUser.messages;
+                for (let i = 0; i < length; i += 1) {
+                  if (newUser.messages[i].req_id === action.data.req_id) {
+                    if (newUser.messages[i].is_success === undefined) {
+                      newUser.messages[i].is_success = false;
+                      break;
                     }
                   }
-                  return newUser;
                 }
-                return user;
-              });
-            } else {
-              setUsers((prevState) => {
-                const user = prevState.get(action.data.user_id);
-                if (user !== undefined) {
-                  const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
-                  if (index > -1) {
-                    if (user.messages[index].is_success === undefined) {
-                      user.messages[index].is_success = false;
-                    }
+                return newUser;
+              }
+              return user;
+            });
+            setUsers((prevState) => {
+              const user = prevState.get(action.data.user_id);
+              if (user !== undefined) {
+                const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
+                if (index > -1) {
+                  if (user.messages[index].is_success === undefined) {
+                    user.messages[index].is_success = false;
                   }
-                  return lodash.clone(prevState);
                 }
-                return prevState;
-              });
-            }
+                return lodash.clone(prevState);
+              }
+              return prevState;
+            });
           }, 2000);
           if (onSend) {
             onSend(action);
@@ -168,7 +169,7 @@ export default function useWebsocketModel() {
         return false;
       }
     },
-    [current?.id, onSend, setCurrent, setUsers, websocket],
+    [onSend, setCurrent, setUsers, websocket],
   );
 
   return {

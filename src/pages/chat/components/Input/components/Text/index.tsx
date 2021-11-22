@@ -24,10 +24,11 @@ const Index: React.FC = () => {
       if (event.code === 'Enter' && !event.shiftKey) {
         if (current) {
           if (text !== '') {
-            const action = createMsg(text, current.id);
-            if (send(action)) {
-              clear();
-            }
+            createMsg(text, current.id).then((message) => {
+              if (send(message)) {
+                clear();
+              }
+            });
           }
           event.preventDefault();
         }

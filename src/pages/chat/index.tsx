@@ -87,7 +87,7 @@ const Index: React.FC = () => {
     setOnMessage((action: API.Action<API.Receipt>) => {
       setCurrent((user) => {
         if (user && action.data.user_id === user.id) {
-          const newUser = lodash.clone(user);
+          const newUser = lodash.cloneDeep(user);
           const index = newUser.messages.findIndex((v) => v.req_id === action.data.req_id);
           if (index > -1) {
             newUser.messages[index].is_success = true;
@@ -103,7 +103,7 @@ const Index: React.FC = () => {
           if (index > -1) {
             user.messages[index].is_success = true;
           }
-          return lodash.clone(prevState);
+          return lodash.cloneDeep(prevState);
         }
         return prevState;
       });
@@ -117,7 +117,7 @@ const Index: React.FC = () => {
         if (prevState && msg.user_id === prevState.id) {
           goTop();
           handleRead(prevState.id).then();
-          const newState = lodash.clone(prevState);
+          const newState = lodash.cloneDeep(prevState);
           newState.messages.unshift(msg);
           notifyMessage(newState.username, msg);
           return newState;
@@ -125,7 +125,7 @@ const Index: React.FC = () => {
         return prevState;
       });
       setUsers((prevState) => {
-        const newState = lodash.clone(prevState);
+        const newState = lodash.cloneDeep(prevState);
         const user = newState.get(msg.user_id);
         if (user) {
           user.messages.unshift(action.data);

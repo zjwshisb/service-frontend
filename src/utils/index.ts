@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { getReqId } from '@/services';
 
 export function createReqId(minNum: number = 10000000000, maxNum: number = 99999999999): number {
   return parseInt((Math.random() * (maxNum - minNum + 1) + minNum).toString(), 10);
@@ -11,12 +12,12 @@ export function timeFormat(timestamp: number) {
   }
   return pre.format('YYYY-MM-DD');
 }
-export function createMsg(
+export async function createMsg(
   content: string,
   userId: number,
   type: API.MessageType = 'text',
-): API.Action<API.Message> {
-  const id = createReqId();
+): Promise<API.Action<API.Message>> {
+  const res = await getReqId();
   return {
     action: 'send-message',
     data: {
@@ -24,7 +25,7 @@ export function createMsg(
       user_id: userId,
       content,
       source: 1,
-      req_id: id,
+      req_id: res.data.reqId,
       avatar: '',
       received_at: new Date().getTime() / 1000,
     },
