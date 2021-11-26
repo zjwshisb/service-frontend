@@ -1,13 +1,12 @@
 import React from 'react';
-import { Avatar, Badge, Dropdown } from 'antd';
+import { Avatar, Badge } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import lodash from 'lodash';
 import LastTime from './components/LastTime';
 import LastMessage from './components/LastMessage';
-import Menu from './components/Menu';
+import Menu from './components/Menu/index';
 import { handleRead } from '@/services';
 import styles from './index.less';
-import { UnorderedListOutlined } from '@ant-design/icons/lib';
 
 const Index: React.FC<{
   user: API.User;
@@ -78,9 +77,7 @@ const Index: React.FC<{
               {lastMessage && <LastMessage message={lastMessage} />}
             </div>
             <div className={styles.action}>
-              <Dropdown overlay={<Menu user={props.user} />} trigger={['hover']}>
-                <UnorderedListOutlined />
-              </Dropdown>
+              <Menu user={props.user} />
             </div>
           </div>
         </div>

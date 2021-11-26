@@ -234,7 +234,7 @@ const Index: React.FC = () => {
           className={'box'}
           height={style.height}
           width={style.width}
-          resizeHandles={['s', 'n', 'w']}
+          resizeHandles={['e', 's', 'n', 'w']}
           onResize={handleResize}
         >
           <div

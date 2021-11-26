@@ -1,9 +1,11 @@
 import React from 'react';
-import { Menu, Modal } from 'antd';
+import { Modal } from 'antd';
 import { useModel } from '@@/plugin-model/useModel';
 import useRemoveUser from '@/hooks/useRemoveUser';
 import { removeUser } from '@/services';
-import HistorySession from './HistorySession';
+import HistorySession from '../HistorySession';
+import { MessageOutlined, CloseOutlined, SwapOutlined } from '@ant-design/icons';
+import styles from './index.less';
 
 const Index: React.FC<{
   user: API.User;
@@ -35,34 +37,32 @@ const Index: React.FC<{
     [handleRemove],
   );
 
-  const handleClick = React.useCallback(
-    (event) => {
-      event.domEvent.stopPropagation();
-      switch (event.key) {
-        case 'remove':
-          handleDelete(props.user);
-          break;
-        case 'transfer':
-          setUser(props.user);
-          setVisible(true);
-          break;
-        case 'other-session':
-          show(props.user.id);
-          break;
-        default:
-      }
-    },
-    [handleDelete, props.user, setUser, setVisible, show],
-  );
-
   return (
     <>
       <HistorySession />
-      <Menu onClick={handleClick}>
-        <Menu.Item key="remove">断开会话</Menu.Item>
-        {!props.user.disabled && <Menu.Item key="transfer">转接其他客服</Menu.Item>}
-        <Menu.Item key="other-session">历史对话</Menu.Item>
-      </Menu>
+      <div className={styles.menuContent}>
+        <MessageOutlined
+          onClick={(e) => {
+            show(props.user.id);
+            e.stopPropagation();
+          }}
+        />
+        <CloseOutlined
+          onClick={(e) => {
+            handleDelete(props.user);
+            e.stopPropagation();
+          }}
+        />
+        {!props.user.disabled && (
+          <SwapOutlined
+            onClick={(e) => {
+              e.stopPropagation();
+              setUser(props.user);
+              setVisible(true);
+            }}
+          />
+        )}
+      </div>
     </>
   );
 };

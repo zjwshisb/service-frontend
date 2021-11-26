@@ -58,7 +58,7 @@ const Index = () => {
           e.stopPropagation();
         }}
       >
-        <Table dataSource={sessions} columns={columns} pagination={false} />
+        <Table dataSource={sessions} rowKey={'id'} columns={columns} pagination={false} />
       </Modal>
       <Modal
         visible={messageVisible}
