@@ -47,12 +47,6 @@ const Index: React.FC<{
             e.stopPropagation();
           }}
         />
-        <CloseOutlined
-          onClick={(e) => {
-            handleDelete(props.user);
-            e.stopPropagation();
-          }}
-        />
         {!props.user.disabled && (
           <SwapOutlined
             onClick={(e) => {
@@ -62,6 +56,12 @@ const Index: React.FC<{
             }}
           />
         )}
+        <CloseOutlined
+          onClick={(e) => {
+            handleDelete(props.user);
+            e.stopPropagation();
+          }}
+        />
       </div>
     </>
   );

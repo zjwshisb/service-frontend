@@ -19,6 +19,8 @@ export default function useWebsocketModel() {
 
   const [onError, setOnError] = React.useState<EventHandle>();
 
+  const [isShowNotice, setIsShowNotice] = React.useState(false);
+
   const { setUsers } = useModel('useUsersModel');
   const { setCurrent } = useModel('useCurrentModel');
 
@@ -57,17 +59,19 @@ export default function useWebsocketModel() {
       };
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = () => {
-        Modal.error({
-          title: '提示',
-          content: '服务器连接已断开',
-          onOk() {
-            window.location.reload();
-          },
-        });
+        if (!isShowNotice) {
+          Modal.error({
+            title: '提示',
+            content: '服务器连接已断开',
+            onOk() {
+              window.location.reload();
+            },
+          });
+        }
         setWebsocket(undefined);
       };
     }
-  }, [connect, onError, onMessage, onOpen, websocket]);
+  }, [connect, isShowNotice, onError, onMessage, onOpen, websocket]);
 
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: API.ActionType): void => {
@@ -100,6 +104,7 @@ export default function useWebsocketModel() {
       });
     }, 'other-login');
     setOnMessage(() => {
+      setIsShowNotice(true);
       Modal.error({
         title: '提示',
         content: '请勿打开多个客服页面',
