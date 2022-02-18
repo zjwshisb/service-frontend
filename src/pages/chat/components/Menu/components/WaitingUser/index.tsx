@@ -1,7 +1,7 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@@/plugin-model/useModel';
-import { List, Skeleton, Avatar, Badge, Tooltip, Modal, Popover } from 'antd';
+import { List, Skeleton, Avatar, Badge, Tooltip, Modal, Popover, message } from 'antd';
 import { timeFormat } from '@/utils';
 import styles from '../index.less';
 import myStyles from './index.less';
@@ -64,7 +64,6 @@ const Index = () => {
         <List
           itemLayout="horizontal"
           dataSource={reverseData}
-          rowKey={'id'}
           size={'small'}
           locale={{
             emptyText: '暂无数据',
@@ -87,7 +86,13 @@ const Index = () => {
                       title: '提示',
                       content: '确定拒绝该会话?',
                       onOk() {
-                        cancelChatSessions(item.session_id).then().catch();
+                        cancelChatSessions(item.session_id)
+                          .then()
+                          .catch((err) => {
+                            if (err && err.message) {
+                              message.error(err.message);
+                            }
+                          });
                       },
                     });
                     e.stopPropagation();

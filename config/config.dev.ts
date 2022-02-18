@@ -13,7 +13,7 @@ export default defineConfig({
     babelOptions: {},
   },
   define: {
-    BASE_URL: 'http://localhost:9090/backend',
-    WS_URL: 'ws://localhost:9090/backend/ws',
+    BASE_URL: 'http://localhost:9999/backend',
+    WS_URL: 'ws://localhost:9999/backend/ws',
   },
 });

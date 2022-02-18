@@ -133,9 +133,10 @@ declare namespace API {
   };
 
   export type Setting = {
+    id: number;
     name: string;
     value: string;
-    options: Record<string, string>;
+    options: Option[];
     title: string;
   };
 

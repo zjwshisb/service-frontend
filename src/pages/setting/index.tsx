@@ -3,6 +3,7 @@ import type { ProColumnType } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { getSettings, updateSetting } from '@/services';
 import { PageContainer } from '@ant-design/pro-layout';
+import type { FormInstance } from 'antd';
 import { message } from 'antd';
 
 const Index = () => {
@@ -17,8 +18,17 @@ const Index = () => {
         title: '值',
         dataIndex: 'value',
         valueType: 'select',
-        valueEnum: (row) => {
-          return row.options;
+        fieldProps: (_: FormInstance, config: { entity: { options: API.Option[] } }) => {
+          return {
+            options: config.entity.options,
+          };
+        },
+        render: (_, record) => {
+          const select = record.options.find((v) => v.value === record.value);
+          if (select) {
+            return select.label;
+          }
+          return '';
         },
       },
       {
@@ -29,7 +39,7 @@ const Index = () => {
           <a
             key="editable"
             onClick={() => {
-              action?.startEditable?.(record.name);
+              action?.startEditable?.(record.id);
             }}
           >
             编辑
@@ -54,7 +64,7 @@ const Index = () => {
             return true;
           },
         }}
-        rowKey={'name'}
+        rowKey={'id'}
         columns={columns}
         request={getSettings}
         pagination={false}
