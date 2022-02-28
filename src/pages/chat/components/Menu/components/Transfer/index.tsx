@@ -34,7 +34,7 @@ const Index = () => {
         title: '转接时间',
         width: '200px',
         render(value) {
-          return moment(value * 1000).format('YYYY-MM-DD HH:mm:ss');
+          return moment(value).format('YYYY-MM-DD HH:mm:ss');
         },
       },
       {
@@ -53,6 +53,7 @@ const Index = () => {
       {
         dataIndex: 'id',
         title: '操作',
+        width: 200,
         render(value, record) {
           return (
             <Space>

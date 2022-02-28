@@ -32,7 +32,9 @@ const Index = () => {
                 <List.Item
                   onClick={() => {
                     if (current?.id) {
-                      send(createMsg(item.content, current.id, item.type));
+                      createMsg(item.content, current.id, item.type).then((msg) => {
+                        send(msg);
+                      });
                     }
                   }}
                   className={styles.list_item}

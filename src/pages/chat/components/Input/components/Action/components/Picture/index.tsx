@@ -10,11 +10,11 @@ const Index = () => {
 
   const onChange = React.useCallback(
     (url: string) => {
-      console.log(url);
       if (current) {
         if (url !== '') {
-          const action = createMsg(url, current.id, 'image');
-          send(action);
+          createMsg(url, current.id, 'image').then((msg) => {
+            send(msg);
+          });
         }
       }
     },
