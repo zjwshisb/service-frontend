@@ -129,7 +129,8 @@ declare namespace API {
     is_auto_accept: boolean;
     welcome_content: string;
     offline_content: string;
-    name: strings;
+    name: string;
+    avatar: string;
   };
 
   export type Setting = {
@@ -138,6 +139,7 @@ declare namespace API {
     value: string;
     options: Option[];
     title: string;
+    type: 'select' | 'text' | 'image';
   };
 
   export type CurrentUser = {

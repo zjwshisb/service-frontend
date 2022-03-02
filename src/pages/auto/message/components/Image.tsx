@@ -10,7 +10,7 @@ const Index = () => {
       label={'图片'}
       required={true}
     >
-      <Upload action={`${BASE_URL}/auto-messages/image`} corp={false} />
+      <Upload path={'message'} corp={false} />
     </ProForm.Item>
   );
 };

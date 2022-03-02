@@ -111,7 +111,6 @@ const errorHandler = (error: ResponseError) => {
         });
         break;
       }
-
       case 500: {
         break;
       }

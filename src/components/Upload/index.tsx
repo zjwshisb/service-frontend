@@ -11,12 +11,12 @@ import { CloseCircleOutlined } from '@ant-design/icons/lib';
 const maxSize = 1024 * 1024 * 5;
 
 const Index: React.FC<{
-  action: string;
   corp?: boolean;
   onChange?: (value: string) => void;
   value?: string;
   width?: string;
   height?: string;
+  path: string;
 }> = (props) => {
   const headers = {
     Authorization: `bearer ${getToken()}`,
@@ -76,7 +76,7 @@ const Index: React.FC<{
     <div className={styles.content}>
       {url ? (
         <>
-          <img className={styles.img} src={url} width={props.width} height={props.height}></img>
+          <img className={styles.img} src={url} width={props.width} height={props.height} />
           <CloseCircleOutlined
             className={styles.delete}
             onClick={(e) => {
@@ -104,7 +104,7 @@ const Index: React.FC<{
       <Upload
         onChange={onChange}
         onPreview={onPreview}
-        action={props.action}
+        action={BASE_URL + '/images?path=' + props.path}
         accept="image/*"
         withCredentials={false}
         showUploadList={false}
@@ -117,7 +117,7 @@ const Index: React.FC<{
   ) : (
     <Upload
       onChange={onChange}
-      action={props.action}
+      action={BASE_URL + '/images?path=' + props.path}
       accept="image/*"
       withCredentials={false}
       showUploadList={false}

@@ -11,7 +11,14 @@ export async function index(params: LoginParamsType) {
     data: params,
   });
 }
-
+export async function updateAvatar(url: string) {
+  return request<API.Response>('/me/avatar', {
+    method: 'POST',
+    data: {
+      url,
+    },
+  });
+}
 export async function queryCurrent() {
   return request<API.Response<API.CurrentUser>>('/me');
 }
@@ -94,7 +101,7 @@ export async function getMessages(uid: number, mid?: number) {
 export async function getSettings() {
   return request<API.Response<API.Setting[]>>('/settings');
 }
-export async function updateSetting(name: string, value: string) {
+export async function updateSetting(name: number, value: string) {
   return request<API.Response>(`/settings/${name}`, {
     method: 'put',
     data: {

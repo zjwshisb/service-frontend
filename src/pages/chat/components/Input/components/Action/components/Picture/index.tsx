@@ -22,7 +22,7 @@ const Index = () => {
   );
 
   return (
-    <Upload action={`${BASE_URL}/ws/image`} onChange={onChange}>
+    <Upload path={'chat'} onChange={onChange}>
       <PictureOutlined className={'action-icon'} />
     </Upload>
   );

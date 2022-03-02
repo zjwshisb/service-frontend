@@ -50,4 +50,5 @@ export default defineConfig({
   manifest: {
     basePath: '/',
   },
+  mfsu: { production: { output: '.mfsu-production' } },
 });

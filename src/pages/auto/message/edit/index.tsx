@@ -6,7 +6,6 @@ import AutoMessageForm from '../components/Form';
 import { useParams } from 'umi';
 import { message } from 'antd';
 import { history } from '@@/core/history';
-import type { MessageNavigator } from '@/pages/auto/message';
 
 const Index: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +21,7 @@ const Index: React.FC = () => {
         title: '',
         type: res.data.type,
       };
-      let navigator: MessageNavigator;
+      let navigator: API.NavigatorContent;
       switch (res.data.type) {
         case 'text':
         case 'image':

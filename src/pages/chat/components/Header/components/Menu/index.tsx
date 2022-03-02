@@ -10,6 +10,8 @@ const Index = () => {
 
   const [menuVisible, setMenuVisible] = React.useState(false);
 
+  const { setting } = useModel('useSettingModel');
+
   return React.useMemo(() => {
     return (
       <div className={styles.index}>
@@ -26,11 +28,7 @@ const Index = () => {
           trigger={['click']}
         >
           <span className={styles.menu}>
-            <Avatar
-              src={initialState.initialState?.currentUser?.avatar}
-              shape="square"
-              className={styles.avatar}
-            >
+            <Avatar src={setting?.avatar} shape="square" className={styles.avatar}>
               {initialState.initialState?.currentUser?.username}
             </Avatar>
             {menuVisible ? <CaretUpOutlined /> : <CaretDownOutlined />}
@@ -38,10 +36,6 @@ const Index = () => {
         </Dropdown>
       </div>
     );
-  }, [
-    initialState.initialState?.currentUser?.avatar,
-    initialState.initialState?.currentUser?.username,
-    menuVisible,
-  ]);
+  }, [initialState.initialState?.currentUser?.username, menuVisible, setting?.avatar]);
 };
 export default Index;
