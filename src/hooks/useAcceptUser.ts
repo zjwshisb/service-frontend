@@ -25,7 +25,9 @@ export default function useAccept() {
               return newState;
             });
             if (setting?.welcome_content) {
-              send(createMsg(setting?.welcome_content, res.data.id));
+              createMsg(setting?.welcome_content, res.data.id).then((msg) => {
+                send(msg);
+              });
             }
           }
           message.success('接入成功');
