@@ -58,7 +58,7 @@ const Index = () => {
             tooltip={'不在线时用户发送消息的自动回复'}
           />
           <ProForm.Item name={'background'} label={'背景图片'} tooltip={'此界面的背景图片'}>
-            <ImageSelect action={`${BASE_URL}/me/settings/image`} corp={false} width={'200px'} />
+            <ImageSelect path="setting" width={'200px'} />
           </ProForm.Item>
         </ModalForm>
       </>

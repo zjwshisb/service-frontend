@@ -16,7 +16,6 @@ const Index = () => {
   const { setOnMessage } = useModel('useWebsocketModel');
 
   const { waitingUsers, setWaitingUsers } = useModel('useWaitingUserModel');
-  const { setting } = useModel('useSettingModel');
   const { notify } = useModel('useNotificationModel');
 
   React.useEffect(() => {
@@ -33,14 +32,6 @@ const Index = () => {
   }, [notify, setOnMessage, setWaitingUsers]);
 
   const accept = useAcceptUser();
-
-  React.useEffect(() => {
-    if (setting?.is_auto_accept) {
-      if (waitingUsers.length > 0) {
-        accept(waitingUsers[0].session_id);
-      }
-    }
-  }, [accept, setting, waitingUsers]);
 
   const reverseData = React.useMemo(() => {
     return [...waitingUsers].reverse();

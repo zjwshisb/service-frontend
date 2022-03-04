@@ -14,6 +14,7 @@ import { Modal } from 'antd';
 import Draggable from 'react-draggable';
 import 'react-resizable/css/styles.css';
 import useMount from '@/hooks/useMount';
+import useAutoAccept from '@/hooks/useAutoAccept';
 
 const chatWidth = 1080;
 const chatHeight = 700;
@@ -22,7 +23,6 @@ const Index: React.FC = () => {
   const { connect, setOnMessage, setOnSend, close } = useModel('useWebsocketModel');
   const { setUsers } = useModel('useUsersModel');
   const { current, setCurrent, goTop } = useModel('useCurrentModel');
-  const initialState = useModel('@@initialState');
 
   const { setting } = useModel('useSettingModel');
 
@@ -33,10 +33,12 @@ const Index: React.FC = () => {
     requestPermission();
   }, [requestPermission]);
 
+  useAutoAccept();
+
   React.useEffect(() => {
     setOnSend(() => {
       return (action: API.Action<API.Message>) => {
-        const avatar = initialState.initialState?.currentUser?.avatar || '';
+        const avatar = setting?.avatar || '';
         const msg = action.data;
         msg.avatar = avatar;
         if (current && current.id === action.data.user_id) {
@@ -64,14 +66,7 @@ const Index: React.FC = () => {
         }
       };
     });
-  }, [
-    current,
-    goTop,
-    initialState.initialState?.currentUser?.avatar,
-    setCurrent,
-    setOnSend,
-    setUsers,
-  ]);
+  }, [current, goTop, setCurrent, setOnSend, setUsers, setting?.avatar]);
 
   useMount(() => {
     setOnMessage((action: API.Action<string>) => {
