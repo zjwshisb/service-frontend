@@ -24,7 +24,11 @@ const Index: React.FC<{
         }
         if (user.unread > 0) {
           user.unread = 0;
-          handleRead(user.id).then().catch();
+          if (user.messages.length > 0) {
+            handleRead(user.id, user.messages[0].id).then().catch();
+          } else {
+            handleRead(user.id).then().catch();
+          }
         }
         if (current) {
           newUsers.set(current.id, current);

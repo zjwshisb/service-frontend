@@ -110,8 +110,9 @@ const Index: React.FC = () => {
       setCurrent((prevState) => {
         if (prevState && msg.user_id === prevState.id) {
           goTop();
-          handleRead(prevState.id).then();
+          handleRead(prevState.id, msg.id).then();
           const newState = lodash.cloneDeep(prevState);
+          newState.unread = 0;
           newState.messages.unshift(msg);
           notifyMessage(newState.username, msg);
           return newState;

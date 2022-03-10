@@ -70,11 +70,12 @@ export async function removeUser(uid: number) {
     method: 'delete',
   });
 }
-export async function handleRead(uid: number) {
+export async function handleRead(uid: number, msgId?: number) {
   return request<API.Response>('/ws/read-all', {
     method: 'post',
     data: {
       id: uid,
+      msg_id: msgId,
     },
   });
 }
