@@ -50,9 +50,9 @@ const Index: React.FC<{
         {!props.user.disabled && (
           <SwapOutlined
             onClick={(e) => {
-              e.stopPropagation();
               setUser(props.user);
               setVisible(true);
+              e.stopPropagation();
             }}
           />
         )}

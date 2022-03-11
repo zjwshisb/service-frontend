@@ -29,7 +29,8 @@ const Index = () => {
         return (
           <Button
             size={'small'}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               getChatSessionDetail(val).then((res) => {
                 setMessageVisible(true);
                 setMessages(res.data.messages);
