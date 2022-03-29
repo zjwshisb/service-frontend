@@ -16,14 +16,14 @@ const Table = () => {
         valueType: 'index',
       },
       {
+        dataIndex: 'username',
+        title: '用户名',
+      },
+      {
         dataIndex: 'avatar',
         title: '头像',
         valueType: 'image',
         search: false,
-      },
-      {
-        dataIndex: 'username',
-        title: '用户名',
       },
       {
         title: '在线情况',

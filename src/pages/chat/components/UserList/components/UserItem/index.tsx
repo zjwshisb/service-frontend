@@ -54,24 +54,18 @@ const Index: React.FC<{
         className={styles.item}
         onClick={() => onClick(props.user.id)}
         data-active={current && current.id === props.user.id}
+        data-online={props.user.online}
       >
         <div className={styles.avatar}>
           <Badge count={props.user.unread} size={'small'}>
-            <Avatar
-              size={50}
-              shape="square"
-              src={props.user.avatar}
-              style={{ opacity: props.user.online ? 1 : 0.3 }}
-            >
+            <Avatar size={50} shape="square" src={props.user.avatar}>
               {props.user.username}
             </Avatar>
           </Badge>
         </div>
         <div className={styles.info}>
           <div className={styles.first}>
-            <div className={styles.name} data-online={props.user.online}>
-              {props.user.username}
-            </div>
+            <div className={styles.name}>{props.user.username}</div>
             <div className={styles.time}>
               {lastMessage && <LastTime time={lastMessage.received_at} />}
             </div>

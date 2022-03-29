@@ -9,12 +9,15 @@ export default function useNotificationModel() {
     }
   }, []);
 
-  const notify = React.useCallback((title, options: NotificationOptions): Notification | null => {
-    if (window.Notification.permission === 'granted') {
-      return new Notification(title, options);
-    }
-    return null;
-  }, []);
+  const notify = React.useCallback(
+    (title, options: NotificationOptions = {}): Notification | null => {
+      if (window.Notification.permission === 'granted') {
+        return new Notification(title, options);
+      }
+      return null;
+    },
+    [],
+  );
 
   const notifyMessage = React.useCallback(
     (username: string, message: API.Message) => {

@@ -23,7 +23,7 @@ const Index = () => {
       if (action.action === 'waiting-users') {
         setWaitingUsers((prevState) => {
           if (prevState.length < action.data.length) {
-            notify('有新的用户待接入', {});
+            notify('有新的用户待接入');
           }
           return action.data;
         });
