@@ -51,8 +51,8 @@ const Index = () => {
           bodyStyle={{ padding: 0 }}
           width={400}
           onClose={(e) => {
-            e.stopPropagation();
             setVisible(false);
+            e.stopPropagation();
           }}
         >
           <Table<API.Admin>
