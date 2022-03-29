@@ -16,4 +16,5 @@ export default defineConfig({
     BASE_URL: 'http://localhost:9999/backend',
     WS_URL: 'ws://localhost:9999/backend/ws',
   },
+  mfsu: { production: { output: '.mfsu-production' } },
 });
