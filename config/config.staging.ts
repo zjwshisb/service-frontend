@@ -13,7 +13,7 @@ export default defineConfig({
     babelOptions: {},
   },
   publicPath: '/admin/',
-  outputPath: '/home/wwwroot/default/admin/',
+  outputPath: '../../wwwroot/default/admin/',
   define: {
     BASE_URL: 'http://119.29.196.153:9090/backend',
     WS_URL: 'ws://119.29.196.153:9090/backend/ws',
