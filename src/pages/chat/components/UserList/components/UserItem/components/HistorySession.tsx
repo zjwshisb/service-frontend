@@ -30,11 +30,11 @@ const Index = () => {
           <Button
             size={'small'}
             onClick={(e) => {
+              e.stopPropagation();
               getChatSessionDetail(val).then((res) => {
                 setMessageVisible(true);
                 setMessages(res.data.messages);
               });
-              e.stopPropagation();
             }}
           >
             详情
