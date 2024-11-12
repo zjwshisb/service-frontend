@@ -61,7 +61,7 @@ const Index = () => {
   return (
     <PageContainer>
       <ModalForm
-        width={400}
+        width={500}
         onFinish={async (form) => {
           if (editRow) {
             await updateSetting(editRow?.id, form.value);
