@@ -188,12 +188,12 @@ declare namespace API {
     id: number;
     admin_name: string;
     user_name: string;
-    queried_at: number;
-    accepted_at: number;
-    broke_at: number;
+    queried_at: string;
+    accepted_at: string;
+    broke_at: string;
     type_label: string;
     status: ChatSessionStatus;
-    canceled_at: number;
+    canceled_at: string;
   };
 
   type Line = {

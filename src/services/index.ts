@@ -2,6 +2,12 @@ import type React from 'react';
 import { request } from '@umijs/max';
 export * from './admin';
 
+export async function getOptions(type: string) {
+  return request<API.Response<API.Option[]>>(`/options/${type}`, {
+    method: 'get',
+  });
+}
+
 export async function login(params: FORM.LoginForm) {
   return request<API.Response<{ token: string }>>('/login', {
     method: 'POST',

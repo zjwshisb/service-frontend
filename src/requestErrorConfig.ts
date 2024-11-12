@@ -1,7 +1,7 @@
 ﻿import type { RequestOptions } from '@@/plugin-request/request';
 import type { RequestConfig } from '@umijs/max';
-import {message, notification} from 'antd';
-import {getToken} from "@/utils/auth";
+import { message, notification } from 'antd';
+import { getToken } from '@/utils/auth';
 import { history } from '@umijs/max';
 // 错误处理方案： 错误类型
 enum ErrorShowType {
@@ -19,7 +19,6 @@ interface ResponseStructure {
   message?: string;
   showType?: ErrorShowType;
 }
-
 
 const codeMessage: Record<any, string> = {
   200: '服务器成功返回请求的数据。',
@@ -48,8 +47,7 @@ export const errorConfig: RequestConfig = {
   errorConfig: {
     // 错误抛出
     errorThrower: (res) => {
-      const { success, data, code, message, showType } =
-        res as unknown as ResponseStructure;
+      const { success, data, code, message, showType } = res as unknown as ResponseStructure;
       if (!success) {
         const error: any = new Error(message);
         error.name = 'BizError';
@@ -64,7 +62,7 @@ export const errorConfig: RequestConfig = {
       if (error.name === 'BizError') {
         const errorInfo: ResponseStructure | undefined = error.info;
         if (errorInfo) {
-          const { code, message : msg } = errorInfo;
+          const { code, message: msg } = errorInfo;
           switch (errorInfo.showType) {
             case ErrorShowType.SILENT:
               // do nothing
@@ -90,31 +88,30 @@ export const errorConfig: RequestConfig = {
         }
       } else if (error.response) {
         const { response } = error;
-        const {data} = response
+        const { data } = response;
         if (response && response.status) {
-          const errorText = codeMessage[response.status]  as string
+          const errorText = codeMessage[response.status] || data;
           const { status, url } = response;
           switch (status) {
             case 401: {
-              history.replace('/user/login')
+              history.replace('/user/login');
               break;
             }
             case 404: {
-              message.error('数据不见啦').then()
+              message.error('数据不见啦').then();
               break;
             }
             case 422: {
-              message.error(data.message).then()
+              message.error(data.message).then();
               break;
             }
-            case 500: {
-              break;
-            }
+            case 500:
             default: {
               notification.error({
                 message: `请求错误 ${status}: ${url}`,
                 description: errorText,
               });
+              break;
             }
           }
         }
@@ -125,10 +122,11 @@ export const errorConfig: RequestConfig = {
         // 请求已经成功发起，但没有收到响应
         // \`error.request\` 在浏览器中是 XMLHttpRequest 的实例，
         // 而在node.js中是 http.ClientRequest 的实例
-        message.error('None response! Please retry.');
+        message.error('None response! Please retry.').then();
       } else {
+        console.log('test');
         // 发送请求时出了点问题
-        message.error('Request error, please retry.');
+        message.error('Request error, please retry.').then();
       }
     },
   },
@@ -139,11 +137,11 @@ export const errorConfig: RequestConfig = {
       const token = getToken();
       config.baseURL = BASE_URL;
       if (!config.headers) {
-        config.headers = {}
+        config.headers = {};
       }
-      config.headers['Accept'] = "application/json"
+      config.headers['Accept'] = 'application/json';
       if (token) {
-        config.headers['Authorization'] = `bearer ${getToken()}`
+        config.headers['Authorization'] = `bearer ${getToken()}`;
       }
       return { ...config };
     },

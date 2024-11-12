@@ -1,15 +1,12 @@
 import React from 'react';
-import { PageContainer } from '@ant-design/pro-layout';
-import ProCard from '@ant-design/pro-card';
 import { DatePicker, Descriptions } from 'antd';
-import moment from 'moment';
 import { getAdminDetail } from '@/services';
-import { useParams } from 'umi';
-import { Line } from '@ant-design/charts';
-
+import { useParams } from '@umijs/max';
+import { ProCard, PageContainer } from '@ant-design/pro-components';
+import dayjs from 'dayjs';
 const Index = () => {
-  const [month, setMonth] = React.useState<moment.Moment | null>(moment());
-  const { id } = useParams<{ id: string }>();
+  const [month, setMonth] = React.useState<dayjs.Dayjs | null>(dayjs());
+  const { id = 0 } = useParams<{ id: string }>();
   const [info, setInfo] = React.useState<{ chart: API.Line[]; admin: API.Admin } | undefined>();
 
   React.useEffect(() => {
@@ -31,13 +28,13 @@ const Index = () => {
                 value={month}
                 picker={'month'}
                 format={'YYYY-MM'}
-                onSelect={(e) => {
-                  setMonth(e);
-                }}
+                // onSelect={(e: string) => {
+                //   setMonth(e);
+                // }}
               />
             }
           >
-            <Line data={info.chart} xField={'label'} yField={'value'} seriesField={'category'} />
+            {/*<Line data={info.chart} xField={'label'} yField={'value'} seriesField={'category'} />*/}
           </ProCard>
           <ProCard colSpan={6}>
             <Descriptions column={1}>

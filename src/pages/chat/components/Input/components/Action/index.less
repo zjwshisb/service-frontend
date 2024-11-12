@@ -1,0 +1,13 @@
+.action {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  padding: 0 10px;
+  line-height: 1;
+  & > * {
+    &:nth-child(n + 2) {
+      margin-left: 10px;
+    }
+  }
+}

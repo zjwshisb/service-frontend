@@ -1,0 +1,33 @@
+.left {
+  display: flex;
+}
+.right {
+  padding: 0 10px;
+}
+.leftItem {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 10px;
+  &:hover {
+    background-color: #eaeaea;
+    cursor: pointer;
+  }
+  &[data-active='true'] {
+    background-color: #eaeaea;
+  }
+}
+.count {
+  margin: 0 3px;
+  color: #1890ff;
+  font-size: 16px;
+}
+.waitingUser {
+  display: flex;
+  justify-content: space-between;
+  & > span:first-child {
+  }
+  & > span:last-child {
+    color: #666666;
+  }
+}
