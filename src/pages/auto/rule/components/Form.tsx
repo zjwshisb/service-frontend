@@ -11,7 +11,8 @@ import {
 import type { FormInstance } from 'antd/es';
 
 import { replyTypeLabel, matchTypeLabel } from '@/pages/auto/rule';
-import { getAutoMessageOption, getAutoRuleScenes, getAutoRuleEvents } from '@/services/auto';
+import { getAutoMessageOption } from '@/services/auto';
+import { getOptions } from '@/services';
 
 const Index: React.FC<{
   submit: (data: FORM.AutoRuleForm) => Promise<void>;
@@ -90,8 +91,8 @@ const Index: React.FC<{
                   rules={[{ required: true, message: '请选择' }]}
                   name={'message_id'}
                   label={'回复的消息'}
-                  request={() => {
-                    return getAutoMessageOption().then((res) => res.data);
+                  request={async () => {
+                    return getOptions('auto-messages').then((r) => r.data);
                   }}
                 />
               );
@@ -103,8 +104,9 @@ const Index: React.FC<{
                     name={'key'}
                     label={'触发的事件'}
                     fieldProps={{}}
-                    request={() => {
-                      return getAutoRuleEvents().then((res) => res.data);
+                    request={async () => {
+                      const r = await getOptions('auto-rule-scenes');
+                      return r.data;
                     }}
                   />
                   <ProFormSelect
@@ -113,8 +115,9 @@ const Index: React.FC<{
                     label={'回复的消息'}
                     tooltip={'事件触发后并且回复的消息'}
                     fieldProps={{}}
-                    request={() => {
-                      return getAutoMessageOption().then((res) => res.data);
+                    request={async () => {
+                      const res = await getAutoMessageOption();
+                      return res.data;
                     }}
                   />
                 </>
@@ -137,8 +140,9 @@ const Index: React.FC<{
                     name={'scenes'}
                     label={'触发场景'}
                     tooltip={'指在什么场景下触发'}
-                    request={() => {
-                      return getAutoRuleScenes().then((res) => res.data);
+                    request={async () => {
+                      const r = await getOptions('auto-rule-scenes');
+                      return r.data;
                     }}
                   />
                 </>
@@ -162,8 +166,5 @@ const Index: React.FC<{
       <ProFormSwitch label={'启用'} name={'is_open'} />
     </ProForm>
   );
-};
-Index.defaultProps = {
-  readonlyValues: [],
 };
 export default Index;

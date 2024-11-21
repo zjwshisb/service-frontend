@@ -18,6 +18,8 @@ declare namespace API {
     value: number | string;
   };
 
+  type OptionType = 'auto-messages' | 'auto-rule-scenes';
+
   type ActionType =
     | 'send-message'
     | 'user-offline'
@@ -40,6 +42,14 @@ declare namespace API {
   type Receipt = {
     user_id: number;
     req_id: number;
+  };
+
+  type File = {
+    id: number;
+    name: string;
+    url: string;
+    thumb_url: string;
+    type: string;
   };
 
   type MessageType = 'text' | 'image' | 'navigator';

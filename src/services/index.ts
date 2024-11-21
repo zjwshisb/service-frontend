@@ -2,7 +2,7 @@ import type React from 'react';
 import { request } from '@umijs/max';
 export * from './admin';
 
-export async function getOptions(type: string) {
+export async function getOptions(type: API.OptionType) {
   return request<API.Response<API.Option[]>>(`/options/${type}`, {
     method: 'get',
   });

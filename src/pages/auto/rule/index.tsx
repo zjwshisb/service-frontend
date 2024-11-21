@@ -2,8 +2,9 @@ import React from 'react';
 import { PageContainer, ProTable, ActionType, ProColumnType } from '@ant-design/pro-components';
 import { Button, message, Modal } from 'antd';
 import { history } from '@@/core/history';
-import { getAutoRules, deleteAutoRule, getAutoRuleScenes } from '@/services/auto';
+import { getAutoRules, deleteAutoRule } from '@/services/auto';
 import MessageContent from '../components/MessageContent';
+import { getOptions } from '@/services';
 
 export const replyTypeLabel: Record<API.ReplyType, string> = {
   message: '回复消息',
@@ -70,8 +71,9 @@ const Index = () => {
         {
           dataIndex: 'scenes',
           title: '触发场景',
-          request() {
-            return getAutoRuleScenes().then((res) => res.data);
+          async request() {
+            const res = await getOptions('auto-rule-scenes');
+            return res.data;
           },
           render(_, record) {
             return record.scenes_label;

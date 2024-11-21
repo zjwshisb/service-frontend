@@ -27,7 +27,7 @@ const Index = () => {
       <ProForm.Item
         tooltip={'大小建议200x100'}
         rules={[{ required: true, message: '请选择图片' }]}
-        name={'content'}
+        name={'image'}
         label={'卡片图片'}
         required={true}
       >

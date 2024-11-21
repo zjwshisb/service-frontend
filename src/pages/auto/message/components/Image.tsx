@@ -6,7 +6,7 @@ const Index = () => {
   return (
     <ProForm.Item
       rules={[{ required: true, message: '请选择图片' }]}
-      name={'content'}
+      name={'file'}
       label={'图片'}
       required={true}
     >
