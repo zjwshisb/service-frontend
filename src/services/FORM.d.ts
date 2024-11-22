@@ -1,24 +1,27 @@
 declare namespace FORM {
-
   type LoginForm = {
     username: string;
     password: string;
   };
 
-   type AutoMessageForm = {
+  type AutoMessageForm = {
     id?: number;
     name: string;
     type: API.MessageType;
+    file?: API.File;
+    navigator?: {
+      url: string;
+      title: string;
+      image: API.File;
+    };
     content: string;
-    url?: string;
-    title?: string;
   };
-   type Pagination<T = Record<any, any>> = {
+  type Pagination<T = Record<any, any>> = {
     pageSize?: number;
     current?: number;
   } & T;
 
-   type AutoRuleForm = {
+  type AutoRuleForm = {
     name: string;
     match: string;
     match_type: API.AutoRuleMatchType;

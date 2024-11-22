@@ -1,26 +1,36 @@
 import React from 'react';
 import { Card, Image } from 'antd';
-import styles from './index.less';
 
 const Index: React.FC<{
   message: API.AutoMessage;
 }> = (props) => {
-  let navigator: API.NavigatorContent;
-  switch (props.message.type) {
+  const { message } = props;
+  switch (message.type) {
     case 'navigator':
-      navigator = JSON.parse(props.message.content);
       return (
         <Card
           hoverable
-          bodyStyle={{ padding: '5px' }}
-          className={styles.navigator}
-          cover={<img src={navigator.content} className={styles.cover} />}
+          className={'w-20'}
+          styles={{
+            body: {
+              padding: 0,
+            },
+          }}
+          cover={
+            <div className={'w-20 h-10'}>
+              <Image src={message.navigator?.image?.thumb_url} />
+            </div>
+          }
         >
-          <Card.Meta title={navigator.title} />
+          <Card.Meta title={message.navigator?.title} />
         </Card>
       );
-    case 'image':
-      return <Image src={props.message.content} className={styles.image} width={'300px'} />;
+    case 'file':
+      return (
+        <div className={'w-20 h-20'}>
+          <Image className={'object-fill w-20 h-20'} src={message.file?.thumb_url} />
+        </div>
+      );
     case 'text':
       return <span>{props.message.content}</span>;
     default:

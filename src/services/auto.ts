@@ -16,7 +16,7 @@ export async function storeAutoMessage(data: FORM.AutoMessageForm) {
     data,
   });
 }
-export async function updateAutoMessage(data: FORM.AutoMessageForm, id: React.ReactText) {
+export async function updateAutoMessage(data: FORM.AutoMessageForm, id: React.Key) {
   return request<API.Response>(`/auto-messages/${id}`, {
     method: 'PUT',
     data,

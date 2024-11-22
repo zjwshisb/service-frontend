@@ -1,9 +1,22 @@
 import { getReqId } from '@/services';
 import dayjs from 'dayjs';
+import lodash from 'lodash';
 
 export function createReqId(minNum: number = 10000000000, maxNum: number = 99999999999): number {
   return parseInt((Math.random() * (maxNum - minNum + 1) + minNum).toString(), 10);
 }
+
+export async function extraData<T>(
+  fn: (() => Promise<API.Response<T>>) | Promise<API.Response<T>>,
+) {
+  if (lodash.isFunction(fn)) {
+    const res = await fn();
+    return res.data;
+  } else {
+    return (await fn).data;
+  }
+}
+
 export function timeFormat(timestamp: number) {
   const today = dayjs();
   const pre = dayjs(timestamp * 1000);

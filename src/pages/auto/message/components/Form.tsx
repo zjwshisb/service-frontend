@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   ProFormDependency,
   ProFormSelect,
@@ -9,29 +9,41 @@ import {
 import { MessageType } from '@/pages/auto/message/index';
 import ImageField from './Image';
 import NavigatorCardField from './NavigatorCard';
-import type { FormInstance } from 'antd/es';
+import { getAutoMessageForm, storeAutoMessage, updateAutoMessage } from '@/services/auto';
+import { App } from 'antd';
+import { history } from '@umijs/max';
+import { FormInstance } from 'antd/es';
+import { extraData } from '@/utils';
 
-const Index: React.FC<{
-  submit: (data: FORM.AutoMessageForm) => Promise<void>;
-  initialValues?: Partial<FORM.AutoMessageForm>;
-  readonlyValues?: string[];
+const Form: React.FC<{
+  id?: React.Key;
 }> = (props) => {
-  const form = React.useRef<FormInstance<FORM.AutoMessageForm>>();
+  const { id } = props;
 
-  React.useEffect(() => {
-    if (props.initialValues && form.current) {
-      form.current.resetFields();
-    }
-  }, [props.initialValues]);
+  const { message } = App.useApp();
+
+  const form = useRef<FormInstance<FORM.AutoMessageForm>>(null);
 
   return (
     <ProForm<FORM.AutoMessageForm>
-      initialValues={props.initialValues}
-      onFinish={(data) => {
-        return props.submit(data);
-      }}
-      style={{ width: '600px' }}
       formRef={form}
+      request={
+        id
+          ? async () => {
+              return await extraData(getAutoMessageForm(id));
+            }
+          : undefined
+      }
+      className={'w-full'}
+      onFinish={async (data) => {
+        if (id) {
+          await updateAutoMessage(data, id);
+        } else {
+          await storeAutoMessage(data);
+        }
+        message.success('操作成功');
+        history.back();
+      }}
     >
       <ProFormText
         rules={[
@@ -44,7 +56,6 @@ const Index: React.FC<{
         placeholder={'随便起个名字'}
         name={'name'}
         required={true}
-        readonly={props.readonlyValues?.includes('name')}
         fieldProps={{
           maxLength: 32,
         }}
@@ -54,7 +65,6 @@ const Index: React.FC<{
         valueEnum={MessageType}
         label={'消息类型'}
         name={'type'}
-        readonly={props.readonlyValues?.includes('type')}
         required={true}
         fieldProps={{
           onChange: () => {
@@ -80,7 +90,7 @@ const Index: React.FC<{
                 />
               );
             }
-            case 'image': {
+            case 'file': {
               return <ImageField />;
             }
             case 'navigator': {
@@ -94,4 +104,4 @@ const Index: React.FC<{
     </ProForm>
   );
 };
-export default Index;
+export default Form;

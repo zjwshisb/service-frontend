@@ -52,7 +52,7 @@ declare namespace API {
     type: string;
   };
 
-  type MessageType = 'text' | 'image' | 'navigator';
+  type MessageType = 'text' | 'file' | 'navigator';
 
   type NavigatorContent = {
     title: string;
@@ -146,6 +146,12 @@ declare namespace API {
     name: string;
     type: MessageType;
     content: string;
+    file?: API.File;
+    navigator?: {
+      title: string;
+      url: string;
+      image: API.File;
+    };
     created_at: string;
     updated_at: string;
     rules_count: number;

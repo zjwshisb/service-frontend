@@ -7,7 +7,7 @@ import MessageContent from '../../components/MessageContent';
 
 export const MessageType: Record<API.MessageType, string> = {
   text: '文本',
-  image: '图片',
+  file: '文件',
   navigator: '导航卡片',
 };
 

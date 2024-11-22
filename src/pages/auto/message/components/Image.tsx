@@ -2,7 +2,7 @@ import React from 'react';
 import { ProForm } from '@ant-design/pro-components';
 import Upload from '@/components/Upload/index';
 
-const Index = () => {
+const Image = () => {
   return (
     <ProForm.Item
       rules={[{ required: true, message: '请选择图片' }]}
@@ -14,4 +14,4 @@ const Index = () => {
     </ProForm.Item>
   );
 };
-export default Index;
+export default Image;
