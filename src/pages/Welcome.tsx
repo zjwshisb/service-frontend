@@ -1,6 +1,6 @@
 import { PageContainer } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
-import { Card, theme } from 'antd';
+import { Button, Card, theme } from 'antd';
 import React from 'react';
 
 /**
@@ -18,6 +18,8 @@ const InfoCard: React.FC<{
 
   const { token } = useToken();
 
+  const { selectFile } = useModel('fileModel');
+
   return (
     <div
       style={{
@@ -32,6 +34,7 @@ const InfoCard: React.FC<{
         flex: 1,
       }}
     >
+      <Button onClick={selectFile}>测试</Button>
       <div
         style={{
           display: 'flex',
@@ -85,9 +88,21 @@ const InfoCard: React.FC<{
 
 const Welcome: React.FC = () => {
   const { token } = theme.useToken();
+  const { selectFile } = useModel('fileModel');
   const { initialState } = useModel('@@initialState');
   return (
     <PageContainer>
+      <Button
+        onClick={() => {
+          selectFile({
+            count: 2,
+          }).then((r) => {
+            console.log(r);
+          });
+        }}
+      >
+        测试
+      </Button>
       <Card
         style={{
           borderRadius: 8,

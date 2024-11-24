@@ -9,6 +9,8 @@ import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import { queryCurrentUser } from '@/services';
 import { App } from 'antd';
+import FileFinder from '@/components/FileFinder';
+
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/login';
 
@@ -105,6 +107,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       return (
         <App>
           {children}
+          <FileFinder />
           {isDev && (
             <SettingDrawer
               disableUrlParams

@@ -4,6 +4,11 @@ declare namespace FORM {
     password: string;
   };
 
+  type Paginate<T extends Record<string, any>> = {
+    current: number;
+    pageSize: number;
+  } & T;
+
   type AutoMessageForm = {
     id?: number;
     name: string;

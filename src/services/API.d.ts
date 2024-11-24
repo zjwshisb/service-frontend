@@ -44,12 +44,14 @@ declare namespace API {
     req_id: number;
   };
 
+  type FileType = 'image' | 'video' | 'audio' | 'dir';
+
   type File = {
     id: number;
     name: string;
     url: string;
     thumb_url: string;
-    type: string;
+    type: API.FileType;
   };
 
   type MessageType = 'text' | 'file' | 'navigator';
