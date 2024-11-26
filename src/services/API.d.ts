@@ -18,7 +18,7 @@ declare namespace API {
     value: number | string;
   };
 
-  type OptionType = 'auto-messages' | 'auto-rule-scenes';
+  type OptionType = 'auto-messages' | 'auto-rule-scenes' | 'file-types';
 
   type ActionType =
     | 'send-message'
@@ -42,16 +42,6 @@ declare namespace API {
   type Receipt = {
     user_id: number;
     req_id: number;
-  };
-
-  type FileType = 'image' | 'video' | 'audio' | 'dir';
-
-  type File = {
-    id: number;
-    name: string;
-    url: string;
-    thumb_url: string;
-    type: API.FileType;
   };
 
   type MessageType = 'text' | 'file' | 'navigator';

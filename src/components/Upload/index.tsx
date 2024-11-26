@@ -16,7 +16,6 @@ const Index: React.FC<
     value?: API.File;
     width?: string;
     height?: string;
-    path: string;
   }>
 > = (props) => {
   const { width = '120px', height = '120px', corp = false } = props;
@@ -98,7 +97,7 @@ const Index: React.FC<
       <Upload
         className={'flex'}
         onChange={onChange}
-        action={BASE_URL + '/images?path=' + props.path}
+        action={BASE_URL + '/images'}
         accept="image/*"
         withCredentials={false}
         showUploadList={false}
@@ -112,7 +111,7 @@ const Index: React.FC<
     <Upload
       onChange={onChange}
       className={'flex'}
-      action={BASE_URL + '/images?path=' + props.path}
+      action={BASE_URL + '/images'}
       accept="image/*"
       withCredentials={false}
       showUploadList={false}

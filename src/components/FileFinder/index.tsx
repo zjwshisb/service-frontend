@@ -1,11 +1,11 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal, Space, Tooltip } from 'antd';
 import Header from './components/Header';
 import Container from './components/Container';
 import { useModel } from '@umijs/max';
 
 const FileFinder: React.FC = () => {
-  const { open, onSelect, onCancel, setOpen, checked } = useModel('fileModel');
+  const { open, onSelect, onCancel, checked } = useModel('fileModel');
 
   return (
     <Modal
@@ -17,20 +17,36 @@ const FileFinder: React.FC = () => {
           padding: 0,
         },
       }}
-      onOk={() => {
-        if (onSelect.current) {
-          onSelect.current(checked);
-        }
-      }}
-      onCancel={() => {
-        setOpen(false);
-        if (onCancel.current) {
-          onCancel.current();
-        }
-      }}
+      onOk={onSelect.current}
+      onCancel={onCancel.current}
       title={<Header />}
       open={open}
-      width={'823px'}
+      okButtonProps={{
+        disabled: checked.length === 0,
+      }}
+      footer={(origin) => {
+        return (
+          <div>
+            <span className={'mr-1'}>
+              已选(
+              {checked.length === 0 ? (
+                0
+              ) : (
+                <Tooltip
+                  title={checked.map((v) => {
+                    return <div key={v.id}>{v.name}</div>;
+                  })}
+                >
+                  <span className={'text-blue-600 cursor-pointer'}>{checked.length}</span>
+                </Tooltip>
+              )}
+              )
+            </span>
+            <Space>{origin}</Space>
+          </div>
+        );
+      }}
+      width={'825px'}
     >
       <Container />
     </Modal>

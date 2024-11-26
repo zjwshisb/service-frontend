@@ -1,39 +1,74 @@
 import React, { useState } from 'react';
 import { getFiles } from '@/services';
-import { useRequest } from '@umijs/max';
 import { values } from 'lodash';
-
-type OnFileSelect = (f: FileValue) => void;
+import { useModel } from '@umijs/max';
+import { useDebounce, useHistoryTravel } from 'ahooks';
+import { useOptions } from '@/hooks/useOptions';
 
 type FileValue = API.File | API.File[];
 
 type selectFileProps = {
   type?: API.FileType;
   count?: number;
-  checked?: API.File[];
+  defaultValue?: API.File[];
 };
 
 export default function FileModel() {
   const [open, setOpen] = useState(false);
 
   const [count, setCount] = useState(1);
-
   const [fileType, setFileType] = useState<API.FileType | API.FileType[] | undefined>();
 
-  const [currentDir] = useState<API.File>();
+  const allFileTypes = useOptions('file-types');
+
+  const {
+    value: dirLinks,
+    setValue: setDirLinks,
+    backLength,
+    forwardLength,
+    back,
+    forward,
+  } = useHistoryTravel<API.File[]>([]);
 
   const [checked, setChecked] = useState<API.File[]>([]);
 
-  const { data, loading, run } = useRequest(
-    async () => {
-      return getFiles({
-        dir_id: currentDir ? currentDir.id : 0,
-        last_id: checked.length > 0 ? checked[checked.length - 1].id : 0,
+  const [files, setFiles] = React.useState<API.File[]>([]);
+
+  const [loading, setLoading] = React.useState(false);
+
+  const { initialState } = useModel('@@initialState');
+
+  const lastDir = React.useMemo(() => {
+    if (dirLinks) {
+      return dirLinks.length > 0 ? dirLinks[dirLinks.length - 1] : undefined;
+    }
+    return undefined;
+  }, [dirLinks]);
+
+  const fetchFiles = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await getFiles({
+        dir_id: lastDir ? lastDir.id : 0,
       });
+      setFiles(res.data);
+    } catch {}
+    setLoading(false);
+  }, [lastDir]);
+
+  React.useEffect(() => {
+    if (initialState?.currentUser) {
+      fetchFiles().then();
+    }
+  }, [fetchFiles, initialState?.currentUser]);
+
+  const onDirClick = React.useCallback(
+    (file: API.File) => {
+      const newLinks = dirLinks ? [...dirLinks] : [];
+      newLinks.push(file);
+      setDirLinks(newLinks);
     },
-    {
-      initialData: [],
-    },
+    [dirLinks, setDirLinks],
   );
 
   const triggerChecked = React.useCallback(
@@ -64,43 +99,67 @@ export default function FileModel() {
     [count],
   );
 
-  const onSelect = React.useRef<OnFileSelect>();
+  const onSelect = React.useRef<() => void>();
 
   const onCancel = React.useRef<() => void>();
 
   const selectFile: (props?: selectFileProps) => Promise<FileValue> = React.useCallback(
     (props?: selectFileProps) => {
-      const { count = 1, checked = [], type = undefined } = props || {};
+      const { count = 1, defaultValue = [], type = undefined } = props || {};
       setCount(count);
-      setChecked(checked);
-      setFileType(type);
+      setChecked(defaultValue);
+      if (type) {
+        setFileType(type);
+      } else {
+        setFileType(allFileTypes?.map((v) => v.value) as API.FileType[]);
+      }
       setOpen(true);
       return new Promise((resolve, reject) => {
-        onSelect.current = (f: FileValue) => {
+        onSelect.current = () => {
           setOpen(false);
-          resolve(f);
+          resolve(checked);
         };
         onCancel.current = () => {
+          setOpen(false);
           reject();
         };
       });
     },
-    [],
+    [allFileTypes, checked],
   );
 
+  const [filter, setFilter] = React.useState('');
+  const debouncedFilter = useDebounce(filter, { wait: 300 });
+
+  const filterFile = React.useMemo(() => {
+    if (debouncedFilter) {
+      return files.filter((v) => {
+        return v.name.includes(debouncedFilter);
+      });
+    }
+    return files;
+  }, [files, debouncedFilter]);
+
   return {
-    data,
+    files: filterFile,
+    setFilter,
+    filter,
     loading,
     fileType,
     count,
     open,
-    getFiles: run,
+    refresh: fetchFiles,
     selectFile,
     onSelect,
     onCancel,
-    setOpen,
     values,
     triggerChecked,
     checked,
+    back,
+    forward,
+    backLength,
+    forwardLength,
+    lastDir,
+    onDirClick,
   };
 }

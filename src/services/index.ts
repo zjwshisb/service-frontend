@@ -2,17 +2,7 @@ import type React from 'react';
 import { request } from '@umijs/max';
 
 export * from './admin';
-
-export async function getFiles(params?: {
-  type?: API.FileType;
-  last_id?: number;
-  dir_id?: number;
-}) {
-  return request<API.Pagination<API.File>>(`/files`, {
-    method: 'get',
-    params,
-  });
-}
+export * from './file';
 
 export async function getOptions(type: API.OptionType) {
   return request<API.Response<API.Option[]>>(`/options/${type}`, {

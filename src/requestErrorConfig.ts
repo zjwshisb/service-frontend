@@ -88,13 +88,13 @@ export const errorConfig: RequestConfig = {
         }
       } else if (error.response) {
         const { response } = error;
-        const { data } = response;
         if (response && response.status) {
+          const { data } = response;
           const errorText = codeMessage[response.status] || data;
           const { status, url } = response;
           switch (status) {
             case 401: {
-              history.replace('/user/login');
+              history.replace('/login');
               break;
             }
             case 404: {
@@ -114,6 +114,8 @@ export const errorConfig: RequestConfig = {
               break;
             }
           }
+        } else {
+          message.error('None response! Please retry.').then();
         }
         throw error;
         // Axios 的错误
@@ -124,7 +126,6 @@ export const errorConfig: RequestConfig = {
         // 而在node.js中是 http.ClientRequest 的实例
         message.error('None response! Please retry.').then();
       } else {
-        console.log('test');
         // 发送请求时出了点问题
         message.error('Request error, please retry.').then();
       }
