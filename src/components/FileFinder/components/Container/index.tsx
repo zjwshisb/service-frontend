@@ -1,34 +1,11 @@
 import React from 'react';
 import { useModel } from '@umijs/max';
 import Item from '../Item';
-import { Empty as BasicEmpty, Spin, Divider } from 'antd';
+import { Empty, Spin, Divider } from 'antd';
+import { When } from 'react-if';
 
 const Container: React.FC = () => {
   const { files, loading } = useModel('fileModel');
-
-  const Empty = () => {
-    if (loading || files.length > 0) {
-      return <></>;
-    }
-    return (
-      <div className={'w-full h-full flex items-center justify-center'}>
-        <BasicEmpty />
-      </div>
-    );
-  };
-
-  const NoMore = () => {
-    if (files.length === 0) {
-      return <></>;
-    }
-    return (
-      <div className={'w-full px-4'}>
-        <Divider plain={true} className={'text-sm'}>
-          没有更多了
-        </Divider>
-      </div>
-    );
-  };
 
   return (
     <Spin spinning={loading}>
@@ -40,8 +17,18 @@ const Container: React.FC = () => {
         {files.map((v) => {
           return <Item file={v} key={v.id} />;
         })}
-        <Empty />
-        <NoMore />
+        <When condition={files.length === 0 && !loading}>
+          <div className={'w-full h-full flex items-center justify-center'}>
+            <Empty />
+          </div>
+        </When>
+        <When condition={files.length !== 0 && !loading}>
+          <div className={'w-full px-4'}>
+            <Divider plain={true} className={'text-sm'}>
+              没有更多了
+            </Divider>
+          </div>
+        </When>
       </div>
     </Spin>
   );

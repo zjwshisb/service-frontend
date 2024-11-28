@@ -18,7 +18,13 @@ declare namespace API {
     value: number | string;
   };
 
-  type OptionType = 'auto-messages' | 'auto-rule-scenes' | 'file-types';
+  type OptionType =
+    | 'auto-messages'
+    | 'auto-rule-scenes'
+    | 'file-types'
+    | 'message-types'
+    | 'auto-rule-match-types'
+    | 'auto-rule-reply-types';
 
   type ActionType =
     | 'send-message'
@@ -146,12 +152,17 @@ declare namespace API {
     };
     created_at: string;
     updated_at: string;
-    rules_count: number;
   };
 
   type AutoRuleMatchType = 'all' | 'part';
 
   type ReplyType = 'message' | 'transfer' | 'event';
+
+  type SystemRule = {
+    id: number;
+    name: string;
+    message_id?: number;
+  };
 
   type AutoRule = {
     id: number;
@@ -164,9 +175,7 @@ declare namespace API {
     created_at: string;
     updated_at: string;
     message?: AutoMessage;
-    message_id: number;
     is_open: boolean;
-    key: string;
     event_label: string;
     scenes_label: string;
     scenes: string[];

@@ -5,7 +5,6 @@ import { useModel } from '@umijs/max';
 import styles from './index.less';
 import { createMsg } from '@/utils';
 import { getAutoMessage } from '@/services/auto';
-import { MessageType } from '@/pages/auto/message/index';
 
 const Index = () => {
   const [messages, setMessages] = React.useState<API.AutoMessage[]>([]);
@@ -39,7 +38,7 @@ const Index = () => {
                   }}
                   className={styles.list_item}
                 >
-                  {index + 1}.{`${item.name}<${MessageType[item.type]}>`}
+                  {index + 1}.{`${item.name}`}
                 </List.Item>
               );
             }}

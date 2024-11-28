@@ -3,6 +3,7 @@ import { Modal, Space, Tooltip } from 'antd';
 import Header from './components/Header';
 import Container from './components/Container';
 import { useModel } from '@umijs/max';
+import { Access } from '@@/exports';
 
 const FileFinder: React.FC = () => {
   const { open, onSelect, onCancel, checked } = useModel('fileModel');
@@ -17,7 +18,7 @@ const FileFinder: React.FC = () => {
           padding: 0,
         },
       }}
-      onOk={onSelect.current}
+      onOk={() => onSelect.current?.(checked)}
       onCancel={onCancel.current}
       title={<Header />}
       open={open}
@@ -29,9 +30,7 @@ const FileFinder: React.FC = () => {
           <div>
             <span className={'mr-1'}>
               已选(
-              {checked.length === 0 ? (
-                0
-              ) : (
+              <Access accessible={checked.length > 0} fallback={0}>
                 <Tooltip
                   title={checked.map((v) => {
                     return <div key={v.id}>{v.name}</div>;
@@ -39,7 +38,7 @@ const FileFinder: React.FC = () => {
                 >
                   <span className={'text-blue-600 cursor-pointer'}>{checked.length}</span>
                 </Tooltip>
-              )}
+              </Access>
               )
             </span>
             <Space>{origin}</Space>

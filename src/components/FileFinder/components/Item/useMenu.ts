@@ -21,7 +21,7 @@ export function useMenu(file: API.File) {
     if (file.type !== 'dir') {
       menu.unshift({
         key: 'view',
-        label: '详情',
+        label: '预览',
         onClick: () => {
           window.open(file.url, '_blank');
         },

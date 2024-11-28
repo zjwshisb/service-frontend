@@ -3,9 +3,6 @@ import { getFiles } from '@/services';
 import { values } from 'lodash';
 import { useModel } from '@umijs/max';
 import { useDebounce, useHistoryTravel } from 'ahooks';
-import { useOptions } from '@/hooks/useOptions';
-
-type FileValue = API.File | API.File[];
 
 type selectFileProps = {
   type?: API.FileType;
@@ -19,7 +16,12 @@ export default function FileModel() {
   const [count, setCount] = useState(1);
   const [fileType, setFileType] = useState<API.FileType | API.FileType[] | undefined>();
 
-  const allFileTypes = useOptions('file-types');
+  const { getOptions } = useModel('optionModel');
+
+  const [allFileTypes, setAllFileType] = React.useState<API.Option[]>([]);
+  React.useEffect(() => {
+    getOptions('file-types').then((res) => setAllFileType(res));
+  }, [getOptions]);
 
   const {
     value: dirLinks,
@@ -99,11 +101,11 @@ export default function FileModel() {
     [count],
   );
 
-  const onSelect = React.useRef<() => void>();
+  const onSelect = React.useRef<(file: API.File[]) => void>();
 
   const onCancel = React.useRef<() => void>();
 
-  const selectFile: (props?: selectFileProps) => Promise<FileValue> = React.useCallback(
+  const selectFile: (props?: selectFileProps) => Promise<API.File[]> = React.useCallback(
     (props?: selectFileProps) => {
       const { count = 1, defaultValue = [], type = undefined } = props || {};
       setCount(count);
@@ -115,9 +117,9 @@ export default function FileModel() {
       }
       setOpen(true);
       return new Promise((resolve, reject) => {
-        onSelect.current = () => {
+        onSelect.current = (v: API.File[]) => {
           setOpen(false);
-          resolve(checked);
+          resolve(v);
         };
         onCancel.current = () => {
           setOpen(false);
@@ -125,7 +127,7 @@ export default function FileModel() {
         };
       });
     },
-    [allFileTypes, checked],
+    [allFileTypes],
   );
 
   const [filter, setFilter] = React.useState('');

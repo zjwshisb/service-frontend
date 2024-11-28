@@ -1,119 +1,65 @@
 import React from 'react';
-import { ProTable, PageContainer, ActionType, ProColumnType } from '@ant-design/pro-components';
-import { Button, message, Modal } from 'antd';
-import { history } from '@@/core/history';
+import { ProTable, PageContainer, ActionType } from '@ant-design/pro-components';
+import { Space } from 'antd';
 import { getAutoMessage, deleteAutoMessage } from '@/services/auto';
-import MessageContent from '../../components/MessageContent';
-
-export const MessageType: Record<API.MessageType, string> = {
-  text: '文本',
-  file: '文件',
-  navigator: '导航卡片',
-};
+import DeleteAction from '@/components/DeleteAction';
+import EditAction from '@/components/EditAction';
+import StoreAction from '@/components/StoreAction';
+import useTableColumn from '@/hooks/useTableColumn';
+import MessageContent from '@/pages/auto/message/components/MessageContent';
+import { useModel } from '@@/exports';
 
 const Index = () => {
   const actionRef = React.useRef<ActionType>();
 
-  const columns: ProColumnType<API.AutoMessage>[] =
-    React.useMemo((): ProColumnType<API.AutoMessage>[] => {
-      return [
-        {
-          title: '#',
-          valueType: 'index',
-        },
-        {
-          dataIndex: 'name',
-          title: '消息名称',
-          search: false,
-        },
-        {
-          dataIndex: 'type',
-          valueEnum: MessageType,
-          title: '消息类型',
-        },
-        {
-          dataIndex: 'content',
-          title: '消息内容',
-          search: false,
-          ellipsis: true,
-          width: 300,
-          render(text, record) {
-            return <MessageContent message={record} />;
-          },
-        },
-        {
-          dataIndex: 'created_at',
-          valueType: 'dateTime',
-          title: '创建时间',
-          search: false,
-        },
-        {
-          dataIndex: 'updated_at',
-          valueType: 'dateTime',
-          title: '最后修改时间',
-          search: false,
-        },
-        {
-          dataIndex: 'id',
-          title: '操作',
-          valueType: 'option',
-          render(_, record) {
-            const action = [
-              <Button
-                type={'primary'}
-                size={'small'}
-                key={1}
-                onClick={() => history.push(`/auto/message/${record.id}/edit`)}
-              >
-                编辑
-              </Button>,
-            ];
-            if (record.rules_count <= 0) {
-              action.push(
-                <Button
-                  type={'primary'}
-                  size={'small'}
-                  danger={true}
-                  key={2}
-                  onClick={() => {
-                    Modal.confirm({
-                      title: '提示',
-                      content: '确定删除该消息?',
-                      onOk() {
-                        deleteAutoMessage(record.id)
-                          .then(() => {
-                            message.success('操作成功');
-                            actionRef.current?.reload();
-                          })
-                          .catch();
-                      },
-                    });
-                  }}
-                >
-                  删除
-                </Button>,
-              );
-            }
-            return action;
-          },
-        },
-      ];
-    }, []);
+  const { getOptions } = useModel('optionModel');
+  const columns = useTableColumn<API.AutoMessage>([
+    {
+      dataIndex: 'name',
+      title: '消息名称',
+      search: true,
+    },
+    {
+      dataIndex: 'type',
+      request: () => getOptions('message-types'),
+      title: '消息类型',
+      search: true,
+    },
+    {
+      dataIndex: 'content',
+      title: '消息内容',
+      width: 300,
+      render(_, message) {
+        return <MessageContent message={message} />;
+      },
+    },
+    {
+      dataIndex: 'id',
+      title: '操作',
+      fixed: 'right',
+      render(_, record) {
+        return (
+          <Space>
+            <EditAction key="edit" path={`/auto/message/${record.id}/edit`} />
+            <DeleteAction
+              onSuccess={actionRef.current?.reload}
+              key={'delete'}
+              id={record.id}
+              request={deleteAutoMessage}
+            ></DeleteAction>
+          </Space>
+        );
+      },
+    },
+  ]);
   return (
     <PageContainer>
       <ProTable
-        form={{
-          labelWidth: 100,
-        }}
         actionRef={actionRef}
         rowKey={'id'}
         columns={columns}
         request={getAutoMessage}
-        toolBarRender={() => [
-          <Button key={'edit'} type={'primary'} onClick={() => history.push('/auto/message/add')}>
-            新增
-          </Button>,
-        ]}
+        toolBarRender={() => [<StoreAction key={'store'} path={'/auto/message/add'}></StoreAction>]}
       />
     </PageContainer>
   );

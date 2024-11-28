@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageContainer, ProCard } from '@ant-design/pro-components';
+import { PageContainer } from '@ant-design/pro-components';
 import AutoMessageForm from '../components/Form';
 import { useParams } from '@umijs/max';
 
@@ -8,9 +8,7 @@ const Index: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProCard layout={'center'}>
-        <AutoMessageForm id={id} />
-      </ProCard>
+      <AutoMessageForm id={id} />
     </PageContainer>
   );
 };

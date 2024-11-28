@@ -2,7 +2,7 @@ import { request } from '@umijs/max';
 import React from 'react';
 
 export async function getAutoMessageForm(id: React.Key) {
-  return request<API.Response<API.AutoMessage>>(`/auto-messages/${id}/form`);
+  return request<API.Response<FORM.AutoMessageForm>>(`/auto-messages/${id}/form`);
 }
 
 export async function getAutoMessage(params: FORM.Pagination) {
@@ -51,17 +51,17 @@ export async function deleteAutoRule(id: React.Key) {
     method: 'delete',
   });
 }
-export async function showAutoRule(id: string) {
-  return request<API.Response<API.AutoRule>>(`/auto-rules/${id}`);
+export async function getAutoRuleForm(id: React.Key) {
+  return request<API.Response<FORM.AutoRuleForm>>(`/auto-rules/${id}/form`);
 }
-export async function updateAutoRule(data: FORM.AutoRuleForm, id: string) {
+export async function updateAutoRule(data: FORM.AutoRuleForm, id: React.Key) {
   return request<API.Response>(`/auto-rules/${id}`, {
     method: 'PUT',
     data,
   });
 }
 export async function getSystemAutoRule() {
-  return request<API.Response<API.AutoRule[]>>('/system-auto-rules');
+  return request<API.Response<API.SystemRule[]>>('/system-auto-rules');
 }
 export async function updateSystemAutoRule(data: Record<string, number>) {
   return request<API.Response>('/system-auto-rules', {

@@ -1,6 +1,6 @@
 import React from 'react';
-import { ProForm, ProFormText, ProFormSelect } from '@ant-design/pro-components';
-import Upload from '@/components/Upload/index';
+import { ProFormText, ProFormSelect } from '@ant-design/pro-components';
+import ProFormFileSelect from '@/components/ProFormFileSelect';
 
 const options = [
   {
@@ -18,21 +18,24 @@ const NavigatorCard = () => {
         required={true}
       />
       <ProFormSelect
-        rules={[{ required: true, message: '请选择跳转路径' }]}
+        rules={[{ required: true, max: 512 }]}
         options={options}
         name={['navigator', 'url']}
         label={'跳转路径'}
         required={true}
       />
-      <ProForm.Item
+      <ProFormFileSelect
         tooltip={'大小建议200x100'}
         rules={[{ required: true, message: '请选择图片' }]}
         name={['navigator', 'image']}
         label={'卡片图片'}
         required={true}
-      >
-        <Upload path={'message'} corp={false} width={'200px'} height={'100px'} />
-      </ProForm.Item>
+        fieldProps={{
+          type: 'image',
+          width: '200px',
+          height: '100px',
+        }}
+      ></ProFormFileSelect>
     </React.Fragment>
   );
 };

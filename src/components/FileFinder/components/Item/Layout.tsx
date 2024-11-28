@@ -24,7 +24,10 @@ const Layout: React.FC<
         onClick={props.onClick}
         className={classNames(
           'w-32 p-2 flex flex-col flex-shrink-0 rounded-lg',
-          props.active ? 'hover:bg-gray-300 cursor-pointer' : 'opacity-30',
+          {
+            'hover:bg-gray-200 cursor-pointer': props.active,
+            'opacity-30': !props.active,
+          },
           props.className,
         )}
       >

@@ -7,164 +7,143 @@ import {
   ProFormDigit,
   ProFormSwitch,
   ProFormCheckbox,
+  ProCard,
 } from '@ant-design/pro-components';
 import type { FormInstance } from 'antd/es';
-
-import { replyTypeLabel, matchTypeLabel } from '@/pages/auto/rule';
-import { getAutoMessageOption } from '@/services/auto';
-import { getOptions } from '@/services';
+import { useFormRequest } from '@/hooks/useFormRequest';
+import { getAutoRuleForm, storeAutoRule, updateAutoRule } from '@/services/auto';
+import { App } from 'antd';
+import { history } from '@umijs/max';
+import { useModel } from '@@/exports';
 
 const Index: React.FC<{
-  submit: (data: FORM.AutoRuleForm) => Promise<void>;
-  initialValues?: Partial<FORM.AutoRuleForm>;
-  readonlyValues?: string[];
+  id?: React.Key;
 }> = (props) => {
+  const { id } = props;
+
   const form = React.useRef<FormInstance<FORM.AutoRuleForm>>();
 
-  React.useEffect(() => {
-    if (props.initialValues && form.current) {
-      form.current.resetFields();
-    }
-  }, [props.initialValues]);
+  const request = useFormRequest(getAutoRuleForm, id);
+  const { message } = App.useApp();
+
+  const { getOptions } = useModel('optionModel');
 
   return (
-    <ProForm<FORM.AutoRuleForm>
-      initialValues={props.initialValues}
-      onFinish={(data) => {
-        return props.submit(data);
-      }}
-      labelCol={{ span: 5 }}
-      style={{ width: '600px' }}
-      formRef={form}
-    >
-      <ProFormText
-        rules={[
-          {
-            required: true,
-            max: 32,
-          },
-        ]}
-        label={'规则名称'}
-        placeholder={'随便起个名字'}
-        name={'name'}
-        fieldProps={{
-          maxLength: 32,
+    <ProCard>
+      <ProForm<FORM.AutoRuleForm>
+        request={request}
+        onFinish={async (data) => {
+          if (id) {
+            await updateAutoRule(data, id);
+          } else {
+            await storeAutoRule(data);
+          }
+          message.success('操作成功');
+          history.back();
         }}
-      />
-      <ProFormSelect
-        rules={[{ required: true, message: '请选择' }]}
-        label={'匹配规则'}
-        name={'match_type'}
-        valueEnum={matchTypeLabel}
-      />
-      <ProFormText
-        rules={[
-          {
-            required: true,
-            max: 32,
-          },
-        ]}
-        label={'匹配文字'}
-        placeholder={'所需要匹配的文字'}
-        name={'match'}
-      />
-      <ProFormSelect
-        rules={[{ required: true, message: '请选择' }]}
-        valueEnum={replyTypeLabel}
-        label={'回复类型'}
-        name={'reply_type'}
-        readonly={props.readonlyValues?.includes('reply_type')}
-        fieldProps={{
-          onChange: () => {
-            form.current?.setFieldsValue({
-              message_id: undefined,
-            });
-          },
-        }}
-      />
-      <ProFormDependency name={['reply_type']}>
-        {({ reply_type }) => {
-          switch (reply_type as API.ReplyType) {
-            case 'message':
-              return (
-                <ProFormSelect
-                  rules={[{ required: true, message: '请选择' }]}
-                  name={'message_id'}
-                  label={'回复的消息'}
-                  request={async () => {
-                    return getOptions('auto-messages').then((r) => r.data);
-                  }}
-                />
-              );
-            case 'event':
-              return (
-                <>
-                  <ProFormSelect
-                    rules={[{ required: true, message: '请选择' }]}
-                    name={'key'}
-                    label={'触发的事件'}
-                    fieldProps={{}}
-                    request={async () => {
-                      const r = await getOptions('auto-rule-scenes');
-                      return r.data;
-                    }}
-                  />
+        className={'w-full'}
+        formRef={form}
+      >
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              max: 32,
+            },
+          ]}
+          label={'规则名称'}
+          placeholder={'随便起个名字'}
+          name={'name'}
+          fieldProps={{
+            maxLength: 32,
+            showCount: true,
+          }}
+        />
+        <ProFormSelect
+          rules={[{ required: true, message: '请选择' }]}
+          label={'匹配规则'}
+          name={'match_type'}
+          request={() => getOptions('auto-rule-match-types')}
+        />
+        <ProFormText
+          rules={[
+            {
+              required: true,
+              max: 32,
+            },
+          ]}
+          label={'匹配文字'}
+          fieldProps={{
+            maxLength: 32,
+            showCount: true,
+          }}
+          placeholder={'所需要匹配的文字'}
+          name={'match'}
+        />
+        <ProFormSelect
+          rules={[{ required: true, message: '请选择' }]}
+          request={() => getOptions('auto-rule-reply-types')}
+          label={'回复类型'}
+          readonly={!!id}
+          name={'reply_type'}
+          fieldProps={{
+            onChange: () => {
+              form.current?.setFieldsValue({
+                message_id: undefined,
+              });
+            },
+          }}
+        />
+        <ProFormDependency name={['reply_type']}>
+          {({ reply_type }) => {
+            switch (reply_type as API.ReplyType) {
+              case 'message':
+                return (
                   <ProFormSelect
                     rules={[{ required: true, message: '请选择' }]}
                     name={'message_id'}
                     label={'回复的消息'}
-                    tooltip={'事件触发后并且回复的消息'}
-                    fieldProps={{}}
-                    request={async () => {
-                      const res = await getAutoMessageOption();
-                      return res.data;
-                    }}
+                    request={() => getOptions('auto-messages')}
                   />
-                </>
-              );
-            case 'transfer':
-            default:
-              return <></>;
-          }
-        }}
-      </ProFormDependency>
-      <ProFormDependency name={['reply_type']}>
-        {({ reply_type }) => {
-          switch (reply_type as API.ReplyType) {
-            case 'message':
-            case 'event':
-              return (
-                <>
-                  <ProFormCheckbox.Group
-                    rules={[{ required: true, message: '请选择' }]}
-                    name={'scenes'}
-                    label={'触发场景'}
-                    tooltip={'指在什么场景下触发'}
-                    request={async () => {
-                      const r = await getOptions('auto-rule-scenes');
-                      return r.data;
-                    }}
-                  />
-                </>
-              );
-            case 'transfer':
-            default:
-              return <></>;
-          }
-        }}
-      </ProFormDependency>
-
-      <ProFormDigit
-        label={'排序'}
-        required={true}
-        name={'sort'}
-        min={0}
-        max={128}
-        rules={[{ required: true }]}
-        tooltip={'从小到大，当多个符合条件的规则时取最小的'}
-      />
-      <ProFormSwitch label={'启用'} name={'is_open'} />
-    </ProForm>
+                );
+              case 'transfer':
+              default:
+                return <></>;
+            }
+          }}
+        </ProFormDependency>
+        <ProFormDependency name={['reply_type']}>
+          {({ reply_type }) => {
+            switch (reply_type as API.ReplyType) {
+              case 'message':
+                return (
+                  <>
+                    <ProFormCheckbox.Group
+                      rules={[{ required: true, message: '请选择' }]}
+                      name={'scenes'}
+                      label={'触发场景'}
+                      tooltip={'指在什么场景下触发'}
+                      request={async () => getOptions('auto-rule-scenes')}
+                    />
+                  </>
+                );
+              case 'transfer':
+              default:
+                return <></>;
+            }
+          }}
+        </ProFormDependency>
+        <ProFormDigit
+          label={'排序'}
+          name={'sort'}
+          min={0}
+          max={10000}
+          rules={[{ required: true }]}
+          tooltip={'从小到大，当多个符合条件的规则时取最小的'}
+        />
+        <ProFormSwitch label={'启用'} name={'is_open'} />
+      </ProForm>
+    </ProCard>
   );
 };
 export default Index;
