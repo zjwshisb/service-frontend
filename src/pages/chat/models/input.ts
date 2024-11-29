@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function useInputModel() {
+export default function () {
   const [text, setText] = React.useState('');
 
   const append = React.useCallback((t: string) => {

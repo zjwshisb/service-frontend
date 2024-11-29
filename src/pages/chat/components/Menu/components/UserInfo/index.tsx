@@ -7,7 +7,7 @@ import { Descriptions, Empty, Tooltip } from 'antd';
 import { getUserInfo } from '@/services';
 
 const Index = () => {
-  const { current } = useModel('useCurrentModel');
+  const { current } = useModel('chat.currentUser');
   const [info, setInfo] = useState<Record<string, any>>({});
 
   React.useEffect(() => {

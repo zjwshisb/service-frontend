@@ -11,11 +11,11 @@ import styles from './index.less';
 const Index: React.FC<{
   user: API.User;
 }> = (props) => {
-  const { setCurrent, current, goTop } = useModel('useCurrentModel');
-  const { setUsers } = useModel('useUsersModel');
+  const { setCurrent, current, goTop } = useModel('chat.currentUser');
+  const { setUsers } = useModel('chat.users');
 
   const onClick = React.useCallback(
-    (id) => {
+    (id: number) => {
       setUsers((prevState) => {
         const newUsers = lodash.cloneDeep(prevState);
         const user = newUsers.get(id);

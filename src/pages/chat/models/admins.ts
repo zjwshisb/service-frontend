@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function useAdminModel() {
+export default function () {
   const [admins, setAdmins] = React.useState<API.Admin[]>([]);
   return {
     admins,

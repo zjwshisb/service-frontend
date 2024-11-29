@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import UserItem from './components/UserItem/index';
 import { useModel, Helmet } from '@umijs/max';
-import styles from './index.less';
 import TransferForm from './components/TransferForm/index';
 import { Empty } from 'antd';
 
 const Index: React.FC = () => {
-  const { users } = useModel('useUsersModel');
+  const { users } = useModel('chat.users');
 
-  const { current } = useModel('useCurrentModel');
+  const { current } = useModel('chat.currentUser');
 
   const [title, setTile] = useState('');
 
@@ -35,7 +34,7 @@ const Index: React.FC = () => {
   }, [current, users]);
 
   return (
-    <div className={styles.list}>
+    <div className={'flex-shrink-0 w-1/3 overflow-y-auto border-r h-full'}>
       <TransferForm />
       <Helmet defer={false}>
         <title>{title}</title>

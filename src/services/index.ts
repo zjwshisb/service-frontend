@@ -117,8 +117,10 @@ export async function getMessages(uid: number, mid?: number) {
   });
 }
 
-export async function getSettings() {
-  return request<API.Response<API.Setting[]>>('/settings');
+export async function getSettings(params: FORM.Pagination) {
+  return request<API.Response<API.Setting[]>>('/settings', {
+    params,
+  });
 }
 
 export async function updateSetting(name: number, value: string) {

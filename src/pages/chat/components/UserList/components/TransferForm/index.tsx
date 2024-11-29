@@ -2,14 +2,16 @@ import React from 'react';
 import { ModalForm, ProFormSelect, ProFormTextArea } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
 import { handleTransfer } from '@/services';
-import useRemoveUser from '@/hooks/useRemoveUser';
-import { message } from 'antd';
+import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
+import { App } from 'antd';
 
 const Index: React.FC = () => {
-  const { visible, setVisible, user, setUser } = useModel('useTransferModel');
+  const { visible, setVisible, user, setUser } = useModel('chat.transfer');
   const initialState = useModel('@@initialState');
-  const { admins } = useModel('useAdminModel');
+  const { admins } = useModel('chat.admins');
   const handleRemoveUser = useRemoveUser();
+
+  const { message } = App.useApp();
 
   const handleSubmit = React.useCallback(
     (toId: number, remark = '') => {
@@ -22,7 +24,7 @@ const Index: React.FC = () => {
         });
       }
     },
-    [handleRemoveUser, setUser, setVisible, user],
+    [handleRemoveUser, message, setUser, setVisible, user],
   );
 
   return (

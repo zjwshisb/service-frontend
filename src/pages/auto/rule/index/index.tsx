@@ -12,7 +12,7 @@ import { useModel } from '@umijs/max';
 const Index = () => {
   const action = React.useRef<ActionType>();
 
-  const { getOptions } = useModel('optionModel');
+  const { getOptions } = useModel('options');
 
   const columns = useTableColumn<API.AutoRule>([
     {
@@ -107,6 +107,9 @@ const Index = () => {
       <ProTable<API.AutoRule>
         scroll={{
           x: 1200,
+        }}
+        search={{
+          collapsed: false,
         }}
         actionRef={action}
         request={getAutoRules}

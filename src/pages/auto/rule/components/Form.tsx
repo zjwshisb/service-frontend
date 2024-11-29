@@ -26,7 +26,7 @@ const Index: React.FC<{
   const request = useFormRequest(getAutoRuleForm, id);
   const { message } = App.useApp();
 
-  const { getOptions } = useModel('optionModel');
+  const { getOptions } = useModel('options');
 
   return (
     <ProCard>

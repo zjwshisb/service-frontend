@@ -2,14 +2,13 @@ import React from 'react';
 import { Input } from 'antd';
 import { useModel } from '@umijs/max';
 import { createMsg } from '@/utils';
-import styles from './index.less';
 
 const Index: React.FC = () => {
-  const { send } = useModel('useWebsocketModel');
+  const { send } = useModel('chat.websocket');
 
-  const { current } = useModel('useCurrentModel');
+  const { current } = useModel('chat.currentUser');
 
-  const { text, setText, clear, append } = useModel('useInputModel');
+  const { text, setText, clear, append } = useModel('chat.input');
 
   const ref = React.useRef<any>();
 
@@ -41,7 +40,7 @@ const Index: React.FC = () => {
     [current, text, send, clear, append],
   );
   return (
-    <div className={styles.input}>
+    <div className={'flex px-1.5'}>
       <Input.TextArea
         ref={ref}
         showCount={true}

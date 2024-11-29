@@ -1,41 +1,18 @@
 import React from 'react';
-import { Avatar, Menu, Dropdown } from 'antd';
-import ChangeAvatar from './components/ChangeAvatar/index';
-import styles from './index.less';
+import { Avatar } from 'antd';
 import { useModel } from '@umijs/max';
-import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons/lib';
 
 const Index = () => {
   const initialState = useModel('@@initialState');
 
-  const [menuVisible, setMenuVisible] = React.useState(false);
+  const { setting } = useModel('chat.adminSetting');
 
-  const { setting } = useModel('useSettingModel');
-
-  return React.useMemo(() => {
-    return (
-      <div className={styles.index}>
-        <Dropdown
-          onVisibleChange={setMenuVisible}
-          overlay={
-            <Menu>
-              <Menu.Item key="avatar">
-                <ChangeAvatar />
-              </Menu.Item>
-            </Menu>
-          }
-          placement="bottomRight"
-          trigger={['click']}
-        >
-          <span className={styles.menu}>
-            <Avatar src={setting?.avatar} shape="square" className={styles.avatar}>
-              {initialState.initialState?.currentUser?.username}
-            </Avatar>
-            {menuVisible ? <CaretUpOutlined /> : <CaretDownOutlined />}
-          </span>
-        </Dropdown>
-      </div>
-    );
-  }, [initialState.initialState?.currentUser?.username, menuVisible, setting?.avatar]);
+  return (
+    <div className={'flex items-center h-full'}>
+      <Avatar src={setting?.avatar} shape="square" className={'cursor-pointer'}>
+        {initialState.initialState?.currentUser?.username}
+      </Avatar>
+    </div>
+  );
 };
 export default Index;

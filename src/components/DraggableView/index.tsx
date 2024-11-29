@@ -32,7 +32,7 @@ const Index: React.FC<
             style={{ width: props.width, top: props.top, left: props.left }}
             data-display={visible}
           >
-            <div className={`${style.header} header`}>
+            <div className={`flex h-[60px] header`}>
               <div className={style.left}>
                 <div className={style.dot} onClick={() => setVisible(false)} />
               </div>

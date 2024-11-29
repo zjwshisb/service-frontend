@@ -31,7 +31,7 @@ const Index: React.FC<{
           </div>
           <div className={styles.content} data-msg-type={props.message.type}>
             {props.message.type === 'text' && <Text content={props.message.content} />}
-            {props.message.type === 'image' && <Image content={props.message.content} />}
+            {props.message.type === 'file' && <Image content={props.message.content} />}
             {props.message.type === 'navigator' && <Navigator content={props.message.content} />}
           </div>
           {props.message.source === 1 && <Spin isSuccess={props.message.is_success} />}

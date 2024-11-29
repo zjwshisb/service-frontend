@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'antd';
 import { useModel } from '@umijs/max';
-import useRemoveUser from '@/hooks/useRemoveUser';
+import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { removeUser } from '@/services';
 import HistorySession from '../HistorySession';
 import { MessageOutlined, CloseOutlined, SwapOutlined } from '@ant-design/icons';
@@ -10,9 +10,9 @@ import styles from './index.less';
 const Index: React.FC<{
   user: API.User;
 }> = (props) => {
-  const { setUser, setVisible } = useModel('useTransferModel');
+  const { setUser, setVisible } = useModel('chat.transfer');
 
-  const show = useModel('useHistorySessionModal', (model) => model.show);
+  const show = useModel('chat.historySession', (model) => model.show);
 
   const handleRemove = useRemoveUser();
 

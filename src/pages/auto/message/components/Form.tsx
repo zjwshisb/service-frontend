@@ -27,7 +27,7 @@ const Form: React.FC<{
 
   const request = useFormRequest(getAutoMessageForm, id);
 
-  const { getOptions } = useModel('optionModel');
+  const { getOptions } = useModel('options');
 
   return (
     <ProCard>

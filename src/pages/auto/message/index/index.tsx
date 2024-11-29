@@ -12,7 +12,7 @@ import { useModel } from '@@/exports';
 const Index = () => {
   const actionRef = React.useRef<ActionType>();
 
-  const { getOptions } = useModel('optionModel');
+  const { getOptions } = useModel('options');
   const columns = useTableColumn<API.AutoMessage>([
     {
       dataIndex: 'name',
@@ -55,6 +55,9 @@ const Index = () => {
   return (
     <PageContainer>
       <ProTable
+        search={{
+          collapsed: false,
+        }}
         actionRef={actionRef}
         rowKey={'id'}
         columns={columns}

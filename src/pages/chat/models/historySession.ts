@@ -1,7 +1,7 @@
 import React from 'react';
 import { getHistorySessions } from '@/services';
 
-export default function useHistorySessionModal() {
+export default function () {
   const [visible, setVisible] = React.useState(false);
   const [sessions, setSessions] = React.useState<API.ChatSession[]>([]);
 

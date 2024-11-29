@@ -108,7 +108,9 @@
   {
     path: '/chat',
     component: './chat/index',
+    name: '客服面板',
     layout: false,
+    target: '_blank',
   },
   { path: '/', redirect: '/welcome' },
   { path: '*', layout: false, component: './404' },

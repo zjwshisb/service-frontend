@@ -14,8 +14,8 @@ const Index = () => {
       setMessages(res.data);
     });
   }, []);
-  const { send } = useModel('useWebsocketModel');
-  const { current } = useModel('useCurrentModel');
+  const { send } = useModel('chat.websocket');
+  const { current } = useModel('chat.currentUser');
 
   return (
     <Popover

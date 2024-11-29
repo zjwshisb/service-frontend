@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function useNotificationModel() {
+export default function () {
   const requestPermission = React.useCallback(() => {
     if (window.Notification) {
       if (window.Notification.permission === 'default') {
@@ -10,7 +10,7 @@ export default function useNotificationModel() {
   }, []);
 
   const notify = React.useCallback(
-    (title, options: NotificationOptions = {}): Notification | null => {
+    (title: string, options: NotificationOptions = {}): Notification | null => {
       if (window.Notification.permission === 'granted') {
         return new Notification(title, options);
       }
@@ -23,8 +23,8 @@ export default function useNotificationModel() {
     (username: string, message: API.Message) => {
       const options: NotificationOptions = {};
       let notice = '';
-      if (message.type === 'image') {
-        options.body = '[图片]';
+      if (message.type === 'file') {
+        options.body = '[文件]';
         notice = `<${username}>发来了一张图片`;
       }
       if (message.type === 'text') {

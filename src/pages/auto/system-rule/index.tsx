@@ -1,13 +1,15 @@
 import React from 'react';
 import { PageContainer, ProForm, ProFormSelect, ProCard } from '@ant-design/pro-components';
 import { getSystemAutoRule, updateSystemAutoRule } from '@/services/auto';
-import { message, Button } from 'antd';
+import { Button, App } from 'antd';
 import { useModel, useRequest } from '@umijs/max';
 
 const Index = () => {
   const [edit, setEdit] = React.useState(false);
 
-  const { getOptions } = useModel('optionModel');
+  const { getOptions } = useModel('options');
+
+  const { message } = App.useApp();
 
   const { data: rules, loading } = useRequest(getSystemAutoRule);
   return (

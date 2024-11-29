@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   ActionType,
-  ProColumnType,
   PageContainer,
   ProTable,
   ProFormInstance,
@@ -10,49 +9,66 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { getSettings, updateSetting } from '@/services';
-import Upload from '@/components/Upload';
-import { Form, Input, message, Select } from 'antd';
+import { App, Form, Input, Select } from 'antd';
+import ProFormFileSelect from '@/components/ProFormFileSelect';
+import FileItem from '@/components/FileItem';
+import EditAction from '@/components/EditAction';
+import useTableColumn from '@/hooks/useTableColumn';
 
 const Index = () => {
   const [editRow, setEditRow] = React.useState<API.Setting>();
 
-  const columns = React.useMemo((): ProColumnType<API.Setting>[] => {
-    return [
-      {
-        title: '名称',
-        dataIndex: 'title',
-        search: false,
-      },
-      {
-        title: '值',
-        dataIndex: 'value',
-        search: false,
-        valueType: (record) => record.type,
-        render(dom, record) {
-          if (record.type === 'select') {
+  const { message } = App.useApp();
+
+  const columns = useTableColumn<API.Setting>([
+    {
+      title: '名称',
+      dataIndex: 'title',
+      search: true,
+      width: 150,
+    },
+    {
+      title: '说明',
+      dataIndex: 'description',
+    },
+    {
+      title: '值',
+      dataIndex: 'value',
+      width: 200,
+      render(_, record) {
+        switch (record.type) {
+          case 'select': {
             return record.options.find((v) => v.value === record.value)?.label;
-          } else {
-            return dom;
           }
-        },
+          case 'image': {
+            if (record.value) {
+              return <FileItem file={record.value as API.File}></FileItem>;
+            }
+            break;
+          }
+          case 'text': {
+            return record.value as string;
+          }
+        }
+        return '-';
       },
-      {
-        title: '操作',
-        valueType: 'option',
-        width: 200,
-        render: (text, record) => [
-          <a
-            key="editable"
+    },
+    {
+      title: '操作',
+      valueType: 'option',
+      fixed: 'right',
+      width: 200,
+      render: (text, record) => {
+        return (
+          <EditAction
             onClick={() => {
               setEditRow(record);
             }}
-          >
-            修改
-          </a>,
-        ],
+          ></EditAction>
+        );
       },
-    ];
-  }, []);
+    },
+  ]);
 
   const formRef = React.useRef<ProFormInstance>();
 
@@ -118,9 +134,13 @@ const Index = () => {
               }
               case 'image': {
                 return (
-                  <Form.Item name={'value'} label={'值'}>
-                    <Upload path={'system'} width={'80px'} height={'80px'} />
-                  </Form.Item>
+                  <ProFormFileSelect
+                    fieldProps={{
+                      type: 'image',
+                    }}
+                    name={'value'}
+                    label={'值'}
+                  />
                 );
               }
             }

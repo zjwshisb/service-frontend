@@ -25,9 +25,9 @@ const columns: ColumnsType<API.Admin> = [
 ];
 
 const Index = () => {
-  const { admins, setAdmins } = useModel('useAdminModel');
+  const { admins, setAdmins } = useModel('chat.admins');
 
-  const setOnMessage = useModel('useWebsocketModel', (model) => model.setOnMessage);
+  const setOnMessage = useModel('chat.websocket', (model) => model.setOnMessage);
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.Admin[]>) => {
@@ -46,9 +46,13 @@ const Index = () => {
           </div>
         </Tooltip>
         <Drawer
-          visible={visible}
+          open={visible}
           placement={'right'}
-          bodyStyle={{ padding: 0 }}
+          styles={{
+            body: {
+              padding: 0,
+            },
+          }}
           width={400}
           onClose={(e) => {
             setVisible(false);

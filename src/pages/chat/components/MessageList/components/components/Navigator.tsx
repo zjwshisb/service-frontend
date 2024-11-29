@@ -8,7 +8,11 @@ const Index: React.FC<{
   return (
     <Card
       hoverable
-      bodyStyle={{ padding: '5px' }}
+      styles={{
+        body: {
+          padding: '5px',
+        },
+      }}
       cover={<img src={item.content} style={{ width: '300px', height: '150px' }} />}
     >
       <Card.Meta title={item.title} />

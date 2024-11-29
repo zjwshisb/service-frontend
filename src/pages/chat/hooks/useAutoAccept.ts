@@ -1,13 +1,13 @@
 import React from 'react';
-import useAccept from '@/hooks/useAcceptUser';
+import useAccept from '@/pages/chat/hooks/useAcceptUser';
 import { useModel } from '@umijs/max';
 
 export default function useAutoAccept() {
   const accept = useAccept();
 
-  const { waitingUsers } = useModel('useWaitingUserModel');
+  const { waitingUsers } = useModel('chat.waitingUsers');
 
-  const { setting } = useModel('useSettingModel');
+  const { setting } = useModel('chat.adminSetting');
 
   React.useEffect(() => {
     if (setting?.is_auto_accept) {

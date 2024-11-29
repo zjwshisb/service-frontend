@@ -2,7 +2,6 @@ import React from 'react';
 import MessageItem from './components/Item/index';
 import { useModel } from '@umijs/max';
 import { Spin } from 'antd';
-import styles from './index.less';
 import { getMessages } from '@/services';
 import Empty from './components/Empty/index';
 import Notice from './components/Notice/index';
@@ -17,7 +16,7 @@ const pageSize = 20;
  * @constructor
  */
 const Index: React.FC = () => {
-  const { current, setCurrent, top } = useModel('useCurrentModel');
+  const { current, setCurrent, top } = useModel('chat.currentUser');
 
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -142,13 +141,17 @@ const Index: React.FC = () => {
   }, [messages]);
 
   return (
-    <div className={styles.list} ref={ref} onScroll={onScroll}>
+    <div
+      className={'flex  flex-1 flex-col-reverse w-full p-2.5 overflow-y-auto bg-[f5f5f5] border-b'}
+      ref={ref}
+      onScroll={onScroll}
+    >
       {current === undefined ? (
         <Empty />
       ) : (
         <>
           {loading && (
-            <div className={styles.loading}>
+            <div className={'text-center'}>
               <Spin />
             </div>
           )}

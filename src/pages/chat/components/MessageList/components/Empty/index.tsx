@@ -1,8 +1,9 @@
 import React from 'react';
-import styles from './index.less';
 
 const Index = () => {
-  return <div className={styles.empty}>请选择聊天</div>;
+  return (
+    <div className={'w-full h-full flex items-center justify-center text-gray-600'}>请选择聊天</div>
+  );
 };
 
 export default Index;

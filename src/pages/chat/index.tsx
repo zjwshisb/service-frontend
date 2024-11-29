@@ -1,5 +1,4 @@
 import React from 'react';
-import './index.less';
 import UserList from './components/UserList/index';
 import MessageList from './components/MessageList/index';
 import InputArea from './components/Input/index';
@@ -8,24 +7,27 @@ import Menu from './components/Menu/index';
 import { useModel } from '@umijs/max';
 import lodash from 'lodash';
 import { getUsers, handleRead } from '@/services';
-import styles from './index.less';
 import BackgroundImg from '@/assets/images/background.png';
 import { Modal } from 'antd';
 import Draggable from 'react-draggable';
 import useMount from '@/hooks/useMount';
-import useAutoAccept from '@/hooks/useAutoAccept';
+import useAutoAccept from '@/pages/chat/hooks/useAutoAccept';
 
 const chatWidth = 1080;
 const chatHeight = 700;
 
 const Index: React.FC = () => {
-  const { connect, setOnMessage, setOnSend, close } = useModel('useWebsocketModel');
-  const { setUsers } = useModel('useUsersModel');
-  const { current, setCurrent, goTop } = useModel('useCurrentModel');
+  const { connect, setOnMessage, setOnSend, close } = useModel('chat.websocket');
+  const { setUsers } = useModel('chat.users');
+  const { current, setCurrent, goTop } = useModel('chat.currentUser');
 
-  const { setting } = useModel('useSettingModel');
+  const { setting, fetchSetting } = useModel('chat.adminSetting');
 
-  const { notifyMessage, requestPermission } = useModel('useNotificationModel');
+  React.useEffect(() => {
+    fetchSetting();
+  }, [fetchSetting]);
+
+  const { notifyMessage, requestPermission } = useModel('chat.notification');
 
   // 请求浏览器通知
   React.useEffect(() => {
@@ -210,19 +212,31 @@ const Index: React.FC = () => {
   }, [setting]);
 
   return (
-    <div id="chat" className={styles.chat_container} style={{ backgroundImage: `url(${bgImg})` }}>
+    <div
+      id="chat"
+      className={'min-h-[100%] bg-[#fafafa] overflow-hidden'}
+      style={{ backgroundImage: `url(${bgImg})` }}
+    >
       <Draggable handle={'#header'}>
-        <div className={styles.chat} style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}>
-          <div className={styles.left}>
+        <div
+          className={'flex m-auto overflow-hidden rounded'}
+          style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
+        >
+          <div className={'items-center w-[60px] h-full bg-[#ebeced]'}>
             <Menu />
           </div>
-          <div className={styles.right}>
-            <div className={styles.header} id={'header'}>
+          <div className={'flex flex-1 flex-col h-full bg-white'}>
+            <div
+              className={
+                'border-b cursor-move flex flex-shrink-0 justify-between w-full h-[60px] bg-[#f3f3f3]'
+              }
+              id={'header'}
+            >
               <Header />
             </div>
-            <div className={styles.body}>
+            <div className={'flex  w-full flex-1 bg-[#f3f3f3]'}>
               <UserList />
-              <div className={styles.message}>
+              <div className={'flex flex-1 flex-col'}>
                 <MessageList />
                 <InputArea />
               </div>

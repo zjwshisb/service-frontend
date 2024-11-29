@@ -1,7 +1,7 @@
 import React from 'react';
 import { getOptions as fetchOptions } from '@/services';
 
-export default function OptionModel() {
+export default function () {
   const [options, setOptions] = React.useState<Partial<Record<API.OptionType, API.Option[]>>>({});
 
   const getOptions = React.useCallback(

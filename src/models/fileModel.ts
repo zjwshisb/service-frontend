@@ -16,7 +16,7 @@ export default function FileModel() {
   const [count, setCount] = useState(1);
   const [fileType, setFileType] = useState<API.FileType | API.FileType[] | undefined>();
 
-  const { getOptions } = useModel('optionModel');
+  const { getOptions } = useModel('options');
 
   const [allFileTypes, setAllFileType] = React.useState<API.Option[]>([]);
   React.useEffect(() => {

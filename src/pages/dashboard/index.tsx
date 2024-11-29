@@ -2,7 +2,6 @@ import React from 'react';
 import { Space } from 'antd';
 import ProCard, { StatisticCard } from '@ant-design/pro-card';
 import { getOnlineInfo, getQueryInfo } from '@/services/dashboard';
-import { Line } from '@ant-design/charts';
 
 const Index = () => {
   const [queryInfo, setQueryInfo] = React.useState<API.Dashboard.QueryInfo>();
@@ -97,25 +96,7 @@ const Index = () => {
               />
             </ProCard>
             <ProCard colSpan={24}>
-              <StatisticCard
-                title={<span>小时接待数</span>}
-                colSpan={24}
-                chart={
-                  <Line
-                    data={queryInfo.chart}
-                    xField={'label'}
-                    yField={'count'}
-                    seriesField={'category'}
-                    xAxis={{
-                      label: {
-                        formatter(y) {
-                          return `${y}时`;
-                        },
-                      },
-                    }}
-                  />
-                }
-              />
+              <StatisticCard title={<span>小时接待数</span>} colSpan={24} />
             </ProCard>
           </ProCard>
         )}

@@ -3,13 +3,16 @@ import { handleAccept, handleRead } from '@/services';
 import lodash from 'lodash';
 import { useModel } from '@umijs/max';
 import { createMsg } from '@/utils';
-import { message, Modal } from 'antd';
+import { App, Modal } from 'antd';
 
 export default function useAccept() {
-  const { setUsers } = useModel('useUsersModel');
-  const { send } = useModel('useWebsocketModel');
-  const { current, setCurrent, goTop } = useModel('useCurrentModel');
-  const { setting } = useModel('useSettingModel');
+  const { setUsers } = useModel('chat.users');
+  const { send } = useModel('chat.websocket');
+  const { current, setCurrent, goTop } = useModel('chat.currentUser');
+  const { setting } = useModel('chat.adminSetting');
+
+  const { message } = App.useApp();
+
   return React.useCallback(
     (id: number) => {
       handleAccept(id)
@@ -41,6 +44,6 @@ export default function useAccept() {
           }
         });
     },
-    [current?.id, goTop, setCurrent, setUsers, setting?.welcome_content, send],
+    [current?.id, message, goTop, setCurrent, setUsers, setting?.welcome_content, send],
   );
 }

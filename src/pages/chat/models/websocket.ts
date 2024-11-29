@@ -1,14 +1,14 @@
 import React from 'react';
 import { getToken, removeToken } from '@/utils/auth';
 import lodash from 'lodash';
-import { message, Modal } from 'antd';
+import { App, Modal } from 'antd';
 import { useModel } from '@umijs/max';
 import { history } from '@@/core/history';
 
 export type ActionHandle<T = any> = (action: API.Action<T>) => void;
 export type EventHandle<T extends Event = Event> = (e: T) => void;
 
-export default function useWebsocketModel() {
+export default function () {
   const [websocket, setWebsocket] = React.useState<WebSocket | undefined>();
 
   const [onSend, setOnSend] = React.useState<ActionHandle | undefined>();
@@ -21,8 +21,10 @@ export default function useWebsocketModel() {
 
   const [isShowNotice, setIsShowNotice] = React.useState(false);
 
-  const { setUsers } = useModel('useUsersModel');
-  const { setCurrent } = useModel('useCurrentModel');
+  const { setUsers } = useModel('chat.users');
+  const { setCurrent } = useModel('chat.currentUser');
+
+  const { message } = App.useApp();
 
   const connect = React.useCallback(() => {
     const url = `${WS_URL}?token=${getToken()}`;
@@ -71,7 +73,7 @@ export default function useWebsocketModel() {
         setWebsocket(undefined);
       };
     }
-  }, [connect, isShowNotice, onError, onMessage, onOpen, websocket]);
+  }, [connect, isShowNotice, message, onError, onMessage, onOpen, websocket]);
 
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: API.ActionType): void => {

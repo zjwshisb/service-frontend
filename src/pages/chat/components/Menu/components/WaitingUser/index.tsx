@@ -1,21 +1,23 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import { List, Skeleton, Avatar, Badge, Tooltip, Modal, Popover, message } from 'antd';
+import { List, Skeleton, Avatar, Badge, Tooltip, Modal, Popover, App } from 'antd';
 import { timeFormat } from '@/utils';
 import styles from '../index.less';
 import myStyles from './index.less';
 import DraggableView from '@/components/DraggableView';
 import { getMessageTypeLabel } from '@/pages/chat/util';
 import { Typography } from 'antd';
-import useAcceptUser from '@/hooks/useAcceptUser';
+import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { cancelChatSessions } from '@/services';
 
 const Index = () => {
-  const { setOnMessage } = useModel('useWebsocketModel');
+  const { setOnMessage } = useModel('chat.websocket');
 
-  const { waitingUsers, setWaitingUsers } = useModel('useWaitingUserModel');
-  const { notify } = useModel('useNotificationModel');
+  const { waitingUsers, setWaitingUsers } = useModel('chat.waitingUsers');
+  const { notify } = useModel('chat.notification');
+
+  const { message } = App.useApp();
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.WaitingUser[]>) => {
@@ -150,6 +152,6 @@ const Index = () => {
         />
       </DraggableView>
     );
-  }, [accept, reverseData]);
+  }, [accept, message, reverseData]);
 };
 export default Index;

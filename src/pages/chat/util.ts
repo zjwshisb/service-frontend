@@ -3,8 +3,8 @@ export function getMessageTypeLabel(content: string, type: API.MessageType): str
     case 'text': {
       return content;
     }
-    case 'image': {
-      return '[图片]';
+    case 'file': {
+      return '[文件]';
     }
     case 'navigator': {
       return '[导航卡片]';

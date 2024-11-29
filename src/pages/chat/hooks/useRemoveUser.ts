@@ -3,8 +3,8 @@ import lodash from 'lodash';
 import { useModel } from '@umijs/max';
 
 export default function useRemoveUser() {
-  const { setUsers } = useModel('useUsersModel');
-  const { current, setCurrent } = useModel('useCurrentModel');
+  const { setUsers } = useModel('chat.users');
+  const { current, setCurrent } = useModel('chat.currentUser');
   return React.useCallback(
     (user: API.User) => {
       if (current && current.id === user.id) {

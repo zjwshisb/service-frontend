@@ -1,13 +1,15 @@
 import React from 'react';
 import { Modal, Table, Button } from 'antd';
-import { useModel } from '@umijs/max';
 import type { ColumnsType } from 'antd/es/table';
 import { getChatSessionDetail } from '@/services';
 import MessageLine from '@/components/MessageLine';
+import { useModel } from '@umijs/max';
+import { useBoolean } from 'ahooks';
 
 const Index = () => {
   const [messages, setMessages] = React.useState<API.Message[]>([]);
-  const [messageVisible, setMessageVisible] = React.useState(false);
+
+  const [open, openAction] = useBoolean(false);
 
   const columns: ColumnsType<API.ChatSession> = [
     {
@@ -28,7 +30,7 @@ const Index = () => {
             onClick={(e) => {
               e.stopPropagation();
               getChatSessionDetail(val).then((res) => {
-                setMessageVisible(true);
+                openAction.setTrue();
                 setMessages(res.data.messages);
               });
             }}
@@ -40,7 +42,7 @@ const Index = () => {
     },
   ];
 
-  const { visible, setVisible, sessions } = useModel('useHistorySessionModal');
+  const { visible, setVisible, sessions } = useModel('chat.historySession');
 
   return (
     <>
@@ -63,12 +65,12 @@ const Index = () => {
         <Table dataSource={sessions} rowKey={'id'} columns={columns} pagination={false} />
       </Modal>
       <Modal
-        open={messageVisible}
+        open={open}
         title={'对话详情'}
         zIndex={5001}
         footer={null}
         onCancel={(e) => {
-          setMessageVisible(false);
+          openAction.setFalse();
           e.stopPropagation();
         }}
       >

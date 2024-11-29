@@ -19,7 +19,15 @@ type FileItemProps = {
 };
 
 const FileItem: React.FC<FileItemProps> = (props) => {
-  const { file, onClick, border = true, width, height, tooltip = true, preview = true } = props;
+  const {
+    file,
+    onClick,
+    border = true,
+    width = 80,
+    height = 80,
+    tooltip = true,
+    preview = true,
+  } = props;
 
   const previewProps: ImagePreviewType | boolean = React.useMemo(() => {
     if (!preview) {

@@ -1,14 +1,8 @@
 import { Footer } from '@/components';
-import {
-  AlipayCircleOutlined,
-  LockOutlined,
-  TaobaoCircleOutlined,
-  UserOutlined,
-  WeiboCircleOutlined,
-} from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { Helmet, history, useModel } from '@umijs/max';
-import { message } from 'antd';
+import { App } from 'antd';
 import { createStyles } from 'antd-style';
 import React from 'react';
 import { flushSync } from 'react-dom';
@@ -53,6 +47,8 @@ const useStyles = createStyles(({ token }) => {
 const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const { styles } = useStyles();
+
+  const { message } = App.useApp();
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
@@ -88,9 +84,8 @@ const Login: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle={'Ant Design 是西湖区最具影响力的 Web 设计规范'}
+          title="go chat service"
+          subTitle={'go chat service'}
           initialValues={{
             autoLogin: true,
           }}
@@ -105,7 +100,6 @@ const Login: React.FC = () => {
                 size: 'large',
                 prefix: <UserOutlined />,
               }}
-              placeholder={'用户名: admin or user'}
               rules={[
                 {
                   required: true,
@@ -119,7 +113,6 @@ const Login: React.FC = () => {
                 size: 'large',
                 prefix: <LockOutlined />,
               }}
-              placeholder={'密码: ant.design'}
               rules={[
                 {
                   required: true,

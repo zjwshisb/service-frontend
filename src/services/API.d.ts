@@ -127,10 +127,12 @@ declare namespace API {
   type Setting = {
     id: number;
     name: string;
-    value: string;
+    value: string | API.File;
     options: Option[];
     title: string;
     type: 'select' | 'text' | 'image';
+    created_at: string;
+    updated_at: string;
   };
 
   type CurrentUser = {

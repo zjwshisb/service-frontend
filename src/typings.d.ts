@@ -19,4 +19,6 @@ declare module 'bizcharts-plugin-slider';
 
 declare const REACT_APP_ENV: 'test' | 'dev' | 'pre' | false;
 
-declare const BASE_URL : string;
+declare const BASE_URL: string;
+
+declare const WS_URL: string;

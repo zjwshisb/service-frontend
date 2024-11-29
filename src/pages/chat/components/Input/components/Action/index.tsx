@@ -2,12 +2,11 @@ import React from 'react';
 import Picture from './components/Picture';
 import Emoji from './components/Emoji';
 import ShortcutReply from './components/ShortcutReply';
-import styles from './index.less';
 
 const Index: React.FC = () => {
   return React.useMemo(() => {
     return (
-      <div className={styles.action}>
+      <div className={'flex items-center w-full h-[50px] px-2.5 '}>
         <Emoji />
         <Picture />
         <ShortcutReply />

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function useWaitingUserModel() {
+export default function () {
   const [transfers, setTransfers] = React.useState<API.Transfer[]>([]);
 
   const [user, setUser] = React.useState<API.User>();

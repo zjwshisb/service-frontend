@@ -6,13 +6,13 @@ import styles from '../index.less';
 import myStyles from './index.less';
 import DraggableView from '@/components/DraggableView';
 import type { ColumnsType } from 'antd/es/table';
-import useAcceptUser from '@/hooks/useAcceptUser';
+import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { getTransferMessage, handleCancelTransfer } from '@/services';
 import MessageLine from '@/components/MessageLine/index';
 
 const Index = () => {
-  const { setOnMessage } = useModel('useWebsocketModel');
-  const { transfers, setTransfers } = useModel('useTransferModel');
+  const { setOnMessage } = useModel('chat.websocket');
+  const { transfers, setTransfers } = useModel('chat.transfer');
   const [messageVisible, setMessageVisible] = useState(false);
   const [messages, setMessages] = useState<API.Message[]>([]);
 
