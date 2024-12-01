@@ -1,26 +1,40 @@
 import React from 'react';
 import { SettingOutlined } from '@ant-design/icons/lib';
-import styles from '../index.less';
 import { useModel } from '@umijs/max';
-import { ModalForm, ProFormSwitch, ProFormTextArea, ProFormText } from '@ant-design/pro-components';
+import { ModalForm, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { updateChatSetting } from '@/services';
-import { App, Tooltip } from 'antd';
+import { App } from 'antd';
 import ProFormFileSelect from '@/components/ProFormFileSelect';
 import { useBoolean } from 'ahooks';
+import { FormInstance } from 'antd/es';
+import MenuItem from '../MenuItem';
 
 const Index = () => {
   const [open, openAction] = useBoolean(false);
   const { setting, fetchSetting } = useModel('chat.adminSetting');
   const { message } = App.useApp();
 
+  const form = React.useRef<FormInstance>();
+
+  React.useEffect(() => {
+    if (open && setting) {
+      form.current?.setFieldsValue(setting);
+    }
+  }, [open, setting]);
+
   return (
     <>
-      <Tooltip title={'客服设置'} placement={'left'}>
-        <div className={styles.item} onClick={openAction.setTrue} data-active={open}>
-          <SettingOutlined className={styles.icon} data-active={open} />
-        </div>
-      </Tooltip>
+      <MenuItem title={'客服设置'} onClick={openAction.setTrue} active={open}>
+        <SettingOutlined data-active={open} />
+      </MenuItem>
       <ModalForm
+        formRef={form}
+        modalProps={{
+          zIndex: 99,
+        }}
+        labelCol={{
+          span: 4,
+        }}
         open={open}
         title={'基本设置'}
         onOpenChange={openAction.set}
@@ -31,7 +45,6 @@ const Index = () => {
           return true;
         }}
         layout="horizontal"
-        initialValues={setting}
       >
         <ProFormText name={'name'} label={'客服名称'} rules={[{ max: 8, required: true }]} />
         <ProFormFileSelect name={'avatar'} label={'头像'} />

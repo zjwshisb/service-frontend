@@ -20,7 +20,7 @@ const Index: React.FC = () => {
           handleRemoveUser(user);
           setVisible(false);
           setUser(undefined);
-          message.success('转接成功');
+          message.success('转接成功').then();
         });
       }
     },

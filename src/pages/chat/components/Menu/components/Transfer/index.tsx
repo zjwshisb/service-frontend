@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import { Badge, Table, Button, Space, Modal, Tooltip } from 'antd';
-import styles from '../index.less';
+import { Button, Modal, Space, Table } from 'antd';
 import myStyles from './index.less';
 import DraggableView from '@/components/DraggableView';
 import type { ColumnsType } from 'antd/es/table';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { getTransferMessage, handleCancelTransfer } from '@/services';
 import MessageLine from '@/components/MessageLine/index';
+import MenuItem from '../MenuItem';
 
 const Index = () => {
   const { setOnMessage } = useModel('chat.websocket');
@@ -101,13 +101,9 @@ const Index = () => {
         title={'转接用户'}
         defaultVisible={false}
         trigger={(visible) => (
-          <Tooltip title={'转接用户'} placement={'left'}>
-            <div className={styles.item}>
-              <Badge count={transfers.length} size={'small'}>
-                <InfoCircleOutlined className={styles.icon} data-active={visible} />
-              </Badge>
-            </div>
-          </Tooltip>
+          <MenuItem title={'转接用户'} active={visible}>
+            <InfoCircleOutlined />
+          </MenuItem>
         )}
       >
         <Table

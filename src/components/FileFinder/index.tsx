@@ -10,6 +10,8 @@ const FileFinder: React.FC = () => {
 
   return (
     <Modal
+      getContainer={'body'}
+      zIndex={999}
       styles={{
         footer: {
           padding: '20px',

@@ -105,7 +105,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
       return (
-        <App>
+        <>
           {children}
           <FileFinder />
           {isDev && (
@@ -121,12 +121,16 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
               }}
             />
           )}
-        </App>
+        </>
       );
     },
     ...initialState?.settings,
   };
 };
+
+export function rootContainer(container: React.ReactNode) {
+  return React.createElement(App, null, <>{container}</>);
+}
 
 /**
  * @name request 配置，可以配置错误处理

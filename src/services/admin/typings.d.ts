@@ -8,11 +8,11 @@ declare namespace API {
   };
 
   type AdminChatSetting = {
-    background: string;
+    background: API.File | null;
     is_auto_accept: boolean;
     welcome_content: string;
     offline_content: string;
     name: string;
-    avatar: string;
+    avatar: API.File | null;
   };
 }

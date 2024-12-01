@@ -17,25 +17,16 @@ export async function login(params: FORM.LoginForm) {
   });
 }
 
-export async function updateAvatar(url: string) {
-  return request<API.Response>('/user/avatar', {
-    method: 'POST',
-    data: {
-      url,
-    },
-  });
-}
-
 export async function queryCurrentUser() {
-  return request<API.Response<API.CurrentUser>>('/user/info');
+  return request<API.Response<API.CurrentUser>>('/current-admin/info');
 }
 
 export async function getChatSetting() {
-  return request<API.Response<API.AdminChatSetting>>('/user/settings');
+  return request<API.Response<API.AdminChatSetting>>('/current-admin/settings');
 }
 
 export async function updateChatSetting(data: API.AdminChatSetting) {
-  return request<API.Response>('/user/settings', {
+  return request<API.Response>('/current-admin/settings', {
     data,
     method: 'PUT',
   });

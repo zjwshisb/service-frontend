@@ -1,9 +1,9 @@
 import React from 'react';
 import { CustomerServiceFilled } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import { Drawer, Table, Avatar, Tooltip } from 'antd';
+import { Avatar, Drawer, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import styles from '../index.less';
+import MenuItem from '../MenuItem';
 
 const columns: ColumnsType<API.Admin> = [
   {
@@ -37,38 +37,34 @@ const Index = () => {
 
   const [visible, setVisible] = React.useState(false);
 
-  return React.useMemo(() => {
-    return (
-      <>
-        <Tooltip title={'在线客服'} placement={'left'}>
-          <div className={styles.item} onClick={() => setVisible(true)} data-active={visible}>
-            <CustomerServiceFilled className={styles.icon} data-active={visible} />
-          </div>
-        </Tooltip>
-        <Drawer
-          open={visible}
-          placement={'right'}
-          styles={{
-            body: {
-              padding: 0,
-            },
-          }}
-          width={400}
-          onClose={(e) => {
-            setVisible(false);
-            e.stopPropagation();
-          }}
-        >
-          <Table<API.Admin>
-            rowKey={'id'}
-            size={'small'}
-            dataSource={admins}
-            pagination={false}
-            columns={columns}
-          />
-        </Drawer>
-      </>
-    );
-  }, [admins, visible]);
+  return (
+    <>
+      <MenuItem title={'在线客服'} onClick={() => setVisible(true)} active={visible}>
+        <CustomerServiceFilled />
+      </MenuItem>
+      <Drawer
+        open={visible}
+        placement={'right'}
+        styles={{
+          body: {
+            padding: 0,
+          },
+        }}
+        width={400}
+        onClose={(e) => {
+          setVisible(false);
+          e.stopPropagation();
+        }}
+      >
+        <Table<API.Admin>
+          rowKey={'id'}
+          size={'small'}
+          dataSource={admins}
+          pagination={false}
+          columns={columns}
+        />
+      </Drawer>
+    </>
+  );
 };
 export default Index;

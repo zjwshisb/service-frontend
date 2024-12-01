@@ -39,7 +39,7 @@ const Index: React.FC = () => {
   React.useEffect(() => {
     setOnSend(() => {
       return (action: API.Action<API.Message>) => {
-        const avatar = setting?.avatar || '';
+        const avatar = setting?.avatar?.thumb_url || '';
         const msg = action.data;
         msg.avatar = avatar;
         if (current && current.id === action.data.user_id) {
@@ -214,26 +214,21 @@ const Index: React.FC = () => {
   return (
     <div
       id="chat"
-      className={'min-h-[100%] bg-[#fafafa] overflow-hidden'}
+      className={
+        'bg-[#fafafa] flex items-center justify-center  h-screen overflow-hidden bg-cover bg-no-repeat'
+      }
       style={{ backgroundImage: `url(${bgImg})` }}
     >
       <Draggable handle={'#header'}>
         <div
-          className={'flex m-auto overflow-hidden rounded'}
+          className={'flex overflow-hidden rounded'}
           style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
         >
           <div className={'items-center w-[60px] h-full bg-[#ebeced]'}>
             <Menu />
           </div>
           <div className={'flex flex-1 flex-col h-full bg-white'}>
-            <div
-              className={
-                'border-b cursor-move flex flex-shrink-0 justify-between w-full h-[60px] bg-[#f3f3f3]'
-              }
-              id={'header'}
-            >
-              <Header />
-            </div>
+            <Header />
             <div className={'flex  w-full flex-1 bg-[#f3f3f3]'}>
               <UserList />
               <div className={'flex flex-1 flex-col'}>

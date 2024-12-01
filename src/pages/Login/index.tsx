@@ -9,6 +9,7 @@ import { flushSync } from 'react-dom';
 import Settings from '../../../config/defaultSettings';
 import { login } from '@/services';
 import { setToken } from '@/utils/auth';
+
 const useStyles = createStyles(({ token }) => {
   return {
     action: {
@@ -49,6 +50,7 @@ const Login: React.FC = () => {
   const { styles } = useStyles();
 
   const { message } = App.useApp();
+
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
@@ -71,60 +73,62 @@ const Login: React.FC = () => {
     history.push(urlParams.get('redirect') || '/');
   };
   return (
-    <div className={styles.container}>
-      <Helmet>
-        <title>
-          {'登录'}
-          {Settings.title && ` - ${Settings.title}`}
-        </title>
-      </Helmet>
-      <div className={'flex-1 py-8'}>
-        <LoginForm
-          contentStyle={{
-            minWidth: 280,
-            maxWidth: '75vw',
-          }}
-          title="go chat service"
-          subTitle={'go chat service'}
-          initialValues={{
-            autoLogin: true,
-          }}
-          onFinish={async (values) => {
-            await handleSubmit(values as FORM.LoginForm);
-          }}
-        >
-          <>
-            <ProFormText
-              name="username"
-              fieldProps={{
-                size: 'large',
-                prefix: <UserOutlined />,
-              }}
-              rules={[
-                {
-                  required: true,
-                  message: '用户名是必填项！',
-                },
-              ]}
-            />
-            <ProFormText.Password
-              name="password"
-              fieldProps={{
-                size: 'large',
-                prefix: <LockOutlined />,
-              }}
-              rules={[
-                {
-                  required: true,
-                  message: '密码是必填项！',
-                },
-              ]}
-            />
-          </>
-        </LoginForm>
+    <App>
+      <div className={styles.container}>
+        <Helmet>
+          <title>
+            {'登录'}
+            {Settings.title && ` - ${Settings.title}`}
+          </title>
+        </Helmet>
+        <div className={'flex-1 py-8'}>
+          <LoginForm
+            contentStyle={{
+              minWidth: 280,
+              maxWidth: '75vw',
+            }}
+            title="go chat service"
+            subTitle={'go chat service'}
+            initialValues={{
+              autoLogin: true,
+            }}
+            onFinish={async (values) => {
+              await handleSubmit(values as FORM.LoginForm);
+            }}
+          >
+            <>
+              <ProFormText
+                name="username"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <UserOutlined />,
+                }}
+                rules={[
+                  {
+                    required: true,
+                    message: '用户名是必填项！',
+                  },
+                ]}
+              />
+              <ProFormText.Password
+                name="password"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined />,
+                }}
+                rules={[
+                  {
+                    required: true,
+                    message: '密码是必填项！',
+                  },
+                ]}
+              />
+            </>
+          </LoginForm>
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </App>
   );
 };
 export default Login;

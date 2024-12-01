@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { AuditOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import styles from '../index.less';
 import DraggableView from '@/components/DraggableView';
-import { Descriptions, Empty, Tooltip } from 'antd';
+import { Descriptions, Empty } from 'antd';
 import { getUserInfo } from '@/services';
+import MenuItem from '../MenuItem';
 
 const Index = () => {
   const { current } = useModel('chat.currentUser');
@@ -26,11 +26,9 @@ const Index = () => {
       defaultVisible={false}
       top="300px"
       trigger={(visible) => (
-        <Tooltip placement={'left'} title={'用户信息'}>
-          <div className={styles.item}>
-            <AuditOutlined className={styles.icon} data-active={visible} />
-          </div>
-        </Tooltip>
+        <MenuItem title={'用户信息'} active={visible}>
+          <AuditOutlined />
+        </MenuItem>
       )}
     >
       <div>

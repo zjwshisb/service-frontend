@@ -4,6 +4,7 @@ import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
+
 const { REACT_APP_ENV = 'dev' } = process.env;
 
 /**
@@ -15,6 +16,7 @@ const PUBLIC_PATH: string = '/';
 export default defineConfig({
   define: {
     BASE_URL: 'http://127.0.0.1:8080/api/backend',
+    WS_URL: 'http://127.0.0.1:8080/api/backend/ws',
   },
   /**
    * @name 开启 hash 模式
@@ -23,6 +25,7 @@ export default defineConfig({
    */
   hash: true,
   publicPath: PUBLIC_PATH,
+
   /**
    * @name 兼容性设置
    * @description 设置 ie11 不一定完美兼容，需要检查自己使用的所有依赖

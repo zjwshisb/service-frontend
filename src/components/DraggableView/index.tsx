@@ -1,7 +1,7 @@
 import React from 'react';
 import Draggable from 'react-draggable';
-import style from './index.less';
 import usePortal from '@/hooks/usePortal';
+import classNames from 'classnames';
 
 const Index: React.FC<
   React.PropsWithChildren<{
@@ -21,23 +21,24 @@ const Index: React.FC<
     return props.defaultVisible;
   });
   return (
-    <div className={style.body}>
+    <div>
       <div className={props.triggerClass} onClick={() => setVisible((prevState) => !prevState)}>
         {props.trigger(visible)}
       </div>
       {usePortal(
         <Draggable handle={'.header'}>
           <div
-            className={style.index}
+            className={classNames('fixed box-border bg-white rounded overflow-hidden shadow', {
+              hidden: !visible,
+            })}
             style={{ width: props.width, top: props.top, left: props.left }}
-            data-display={visible}
           >
             <div className={`flex h-[60px] header`}>
-              <div className={style.left}>
-                <div className={style.dot} onClick={() => setVisible(false)} />
+              <div className={'flex items-center'}>
+                <div onClick={() => setVisible(false)} />
               </div>
-              <div className={style.center}>{props.title}</div>
-              <div className={style.right} />
+              <div>{props.title}</div>
+              <div />
             </div>
             <div>{props.children}</div>
           </div>

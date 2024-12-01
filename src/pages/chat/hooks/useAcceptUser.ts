@@ -33,7 +33,7 @@ export default function useAccept() {
               });
             }
           }
-          message.success('接入成功');
+          message.success('接入成功').then();
         })
         .catch((err) => {
           if (err.data.success === false) {
