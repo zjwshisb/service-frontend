@@ -47,7 +47,7 @@ declare namespace API {
 
   type Receipt = {
     user_id: number;
-    req_id: number;
+    req_id: string;
   };
 
   type MessageType = 'text' | 'file' | 'navigator';
@@ -74,8 +74,8 @@ declare namespace API {
     content: string;
     source: Source;
     is_success?: boolean;
-    req_id: number;
-    received_at: number;
+    req_id: string;
+    received_at: string;
     avatar: string;
   };
 
@@ -92,7 +92,7 @@ declare namespace API {
     user_id: number;
     username: string;
     avatar: string;
-    last_time: number;
+    last_time: string;
     messages: {
       type: MessageType;
       time: number;
@@ -119,7 +119,8 @@ declare namespace API {
     avatar?: string;
     online: boolean;
     messages: API.Message[];
-    last_chat_time: number;
+    last_message?: API.Message;
+    last_chat_time: string;
     unread: number;
     disabled: boolean;
   };

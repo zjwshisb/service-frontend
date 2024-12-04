@@ -10,18 +10,23 @@ import { getUsers, handleRead } from '@/services';
 import BackgroundImg from '@/assets/images/background.png';
 import { Modal } from 'antd';
 import Draggable from 'react-draggable';
-import useMount from '@/hooks/useMount';
+import { useMount } from 'ahooks';
 import useAutoAccept from '@/pages/chat/hooks/useAutoAccept';
+import FileFinder from '@/components/FileFinder';
 
 const chatWidth = 1080;
 const chatHeight = 700;
 
 const Index: React.FC = () => {
   const { connect, setOnMessage, setOnSend, close } = useModel('chat.websocket');
-  const { setUsers } = useModel('chat.users');
+  const { getUser, updateUser, users, setUsers } = useModel('chat.users');
   const { current, setCurrent, goTop } = useModel('chat.currentUser');
 
   const { setting, fetchSetting } = useModel('chat.adminSetting');
+
+  React.useEffect(() => {
+    console.log(users);
+  }, [users]);
 
   React.useEffect(() => {
     fetchSetting();
@@ -49,25 +54,23 @@ const Index: React.FC = () => {
               const newState = lodash.cloneDeep(prevState);
               newState.last_chat_time = msg.received_at;
               newState.messages.unshift(msg);
+              newState.last_message = msg;
               return newState;
             }
             return prevState;
           });
         } else {
-          setUsers((prevState) => {
-            const newState = lodash.cloneDeep(prevState);
-            const user = newState.get(msg.user_id);
-            if (user) {
-              user.messages.unshift(msg);
-              user.last_chat_time = msg.received_at;
-              return newState;
-            }
-            return prevState;
-          });
+          const user = getUser(msg.user_id);
+          if (user) {
+            user.messages.unshift(msg);
+            user.last_chat_time = msg.received_at;
+            user.last_message = msg;
+            updateUser(user);
+          }
         }
       };
     });
-  }, [current, goTop, setCurrent, setOnSend, setUsers, setting?.avatar]);
+  }, [current, getUser, goTop, setCurrent, setOnSend, setting?.avatar, updateUser]);
 
   useMount(() => {
     setOnMessage((action: API.Action<string>) => {
@@ -91,17 +94,14 @@ const Index: React.FC = () => {
         }
         return user;
       });
-      setUsers((prevState) => {
-        const user = prevState.get(action.data.user_id);
-        if (user !== undefined) {
-          const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
-          if (index > -1) {
-            user.messages[index].is_success = true;
-          }
-          return lodash.cloneDeep(prevState);
+      const user = getUser(action.data.user_id);
+      if (user !== undefined) {
+        const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
+        if (index > -1) {
+          user.messages[index].is_success = true;
         }
-        return prevState;
-      });
+        updateUser(user);
+      }
     }, 'receipt');
   });
 
@@ -120,17 +120,13 @@ const Index: React.FC = () => {
         }
         return prevState;
       });
-      setUsers((prevState) => {
-        const newState = lodash.cloneDeep(prevState);
-        const user = newState.get(msg.user_id);
-        if (user) {
-          user.messages.unshift(action.data);
-          user.unread += 1;
-          notifyMessage(user.username, msg);
-          return newState;
-        }
-        return prevState;
-      });
+      const user = getUser(msg.user_id);
+      if (user) {
+        user.messages.unshift(action.data);
+        user.unread += 1;
+        updateUser(user);
+        notifyMessage(user.username, msg);
+      }
     }, 'receive-message');
   });
 
@@ -144,17 +140,11 @@ const Index: React.FC = () => {
         }
         return prevState;
       });
-      setUsers((prevState) => {
-        if (prevState.get(action.data.user_id)) {
-          const newState = lodash.clone(prevState);
-          const user = newState.get(action.data.user_id);
-          if (user) {
-            user.online = true;
-          }
-          return newState;
-        }
-        return prevState;
-      });
+      const user = getUser(action.data.user_id);
+      if (user) {
+        user.online = true;
+        updateUser(user);
+      }
     }, 'user-online');
   });
 
@@ -168,31 +158,23 @@ const Index: React.FC = () => {
         }
         return prevState;
       });
-      setUsers((prevState) => {
-        if (prevState.get(action.data.user_id)) {
-          const newState = lodash.clone(prevState);
-          const user = newState.get(action.data.user_id);
-          if (user) {
-            user.online = false;
-          }
-          return newState;
-        }
-        return prevState;
-      });
+      const user = getUser(action.data.user_id);
+      if (user) {
+        user.online = false;
+        updateUser(user);
+      }
     }, 'user-offline');
   });
 
   React.useEffect(() => {
     getUsers().then((res) => {
       setCurrent(undefined);
-      setUsers(() => {
-        const map = new Map<number, API.User>();
-        res.data.forEach((v) => {
-          map.set(v.id, v);
-        });
-        connect();
-        return map;
+      const map = new Map<number, API.User>();
+      res.data.forEach((v) => {
+        map.set(v.id, v);
       });
+      connect();
+      setUsers(map);
     });
     return () => {
       close();
@@ -219,6 +201,7 @@ const Index: React.FC = () => {
       }
       style={{ backgroundImage: `url(${bgImg})` }}
     >
+      <FileFinder />
       <Draggable handle={'#header'}>
         <div
           className={'flex overflow-hidden rounded'}
@@ -229,7 +212,7 @@ const Index: React.FC = () => {
           </div>
           <div className={'flex flex-1 flex-col h-full bg-white'}>
             <Header />
-            <div className={'flex  w-full flex-1 bg-[#f3f3f3]'}>
+            <div className={'flex  w-full flex-1 bg-[#f3f3f3] overflow-hidden'}>
               <UserList />
               <div className={'flex flex-1 flex-col'}>
                 <MessageList />

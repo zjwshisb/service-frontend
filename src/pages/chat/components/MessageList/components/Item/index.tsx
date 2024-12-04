@@ -5,18 +5,18 @@ import Spin from '../components/Spin';
 import Text from '../components/Text';
 import Image from '../components/Image';
 import Navigator from '../components/Navigator';
-import moment from 'moment';
 import Notice from '../Notice';
+import dayjs from 'dayjs';
 
 const Index: React.FC<{
   message: API.Message;
   prev?: API.Message;
 }> = (props) => {
   return React.useMemo(() => {
-    const currMoment = moment(props.message.received_at * 1000);
+    const currMoment = dayjs(props.message.received_at);
     let time: JSX.Element = <></>;
     if (props.prev) {
-      const duration = props.message.received_at - props.prev.received_at;
+      const duration = currMoment.diff(props.prev.received_at);
       if (duration > 30 * 60) {
         time = <Notice>{currMoment.format('YYYY-MM-DD HH:mm:ss')}</Notice>;
       }

@@ -6,14 +6,14 @@ import { SmileOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 
 const Index = () => {
-  const { append } = useModel('useInputModel');
+  const { append } = useModel('chat.input');
 
   return (
     <div>
       <Popover
         content={
           <Picker
-            set={'apple'}
+            locale={'zh'}
             data={data}
             onEmojiSelect={(e: { native: string }) => {
               if ('native' in e && e.native) {

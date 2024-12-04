@@ -5,9 +5,8 @@ import TransferForm from './components/TransferForm/index';
 import { Empty } from 'antd';
 
 const Index: React.FC = () => {
-  const { users } = useModel('chat.users');
-
   const { current } = useModel('chat.currentUser');
+  const { users } = useModel('chat.users');
 
   const [title, setTile] = useState('');
 
@@ -36,6 +35,7 @@ const Index: React.FC = () => {
   return (
     <div className={'flex-shrink-0 w-1/3 overflow-y-auto border-r h-full'}>
       <TransferForm />
+
       <Helmet defer={false}>
         <title>{title}</title>
       </Helmet>

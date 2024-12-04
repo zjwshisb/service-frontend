@@ -10,71 +10,54 @@ import styles from './index.less';
 
 const Index: React.FC<{
   user: API.User;
-}> = (props) => {
+}> = ({ user }) => {
   const { setCurrent, current, goTop } = useModel('chat.currentUser');
-  const { setUsers } = useModel('chat.users');
+  const { removeUser, addUser } = useModel('chat.users');
 
-  const onClick = React.useCallback(
-    (id: number) => {
-      setUsers((prevState) => {
-        const newUsers = lodash.cloneDeep(prevState);
-        const user = newUsers.get(id);
-        if (!user) {
-          return prevState;
-        }
-        if (user.unread > 0) {
-          user.unread = 0;
-          if (user.messages.length > 0) {
-            handleRead(user.id, user.messages[0].id).then().catch();
-          } else {
-            handleRead(user.id).then().catch();
-          }
-        }
-        if (current) {
-          newUsers.set(current.id, current);
-        }
-        newUsers.delete(id);
-        setCurrent(lodash.cloneDeep(user));
-        goTop();
-        return newUsers;
-      });
-    },
-    [current, goTop, setCurrent, setUsers],
-  );
-
-  const { length } = props.user.messages;
-
-  const lastMessage: API.Message | undefined = React.useMemo(() => {
-    return length > 0 ? props.user.messages[0] : undefined;
-  }, [length, props.user.messages]);
+  const onClick = React.useCallback(() => {
+    if (user.unread > 0) {
+      user.unread = 0;
+      if (user.messages.length > 0) {
+        handleRead(user.id, user.messages[0].id).then().catch();
+      } else {
+        handleRead(user.id).then().catch();
+      }
+    }
+    if (current) {
+      addUser(current);
+    }
+    removeUser(user);
+    setCurrent(lodash.cloneDeep(user));
+    goTop();
+  }, [addUser, current, goTop, removeUser, setCurrent, user]);
 
   return (
     <div
       className={styles.item}
-      onClick={() => onClick(props.user.id)}
-      data-active={current && current.id === props.user.id}
-      data-online={props.user.online}
+      onClick={() => onClick()}
+      data-active={current && current.id === user.id}
+      data-online={user.online}
     >
       <div className={styles.avatar}>
-        <Badge count={props.user.unread} size={'small'}>
-          <Avatar size={50} shape="square" src={props.user.avatar}>
-            {props.user.username}
+        <Badge count={user.unread} size={'small'}>
+          <Avatar size={50} shape="square" src={user.avatar}>
+            {user.username}
           </Avatar>
         </Badge>
       </div>
       <div className={styles.info}>
         <div className={styles.first}>
-          <div className={styles.name}>{props.user.username}</div>
+          <div className={styles.name}>{user.username}</div>
           <div className={styles.time}>
-            {lastMessage && <LastTime time={lastMessage.received_at} />}
+            {user.last_message && <LastTime time={user.last_message.received_at} />}
           </div>
         </div>
         <div className={styles.last}>
           <div className={styles.message}>
-            {lastMessage && <LastMessage message={lastMessage} />}
+            {user.last_message && <LastMessage message={user.last_message} />}
           </div>
           <div className={styles.action}>
-            <Menu user={props.user} />
+            <Menu user={user} />
           </div>
         </div>
       </div>

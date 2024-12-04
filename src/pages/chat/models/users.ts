@@ -1,14 +1,44 @@
+import { useMap } from 'ahooks';
 import React from 'react';
+import lodash from 'lodash';
 
 /**
  * 聊天用户map
  */
 export default function () {
-  const [users, setUsers] = React.useState<Map<number, API.User>>(() => {
-    return new Map<number, API.User>();
-  });
+  const [users, usersAction] = useMap<number, API.User>(new Map());
+
+  React.useEffect(() => {
+    console.log(users);
+  }, [users]);
+
+  const updateUser = React.useCallback(
+    (user: API.User) => {
+      usersAction.set(user.id, lodash.cloneDeep(user));
+    },
+    [usersAction],
+  );
+
+  const addUser = React.useCallback(
+    (user: API.User) => {
+      usersAction.set(user.id, user);
+    },
+    [usersAction],
+  );
+
+  const removeUser = React.useCallback(
+    (user: API.User) => {
+      usersAction.remove(user.id);
+    },
+    [usersAction],
+  );
+
   return {
-    users,
-    setUsers,
+    users: users,
+    addUser,
+    updateUser,
+    setUsers: usersAction.setAll,
+    getUser: usersAction.get,
+    removeUser,
   };
 }

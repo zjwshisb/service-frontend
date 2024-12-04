@@ -1,22 +1,19 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import { App, Avatar, Badge, List, Modal, Popover, Skeleton, Typography } from 'antd';
-import { timeFormat } from '@/utils';
-import myStyles from './index.less';
+import { Avatar, Button, List, Modal, Popover, Skeleton, Typography } from 'antd';
 import DraggableView from '@/components/DraggableView';
 import { getMessageTypeLabel } from '@/pages/chat/util';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { cancelChatSessions } from '@/services';
 import MenuItem from '@/pages/chat/components/Menu/components/MenuItem';
+import { If, Then } from 'react-if';
 
 const Index = () => {
   const { setOnMessage } = useModel('chat.websocket');
 
   const { waitingUsers, setWaitingUsers } = useModel('chat.waitingUsers');
   const { notify } = useModel('chat.notification');
-
-  const { message } = App.useApp();
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.WaitingUser[]>) => {
@@ -51,13 +48,17 @@ const Index = () => {
         itemLayout="horizontal"
         dataSource={reverseData}
         size={'small'}
-        locale={{
-          emptyText: '暂无数据',
-        }}
         renderItem={(item) => (
           <List.Item
+            styles={{
+              actions: {
+                marginLeft: 10,
+              },
+            }}
             actions={[
-              <a
+              <Button
+                size={'small'}
+                type={'text'}
                 key={'accept'}
                 onClick={(e) => {
                   accept(item.session_id);
@@ -65,45 +66,42 @@ const Index = () => {
                 }}
               >
                 接入
-              </a>,
-              <a
+              </Button>,
+              <Button
+                size={'small'}
+                type={'text'}
+                danger={true}
                 key={'refuse'}
                 className={'red-6'}
                 onClick={(e) => {
                   Modal.confirm({
                     title: '提示',
                     content: '确定拒绝该会话?',
-                    onOk() {
-                      cancelChatSessions(item.session_id)
-                        .then()
-                        .catch((err) => {
-                          if (err && err.message) {
-                            message.error(err.message);
-                          }
-                        });
+                    async onOk() {
+                      await cancelChatSessions(item.session_id);
                     },
                   });
                   e.stopPropagation();
                 }}
               >
                 拒绝
-              </a>,
+              </Button>,
             ]}
           >
             <Skeleton avatar title={false} active loading={false}>
               <Popover
                 content={
                   <List
+                    className={'max-w-96'}
                     dataSource={[...item.messages].reverse()}
                     size={'small'}
-                    className={myStyles.simpleMessage}
                     renderItem={(i) => {
                       return (
-                        <List.Item className={myStyles.msgItem}>
-                          <span className={myStyles.time}>{i.time}</span>
-                          <span className={myStyles.msg}>
+                        <List.Item className={'overflow-hidden flex items-center'}>
+                          <span className={'flex-shrink-0'}>{i.time}</span>
+                          <Typography.Text ellipsis={true} className={'ml-2'}>
                             {getMessageTypeLabel(i.content, i.type)}
-                          </span>
+                          </Typography.Text>
                         </List.Item>
                       );
                     }}
@@ -112,31 +110,28 @@ const Index = () => {
                 placement={'bottom'}
               >
                 <List.Item.Meta
-                  className={myStyles.listItem}
                   avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
                   title={
-                    <div>
-                      <span>{item.username}</span>
-                      <span className={myStyles.time} style={{ marginLeft: '20px' }}>
-                        {timeFormat(item.last_time)}
-                      </span>
+                    <div className={'w-full text-sm'}>
+                      <div>{item.username}</div>
+                      <div>{item.last_time}</div>
                     </div>
                   }
                   description={
-                    <Badge
-                      count={item.message_count}
-                      size={'small'}
-                      className={myStyles.messageContent}
-                    >
-                      <Typography.Text ellipsis={true} className={myStyles.messageContent}>
-                        {item.messages.length > 0
-                          ? getMessageTypeLabel(
-                              item.messages[item.messages.length - 1].content,
-                              item.messages[item.messages.length - 1].type,
-                            )
-                          : ''}
-                      </Typography.Text>
-                    </Badge>
+                    <If condition={item.messages.length > 0}>
+                      <Then>
+                        {() => (
+                          <Typography.Text ellipsis={true}>
+                            {item.messages.length > 0
+                              ? getMessageTypeLabel(
+                                  item.messages[item.messages.length - 1].content,
+                                  item.messages[item.messages.length - 1].type,
+                                )
+                              : ''}
+                          </Typography.Text>
+                        )}
+                      </Then>
+                    </If>
                   }
                 />
               </Popover>

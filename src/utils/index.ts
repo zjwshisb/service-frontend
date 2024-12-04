@@ -17,9 +17,9 @@ export async function extraData<T>(
   }
 }
 
-export function timeFormat(timestamp: number) {
+export function timeFormat(datetime: string) {
   const today = dayjs();
-  const pre = dayjs(timestamp * 1000);
+  const pre = dayjs(datetime);
   if (pre.year() === today.year() && pre.month() === today.month() && today.date() === pre.date()) {
     return pre.format('HH:mm:ss');
   }
@@ -38,9 +38,9 @@ export async function createMsg(
       user_id: userId,
       content,
       source: 1,
-      req_id: res.data.reqId,
+      req_id: res.data.req_id,
       avatar: '',
-      received_at: new Date().getTime() / 1000,
+      received_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     },
     time: new Date().getTime(),
   };

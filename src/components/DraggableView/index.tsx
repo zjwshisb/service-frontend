@@ -2,6 +2,7 @@ import React from 'react';
 import Draggable from 'react-draggable';
 import usePortal from '@/hooks/usePortal';
 import classNames from 'classnames';
+import { Icon } from '@iconify/react';
 
 const Index: React.FC<
   React.PropsWithChildren<{
@@ -33,12 +34,17 @@ const Index: React.FC<
             })}
             style={{ width: props.width, top: props.top, left: props.left }}
           >
-            <div className={`flex h-[60px] header`}>
-              <div className={'flex items-center'}>
-                <div onClick={() => setVisible(false)} />
-              </div>
+            <div className={`flex header p-1 bg-slate-50 justify-between items-center`}>
               <div>{props.title}</div>
-              <div />
+              <div className={'text-lg'}>
+                <Icon
+                  icon={'mdi:close'}
+                  className={'cursor-pointer'}
+                  onClick={() => {
+                    setVisible(false);
+                  }}
+                ></Icon>
+              </div>
             </div>
             <div>{props.children}</div>
           </div>

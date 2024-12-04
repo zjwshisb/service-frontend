@@ -63,7 +63,7 @@ export async function getTransferMessage(id: number) {
 }
 
 export async function getUserInfo(uid: number) {
-  return request<API.Response<Record<string, string>>>(`/ws/user/${uid}`);
+  return request<API.Response<Record<string, string>>>(`/ws/chat-user/${uid}`);
 }
 
 export async function getUsers() {
@@ -77,7 +77,7 @@ export async function removeUser(uid: number) {
 }
 
 export async function handleRead(uid: number, msgId?: number) {
-  return request<API.Response>('/ws/read-all', {
+  return request<API.Response>('/ws/read', {
     method: 'post',
     data: {
       id: uid,
@@ -89,10 +89,10 @@ export async function handleRead(uid: number, msgId?: number) {
 export async function getReqId() {
   return request<
     API.Response<{
-      reqId: number;
+      req_id: string;
     }>
   >('/ws/req-id', {
-    method: 'post',
+    method: 'get',
   });
 }
 

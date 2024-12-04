@@ -21,7 +21,7 @@ export default function () {
 
   const [isShowNotice, setIsShowNotice] = React.useState(false);
 
-  const { setUsers } = useModel('chat.users');
+  const { getUser, updateUser } = useModel('chat.users');
   const { setCurrent } = useModel('chat.currentUser');
 
   const { message } = App.useApp();
@@ -143,19 +143,16 @@ export default function () {
               }
               return user;
             });
-            setUsers((prevState) => {
-              const user = prevState.get(action.data.user_id);
-              if (user !== undefined) {
-                const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
-                if (index > -1) {
-                  if (user.messages[index].is_success === undefined) {
-                    user.messages[index].is_success = false;
-                  }
+            const user = getUser(action.data.user_id);
+            if (user !== undefined) {
+              const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
+              if (index > -1) {
+                if (user.messages[index].is_success === undefined) {
+                  user.messages[index].is_success = false;
                 }
-                return lodash.clone(prevState);
               }
-              return prevState;
-            });
+              updateUser(user);
+            }
           }, 2000);
           if (onSend) {
             onSend(action);
@@ -176,7 +173,7 @@ export default function () {
         return false;
       }
     },
-    [onSend, setCurrent, setUsers, websocket],
+    [getUser, onSend, setCurrent, updateUser, websocket],
   );
 
   return {

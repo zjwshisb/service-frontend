@@ -1,12 +1,11 @@
 import React from 'react';
 import { handleAccept, handleRead } from '@/services';
-import lodash from 'lodash';
 import { useModel } from '@umijs/max';
 import { createMsg } from '@/utils';
 import { App, Modal } from 'antd';
 
 export default function useAccept() {
-  const { setUsers } = useModel('chat.users');
+  const { addUser } = useModel('chat.users');
   const { send } = useModel('chat.websocket');
   const { current, setCurrent, goTop } = useModel('chat.currentUser');
   const { setting } = useModel('chat.adminSetting');
@@ -22,11 +21,7 @@ export default function useAccept() {
             setCurrent(res.data);
             handleRead(res.data.id, res.data.messages[0]?.id).then().catch();
           } else {
-            setUsers((prevState) => {
-              const newState = lodash.clone(prevState);
-              newState.set(res.data.id, res.data);
-              return newState;
-            });
+            addUser(res.data);
             if (setting?.welcome_content) {
               createMsg(setting?.welcome_content, res.data.id).then((msg) => {
                 send(msg);
@@ -44,6 +39,6 @@ export default function useAccept() {
           }
         });
     },
-    [current?.id, message, goTop, setCurrent, setUsers, setting?.welcome_content, send],
+    [current?.id, message, goTop, setCurrent, addUser, setting?.welcome_content, send],
   );
 }

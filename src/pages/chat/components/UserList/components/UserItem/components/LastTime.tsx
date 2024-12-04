@@ -2,7 +2,7 @@ import React from 'react';
 import { timeFormat } from '@/utils';
 
 const Index: React.FC<{
-  time: number;
+  time: string;
 }> = (props) => {
   const [content, setContent] = React.useState('');
 
