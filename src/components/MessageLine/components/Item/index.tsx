@@ -1,7 +1,6 @@
 import React from 'react';
-import { Avatar, Image, Card } from 'antd';
-import moment from 'moment';
-import style from './index.less';
+import { Image, Card } from 'antd';
+import classNames from 'classnames';
 
 const Index: React.FC<{
   item: API.Message;
@@ -12,12 +11,12 @@ const Index: React.FC<{
     case 'navigator':
       obj = JSON.parse(props.item.content);
       content = (
-        <Card bodyStyle={{ padding: '5px' }} cover={<Image src={obj.content} />}>
+        <Card styles={{ body: { padding: '5px' } }} cover={<Image src={obj.image} />}>
           <Card.Meta title={obj.title} />
         </Card>
       );
       break;
-    case 'image':
+    case 'file':
       content = <Image src={props.item.content} />;
       break;
     case 'text':
@@ -28,16 +27,15 @@ const Index: React.FC<{
   }
 
   return (
-    <div className={style.container}>
-      <div className={`${style.item} ${props.item.source === 0 ? style.right : ''}`}>
-        <div className={style.avatar}>
-          <Avatar src={props.item.avatar} shape="square" />
-        </div>
-        <div className={style.content}>
-          <div className={style.time}>
-            {moment(props.item.received_at * 1000).format('YYYY-MM-DD HH:mm:ss')}
-          </div>
-          <div className={style.body}>{content}</div>
+    <div className={'inline-block'}>
+      <div
+        className={classNames('flex flex-row justify-end', {
+          'flex-row-reverse': props.item.source === 0,
+        })}
+      >
+        <div className={'flex-1 px-2.5 text-gray-600'}>
+          <div>{props.item.received_at}</div>
+          <div className={'whitespace-pre-wrap'}>{content}</div>
         </div>
       </div>
     </div>

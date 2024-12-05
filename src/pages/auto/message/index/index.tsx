@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProTable, PageContainer, ActionType } from '@ant-design/pro-components';
+import { ProTable, PageContainer } from '@ant-design/pro-components';
 import { Space } from 'antd';
 import { getAutoMessage, deleteAutoMessage } from '@/services/auto';
 import DeleteAction from '@/components/DeleteAction';
@@ -10,8 +10,6 @@ import MessageContent from '@/pages/auto/message/components/MessageContent';
 import { useModel } from '@@/exports';
 
 const Index = () => {
-  const actionRef = React.useRef<ActionType>();
-
   const { getOptions } = useModel('options');
   const columns = useTableColumn<API.AutoMessage>([
     {
@@ -37,12 +35,12 @@ const Index = () => {
       dataIndex: 'id',
       title: '操作',
       fixed: 'right',
-      render(_, record) {
+      render(_, record, __, action) {
         return (
           <Space>
             <EditAction key="edit" path={`/auto/message/${record.id}/edit`} />
             <DeleteAction
-              onSuccess={actionRef.current?.reload}
+              onSuccess={action?.reload}
               key={'delete'}
               id={record.id}
               request={deleteAutoMessage}
@@ -58,7 +56,6 @@ const Index = () => {
         search={{
           collapsed: false,
         }}
-        actionRef={actionRef}
         rowKey={'id'}
         columns={columns}
         request={getAutoMessage}

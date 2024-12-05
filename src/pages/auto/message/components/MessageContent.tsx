@@ -12,7 +12,7 @@ const MessageContent: React.FC<{
         return (
           <Card
             hoverable
-            className={'w-32 inline-block'}
+            className={'w-32 inline-block text-left'}
             styles={{
               body: {
                 padding: 0,

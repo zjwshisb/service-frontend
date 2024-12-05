@@ -13,8 +13,8 @@ const Index = () => {
 
   const { data: rules, loading } = useRequest(getSystemAutoRule);
   return (
-    <PageContainer>
-      <ProCard layout={'center'} loading={loading}>
+    <PageContainer loading={loading}>
+      <ProCard layout={'center'}>
         <ProForm
           className={'w-full'}
           submitter={{

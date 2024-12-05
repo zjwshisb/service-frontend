@@ -10,7 +10,11 @@ const Index: React.FC<{
       <>
         {props.isSuccess === undefined && <Spin />}
         {props.isSuccess === false && (
-          <InfoCircleOutlined className={'error'} style={{ color: '#ff4d4f' }} />
+          <InfoCircleOutlined
+            className={
+              'text-red-600 flex items-center justify-center cursor-pointer h-[30px] text-xl'
+            }
+          />
         )}
       </>
     );

@@ -24,7 +24,8 @@ declare namespace API {
     | 'file-types'
     | 'message-types'
     | 'auto-rule-match-types'
-    | 'auto-rule-reply-types';
+    | 'auto-rule-reply-types'
+    | 'session-status';
 
   type ActionType =
     | 'send-message'
@@ -55,7 +56,7 @@ declare namespace API {
   type NavigatorContent = {
     title: string;
     content: string;
-    url: string;
+    image: string;
   };
 
   type SourceUser = 0;
@@ -202,15 +203,15 @@ declare namespace API {
     };
   }
 
-  type ChatSessionStatus = 'cancel' | 'accept' | 'wait';
+  type ChatSessionStatus = 'cancel' | 'accept' | 'wait' | 'close';
 
   type ChatSession = {
     id: number;
     admin_name: string;
-    user_name: string;
+    username: string;
     queried_at: string;
     accepted_at: string;
-    broke_at: string;
+    broken_at: string;
     type_label: string;
     status: ChatSessionStatus;
     canceled_at: string;

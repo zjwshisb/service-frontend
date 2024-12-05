@@ -133,13 +133,13 @@ export async function getChatSessions(params: FORM.Pagination) {
   });
 }
 
-export async function cancelChatSessions(id: React.ReactText) {
-  return request<API.Pagination>(`/chat-sessions/${id}/cancel`, {
+export async function cancelChatSessions(id: React.Key) {
+  return request<API.Response>(`/chat-sessions/${id}/cancel`, {
     method: 'POST',
   });
 }
 
-export async function getChatSessionDetail(id: React.ReactText) {
+export async function getChatSessionDetail(id: React.Key) {
   return request<
     API.Response<{
       messages: API.Message[];
@@ -153,7 +153,7 @@ export async function getTransfers() {
   return request<API.Pagination<API.Transfer>>(`/transfers`);
 }
 
-export async function cancelTransfer(id: React.ReactText) {
+export async function cancelTransfer(id: React.Key) {
   return request<API.Pagination<API.Transfer>>(`/transfers/${id}/cancel`, {
     method: 'post',
   });

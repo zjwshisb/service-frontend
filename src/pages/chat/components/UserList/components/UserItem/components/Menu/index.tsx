@@ -1,11 +1,10 @@
 import React from 'react';
-import { Modal } from 'antd';
+import { Modal, Space } from 'antd';
 import { useModel } from '@umijs/max';
 import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { removeUser } from '@/services';
 import HistorySession from '../HistorySession';
 import { MessageOutlined, CloseOutlined, SwapOutlined } from '@ant-design/icons';
-import styles from './index.less';
 
 const Index: React.FC<{
   user: API.User;
@@ -40,28 +39,30 @@ const Index: React.FC<{
   return (
     <>
       <HistorySession />
-      <div className={styles.menuContent}>
-        <MessageOutlined
-          onClick={(e) => {
-            show(props.user.id);
-            e.stopPropagation();
-          }}
-        />
-        {!props.user.disabled && (
-          <SwapOutlined
+      <div className={'w-full text-right'}>
+        <Space>
+          <MessageOutlined
             onClick={(e) => {
-              setUser(props.user);
-              setVisible(true);
+              show(props.user.id);
               e.stopPropagation();
             }}
           />
-        )}
-        <CloseOutlined
-          onClick={(e) => {
-            handleDelete(props.user);
-            e.stopPropagation();
-          }}
-        />
+          {!props.user.disabled && (
+            <SwapOutlined
+              onClick={(e) => {
+                setUser(props.user);
+                setVisible(true);
+                e.stopPropagation();
+              }}
+            />
+          )}
+          <CloseOutlined
+            onClick={(e) => {
+              handleDelete(props.user);
+              e.stopPropagation();
+            }}
+          />
+        </Space>
       </div>
     </>
   );

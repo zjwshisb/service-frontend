@@ -33,7 +33,7 @@ const Index: React.FC = () => {
   }, [current, users]);
 
   return (
-    <div className={'flex-shrink-0 w-1/3 overflow-y-auto border-r h-full'}>
+    <div className={'flex-shrink-0 overflow-x-hidden w-1/3 overflow-y-auto border-r h-full'}>
       <TransferForm />
 
       <Helmet defer={false}>

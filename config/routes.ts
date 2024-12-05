@@ -96,12 +96,12 @@
       {
         path: '/session',
         name: '会话记录',
-        component: './session/list/index',
+        component: './session/index/index',
       },
       {
         path: '/session/:id',
         name: '会话详情',
-        component: './session/detail/index',
+        component: './session/show/index',
       },
     ],
   },

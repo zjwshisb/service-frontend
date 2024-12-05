@@ -1,5 +1,5 @@
 import React from 'react';
-import { PageContainer, ProTable, ActionType } from '@ant-design/pro-components';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { Space } from 'antd';
 import { getAutoRules, deleteAutoRule } from '@/services/auto';
 import useTableColumn from '@/hooks/useTableColumn';
@@ -10,8 +10,6 @@ import MessageContent from '@/pages/auto/message/components/MessageContent';
 import { useModel } from '@umijs/max';
 
 const Index = () => {
-  const action = React.useRef<ActionType>();
-
   const { getOptions } = useModel('options');
 
   const columns = useTableColumn<API.AutoRule>([
@@ -87,15 +85,11 @@ const Index = () => {
       title: '操作',
       valueType: 'option',
       fixed: 'right',
-      render(_, record) {
+      render(_, record, __, action) {
         return (
           <Space>
             <EditAction path={`/auto/rule/${record.id}/edit`} />
-            <DeleteAction
-              onSuccess={action.current?.reload}
-              id={record.id}
-              request={deleteAutoRule}
-            />
+            <DeleteAction onSuccess={action?.reload} id={record.id} request={deleteAutoRule} />
           </Space>
         );
       },
@@ -111,7 +105,6 @@ const Index = () => {
         search={{
           collapsed: false,
         }}
-        actionRef={action}
         request={getAutoRules}
         columns={columns}
         rowKey={'id'}
