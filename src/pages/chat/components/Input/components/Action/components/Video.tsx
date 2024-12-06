@@ -1,9 +1,9 @@
 import React from 'react';
-import { PictureOutlined } from '@ant-design/icons/lib';
+import { Icon } from '@iconify/react';
 // import { createMsg } from '@/utils';
 // import { useModel } from '@umijs/max';
 
-const Index = () => {
+const Video = () => {
   // const { current } = useModel('chat.currentUser');
   // const { send } = useModel('chat.websocket');
   //
@@ -20,10 +20,6 @@ const Index = () => {
   //   [current, send],
   // );
 
-  return (
-    <div>
-      <PictureOutlined className={'action-icon'} />
-    </div>
-  );
+  return <Icon icon={'tabler:video'} className={'cursor-pointer'} />;
 };
-export default Index;
+export default Video;

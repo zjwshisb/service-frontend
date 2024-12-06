@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 
-const Index: React.FC<{
+const Navigator: React.FC<{
   content: string;
 }> = (props) => {
   const item: API.NavigatorContent = JSON.parse(props.content);
@@ -20,4 +20,4 @@ const Index: React.FC<{
   );
 };
 
-export default Index;
+export default Navigator;

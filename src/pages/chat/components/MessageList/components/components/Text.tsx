@@ -1,13 +1,13 @@
 import React from 'react';
 import { isUrl } from '@/utils/utils';
 
-const Index: React.FC<{
+const Text: React.FC<{
   content: string;
 }> = (props) => {
   return (
     <>
       {isUrl(props.content) ? (
-        <a target="_blank" href={props.content}>
+        <a target="_blank" href={props.content} rel="noreferrer">
           <div>{props.content}</div>
         </a>
       ) : (
@@ -17,4 +17,4 @@ const Index: React.FC<{
   );
 };
 
-export default Index;
+export default Text;

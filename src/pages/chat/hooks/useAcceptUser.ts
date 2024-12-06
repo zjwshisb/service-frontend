@@ -1,7 +1,6 @@
 import React from 'react';
 import { handleAccept, handleRead } from '@/services';
 import { useModel } from '@umijs/max';
-import { createMsg } from '@/utils';
 import { App, Modal } from 'antd';
 
 export default function useAccept() {
@@ -23,9 +22,7 @@ export default function useAccept() {
           } else {
             addUser(res.data);
             if (setting?.welcome_content) {
-              createMsg(setting?.welcome_content, res.data.id).then((msg) => {
-                send(msg);
-              });
+              send(setting?.welcome_content, 'text');
             }
           }
           message.success('接入成功').then();

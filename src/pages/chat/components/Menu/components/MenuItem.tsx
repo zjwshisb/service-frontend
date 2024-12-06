@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip } from 'antd';
+import { Button, Tooltip } from 'antd';
 import classNames from 'classnames';
 
 const MenuItem: React.FC<
@@ -12,15 +12,18 @@ const MenuItem: React.FC<
   return (
     <Tooltip title={props.title} placement={'left'}>
       <div
-        className={classNames(
-          'w-full h-[50px] text-xl flex items-center justify-center cursor-pointer ',
-          {
-            'text-green-600': props.active,
-          },
-        )}
+        className={classNames('w-full h-[50px] flex items-center justify-center', {})}
         onClick={props.onClick}
       >
-        {props.children}
+        <Button
+          type={'text'}
+          size={'large'}
+          className={classNames('text-xl', {
+            'text-green-600': props.active,
+          })}
+        >
+          {props.children}
+        </Button>
       </div>
     </Tooltip>
   );

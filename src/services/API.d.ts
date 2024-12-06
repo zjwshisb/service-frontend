@@ -51,7 +51,7 @@ declare namespace API {
     req_id: string;
   };
 
-  type MessageType = 'text' | 'file' | 'navigator';
+  type MessageType = 'text' | 'navigator' | 'image' | 'audio' | 'video' | 'pdf';
 
   type NavigatorContent = {
     title: string;

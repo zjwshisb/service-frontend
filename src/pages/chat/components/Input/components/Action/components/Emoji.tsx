@@ -5,7 +5,7 @@ import { Popover } from 'antd';
 import { SmileOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 
-const Index = () => {
+const Emoji = () => {
   const { append } = useModel('chat.input');
 
   return (
@@ -31,4 +31,4 @@ const Index = () => {
     </div>
   );
 };
-export default Index;
+export default Emoji;

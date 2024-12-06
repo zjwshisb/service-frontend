@@ -90,14 +90,19 @@ const Form: React.FC<{
                   />
                 );
               }
-              case 'file': {
-                return <ProFormFileSelect name={'file'} label={'文件'}></ProFormFileSelect>;
-              }
               case 'navigator': {
                 return <NavigatorCardField />;
               }
               default:
-                return <></>;
+                return (
+                  <ProFormFileSelect
+                    fieldProps={{
+                      type: type,
+                    }}
+                    name={'file'}
+                    label={'文件'}
+                  ></ProFormFileSelect>
+                );
             }
           }}
         </ProFormDependency>

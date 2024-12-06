@@ -1,9 +1,8 @@
 import React from 'react';
-import { Modal, Space } from 'antd';
+import { Button, Modal, Space } from 'antd';
 import { useModel } from '@umijs/max';
 import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { removeUser } from '@/services';
-import HistorySession from '../HistorySession';
 import { MessageOutlined, CloseOutlined, SwapOutlined } from '@ant-design/icons';
 
 const Index: React.FC<{
@@ -37,17 +36,19 @@ const Index: React.FC<{
   );
 
   return (
-    <>
-      <HistorySession />
-      <div className={'w-full text-right'}>
-        <Space>
+    <div className={'w-full text-right'}>
+      <Space>
+        <Button type={'text'} size={'small'}>
           <MessageOutlined
             onClick={(e) => {
               show(props.user.id);
               e.stopPropagation();
             }}
           />
-          {!props.user.disabled && (
+        </Button>
+
+        {!props.user.disabled && (
+          <Button type={'text'} size={'small'}>
             <SwapOutlined
               onClick={(e) => {
                 setUser(props.user);
@@ -55,16 +56,18 @@ const Index: React.FC<{
                 e.stopPropagation();
               }}
             />
-          )}
+          </Button>
+        )}
+        <Button type={'text'} size={'small'}>
           <CloseOutlined
             onClick={(e) => {
               handleDelete(props.user);
               e.stopPropagation();
             }}
           />
-        </Space>
-      </div>
-    </>
+        </Button>
+      </Space>
+    </div>
   );
 };
 export default Index;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Badge } from 'antd';
+import { Avatar, Badge, Typography } from 'antd';
 import { useModel } from '@umijs/max';
 import lodash from 'lodash';
 import LastTime from './components/LastTime';
@@ -33,12 +33,10 @@ const Index: React.FC<{
 
   return (
     <div
-      className={classNames('flex w-full min-h-[70px] p-2.5 overflow-hidden', {
+      className={classNames('flex w-full min-h-[70px] p-2.5', {
         'bg-[#dedede]': current && current.id === user.id,
       })}
       onClick={() => onClick()}
-      data-active={current && current.id === user.id}
-      data-online={user.online}
     >
       <div
         className={classNames('flex-shrink-0 w-[50px] h-[50px]', {
@@ -52,16 +50,16 @@ const Index: React.FC<{
         </Badge>
       </div>
       <div className={'flex-1 ml-2.5 overflow-hidden'}>
-        <div className={'text-nowrap overflow-hidden w-full flex items-center'}>
-          <div className={'flex-1 text-lg overflow-hidden text-ellipsis'}>{user.username}</div>
+        <div className={'w-full flex items-center'}>
+          <Typography.Text ellipsis={true}>{user.username}</Typography.Text>
           <div className={'w-24 text-[#acacac] text-sm text-right flex-shrink-0'}>
             {user.last_message && <LastTime time={user.last_message.received_at} />}
           </div>
         </div>
-        <div className={'flex justify-between overflow-hidden text-nowrap text-[#888]'}>
-          <div className={'flex-1 overflow-hidden text-ellipsis'}>
+        <div className={'flex justify-between text-[#888] mt-1'}>
+          <Typography.Text ellipsis={true}>
             {user.last_message && <LastMessage message={user.last_message} />}
-          </div>
+          </Typography.Text>
           <div className={'flex-shrink-0 w-[100px]'}>
             <Menu user={user} />
           </div>

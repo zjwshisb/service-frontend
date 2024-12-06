@@ -29,12 +29,6 @@ export async function deleteAutoMessage(id: React.Key) {
   });
 }
 
-export async function getAutoMessageOption() {
-  return request<API.Response<API.Option[]>>('/options/auto-messages');
-}
-export async function getAutoRuleEvents() {
-  return request<API.Response<API.Option[]>>('/options/events');
-}
 export async function getAutoRules(params: FORM.Pagination) {
   return request<API.Pagination<API.AutoRule>>('/auto-rules', {
     params,

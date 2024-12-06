@@ -1,10 +1,10 @@
 import React from 'react';
-import { Image } from 'antd';
+import { Image as BaseImage } from 'antd';
 
-const Index: React.FC<{
+const Image: React.FC<{
   content: string;
 }> = (props) => {
-  return <Image src={props.content} />;
+  return <BaseImage src={props.content} />;
 };
 
-export default Index;
+export default Image;

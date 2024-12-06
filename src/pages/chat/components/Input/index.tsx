@@ -14,7 +14,7 @@ const Index: React.FC = () => {
     <div className={'relative flex-shrink-0 h-[220px]'}>
       <Action />
       <Input />
-      <If condition={current.disabled}>
+      <If condition={!current.disabled}>
         <Then>
           <div className={'absolute top-0 w-full h-full cursor-not-allowed z-30'} />
         </Then>

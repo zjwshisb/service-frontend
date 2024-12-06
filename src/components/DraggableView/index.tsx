@@ -3,6 +3,7 @@ import Draggable from 'react-draggable';
 import usePortal from '@/hooks/usePortal';
 import classNames from 'classnames';
 import { Icon } from '@iconify/react';
+import { Button } from 'antd';
 
 const Index: React.FC<
   React.PropsWithChildren<{
@@ -34,16 +35,19 @@ const Index: React.FC<
             })}
             style={{ width: props.width, top: props.top, left: props.left }}
           >
-            <div className={`flex header p-1 bg-slate-50 justify-between items-center`}>
+            <div
+              className={`flex cursor-move header px-2 py-1 bg-stone-100 justify-between items-center`}
+            >
               <div>{props.title}</div>
               <div className={'text-lg'}>
-                <Icon
-                  icon={'mdi:close'}
-                  className={'cursor-pointer'}
-                  onClick={() => {
-                    setVisible(false);
-                  }}
-                ></Icon>
+                <Button type={'text'}>
+                  <Icon
+                    icon={'mdi:close'}
+                    onClick={() => {
+                      setVisible(false);
+                    }}
+                  ></Icon>
+                </Button>
               </div>
             </div>
             <div>{props.children}</div>

@@ -12,17 +12,13 @@ const Index = () => {
     {
       dataIndex: 'username',
       title: '用户名',
-    },
-    {
-      dataIndex: 'avatar',
-      title: '头像',
-      valueType: 'image',
-      search: false,
+      search: true,
+      width: 200,
     },
     {
       title: '在线情况',
       dataIndex: 'online',
-      search: false,
+      width: 100,
       render(_, record) {
         return record.online ? (
           <span className={'green-6'}>在线</span>
@@ -34,13 +30,11 @@ const Index = () => {
     {
       dataIndex: 'accepted_count',
       title: '当前接待数量',
-      search: false,
     },
     {
       dataIndex: 'id',
       title: '操作',
       fixed: 'right',
-      search: false,
       render(_, record) {
         return (
           <Button size={'small'} onClick={() => history.push(`/admin/${record.id}`)}>

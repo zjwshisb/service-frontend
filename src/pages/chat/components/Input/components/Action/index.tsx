@@ -1,15 +1,19 @@
 import React from 'react';
-import Picture from './components/Picture';
+import Image from './components/Image';
 import Emoji from './components/Emoji';
 import ShortcutReply from './components/ShortcutReply';
 import { Space } from 'antd';
+import Audio from './components/Audio';
+import Video from './components/Video';
 
 const Action: React.FC = () => {
   return (
-    <div className={'flex items-center w-full h-[40px] px-2.5 text-lg'}>
-      <Space>
+    <div className={'w-full h-[40px] px-2.5 text-lg'}>
+      <Space size={'middle'} className={'flex items-center h-full'}>
         <Emoji />
-        <Picture />
+        <Image />
+        <Audio />
+        <Video />
         <ShortcutReply />
       </Space>
     </div>

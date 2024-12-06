@@ -1,7 +1,6 @@
 import React from 'react';
 import { Input } from 'antd';
 import { useModel } from '@umijs/max';
-import { createMsg } from '@/utils';
 
 const Index: React.FC = () => {
   const { send } = useModel('chat.websocket');
@@ -21,23 +20,18 @@ const Index: React.FC = () => {
   const sendMsg = React.useCallback(
     (event: React.KeyboardEvent) => {
       if (event.code === 'Enter' && !event.shiftKey) {
-        if (current) {
-          if (text !== '') {
-            createMsg(text, current.id).then((message) => {
-              if (send(message)) {
-                clear();
-              }
-            });
-          }
-          event.preventDefault();
+        if (text !== '') {
+          send(text, 'text');
+          clear();
         }
+        event.preventDefault();
       }
       if (event.shiftKey && event.code === 'Enter') {
         append('\n');
         event.preventDefault();
       }
     },
-    [current, text, send, clear, append],
+    [text, send, clear, append],
   );
   return (
     <div className={'flex px-1.5'}>

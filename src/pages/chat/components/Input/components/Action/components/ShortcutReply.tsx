@@ -1,15 +1,13 @@
 import React from 'react';
 import { UnorderedListOutlined } from '@ant-design/icons/lib';
-import { Popover, List, App } from 'antd';
+import { Popover, List, App, Typography } from 'antd';
 import { useModel, useRequest } from '@umijs/max';
-import { createMsg } from '@/utils';
 import { getAutoMessage } from '@/services/auto';
 
-const Index = () => {
+const ShortcutReply = () => {
   const { data } = useRequest(() => getAutoMessage({ current: 1, pageSize: 100 }));
 
   const { send } = useModel('chat.websocket');
-  const { current } = useModel('chat.currentUser');
 
   const { message } = App.useApp();
 
@@ -17,11 +15,6 @@ const Index = () => {
     switch (msg.type) {
       case 'text':
         return msg.content;
-      case 'file':
-        if (msg.file) {
-          return msg.file.url;
-        }
-        return '';
       case 'navigator': {
         if (msg.navigator) {
           return JSON.stringify({
@@ -32,6 +25,14 @@ const Index = () => {
         }
         return '';
       }
+      case 'video':
+      case 'audio':
+      case 'image':
+      case 'pdf':
+        if (msg.file) {
+          return msg.file.url;
+        }
+        return '';
       default: {
         return '';
       }
@@ -42,7 +43,7 @@ const Index = () => {
     <Popover
       placement={'right'}
       trigger={['click']}
-      overlayStyle={{
+      overlayInnerStyle={{
         padding: 0,
       }}
       content={
@@ -53,20 +54,19 @@ const Index = () => {
             renderItem={(item, index) => {
               return (
                 <List.Item
+                  className={'cursor-pointer hover:bg-stone-100'}
                   onClick={() => {
-                    if (current?.id) {
-                      const content = messageToContent(item);
-                      if (content === '') {
-                        message.error('该快捷回复无内容').then();
-                      } else {
-                        createMsg(content, current.id, item.type).then((msg) => {
-                          send(msg);
-                        });
-                      }
+                    const content = messageToContent(item);
+                    if (content === '') {
+                      message.error('该快捷回复无内容').then();
+                    } else {
+                      send(content, item.type);
                     }
                   }}
                 >
-                  {index + 1}.{`${item.name}`}
+                  <Typography.Text ellipsis={true}>
+                    {index + 1}.{`${item.name}`}
+                  </Typography.Text>
                 </List.Item>
               );
             }}
@@ -79,4 +79,4 @@ const Index = () => {
     </Popover>
   );
 };
-export default Index;
+export default ShortcutReply;

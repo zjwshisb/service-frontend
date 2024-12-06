@@ -21,6 +21,8 @@ const Index = () => {
       dataIndex: 'type',
       request: () => getOptions('message-types'),
       title: '消息类型',
+      valueType: 'select',
+      width: 100,
       search: true,
     },
     {
@@ -35,6 +37,7 @@ const Index = () => {
       dataIndex: 'id',
       title: '操作',
       fixed: 'right',
+      width: 150,
       render(_, record, __, action) {
         return (
           <Space>

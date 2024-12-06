@@ -13,20 +13,17 @@ import Draggable from 'react-draggable';
 import { useMount } from 'ahooks';
 import useAutoAccept from '@/pages/chat/hooks/useAutoAccept';
 import FileFinder from '@/components/FileFinder';
+import HistorySession from './components/UserList/components/HistorySession';
 
 const chatWidth = 1080;
 const chatHeight = 700;
 
 const Index: React.FC = () => {
   const { connect, setOnMessage, setOnSend, close } = useModel('chat.websocket');
-  const { getUser, updateUser, users, setUsers } = useModel('chat.users');
+  const { getUser, updateUser, setUsers } = useModel('chat.users');
   const { current, setCurrent, goTop } = useModel('chat.currentUser');
 
   const { setting, fetchSetting } = useModel('chat.adminSetting');
-
-  React.useEffect(() => {
-    console.log(users);
-  }, [users]);
 
   React.useEffect(() => {
     fetchSetting();
@@ -201,6 +198,7 @@ const Index: React.FC = () => {
       }
       style={{ backgroundImage: `url(${bgImg})` }}
     >
+      <HistorySession />
       <FileFinder />
       <Draggable handle={'#header'}>
         <div

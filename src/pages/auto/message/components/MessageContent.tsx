@@ -27,13 +27,16 @@ const MessageContent: React.FC<{
         );
       }
       return '-';
-    case 'file':
+    case 'text':
+      return <div className={'whitespace-pre-wrap inline-block'}>{message.content}</div>;
+    case 'audio':
+    case 'video':
+    case 'image':
       if (message.file) {
         return <FileItem width={'70px'} height={'70px'} file={message.file}></FileItem>;
       }
       return '-';
-    case 'text':
-      return <div className={'whitespace-pre-wrap inline-block'}>{message.content}</div>;
+
     default:
       return <></>;
   }

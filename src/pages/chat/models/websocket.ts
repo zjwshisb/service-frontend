@@ -4,6 +4,7 @@ import lodash from 'lodash';
 import { App, Modal } from 'antd';
 import { useModel } from '@umijs/max';
 import { history } from '@@/core/history';
+import { createMsg } from '../util';
 
 export type ActionHandle<T = any> = (action: API.Action<T>) => void;
 export type EventHandle<T extends Event = Event> = (e: T) => void;
@@ -22,7 +23,7 @@ export default function () {
   const [isShowNotice, setIsShowNotice] = React.useState(false);
 
   const { getUser, updateUser } = useModel('chat.users');
-  const { setCurrent } = useModel('chat.currentUser');
+  const { setCurrent, current } = useModel('chat.currentUser');
 
   const { message } = App.useApp();
 
@@ -55,9 +56,7 @@ export default function () {
               handle(action);
             }
           }
-        } catch (err) {
-          console.log(err);
-        }
+        } catch (err) {}
       };
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = () => {
@@ -120,7 +119,7 @@ export default function () {
 
   React.useEffect(() => {}, [websocket]);
 
-  const send: (msg: API.Action<API.Message>) => boolean = React.useCallback(
+  const sendAction: (msg: API.Action<API.Message>) => boolean = React.useCallback(
     (action: API.Action<API.Message>) => {
       if (websocket) {
         try {
@@ -174,6 +173,19 @@ export default function () {
       }
     },
     [getUser, onSend, setCurrent, updateUser, websocket],
+  );
+
+  const send: (content: string, type: API.MessageType) => Promise<boolean> = React.useCallback(
+    async (content: string, type: API.MessageType) => {
+      if (current) {
+        const res = await createMsg(content, current.id, type);
+        return sendAction(res);
+      } else {
+        message.error('当前无聊天对象，无法发送').then();
+        return Promise.reject(new Error('当前无聊天对象，无法发送'));
+      }
+    },
+    [current, message, sendAction],
   );
 
   return {
