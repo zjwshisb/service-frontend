@@ -30,23 +30,23 @@ const Index: React.FC<
       {usePortal(
         <Draggable handle={'.header'}>
           <div
-            className={classNames('fixed box-border bg-white rounded overflow-hidden shadow', {
+            className={classNames('fixed box-border bg-white rounded-lg overflow-hidden shadow', {
               hidden: !visible,
             })}
             style={{ width: props.width, top: props.top, left: props.left }}
           >
             <div
-              className={`flex cursor-move header px-2 py-1 bg-stone-100 justify-between items-center`}
+              className={`flex text-base cursor-move header px-2 py-1 bg-neutral-100 justify-between items-center`}
             >
               <div>{props.title}</div>
               <div className={'text-lg'}>
-                <Button type={'text'}>
-                  <Icon
-                    icon={'mdi:close'}
-                    onClick={() => {
-                      setVisible(false);
-                    }}
-                  ></Icon>
+                <Button
+                  type={'text'}
+                  onClick={() => {
+                    setVisible(false);
+                  }}
+                >
+                  <Icon icon={'mdi:close'}></Icon>
                 </Button>
               </div>
             </div>

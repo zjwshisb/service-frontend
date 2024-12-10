@@ -3,6 +3,7 @@ import UserItem from './components/UserItem/index';
 import { useModel, Helmet } from '@umijs/max';
 import TransferForm from './components/TransferForm/index';
 import { Empty } from 'antd';
+import { If, Then, Else } from 'react-if';
 
 const Index: React.FC = () => {
   const { current } = useModel('chat.currentUser');
@@ -33,17 +34,17 @@ const Index: React.FC = () => {
   }, [current, users]);
 
   return (
-    <div className={'flex-shrink-0 overflow-x-hidden w-1/3 overflow-y-auto border-r h-full'}>
+    <div className={'flex-shrink-0 overflow-x-hidden w-[300px] overflow-y-auto border-r h-full'}>
       <TransferForm />
-
       <Helmet defer={false}>
         <title>{title}</title>
       </Helmet>
-      {userList.length > 0 ? (
-        userList
-      ) : (
-        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={'暂无会话'} />
-      )}
+      <If condition={userList.length > 0}>
+        <Then>{userList}</Then>
+        <Else>
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={'暂无会话'} />
+        </Else>
+      </If>
     </div>
   );
 };

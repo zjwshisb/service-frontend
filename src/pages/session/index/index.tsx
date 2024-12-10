@@ -97,7 +97,7 @@ const Index = () => {
     <PageContainer>
       <ProTable<API.ChatSession>
         search={{
-          defaultCollapsed: true,
+          defaultCollapsed: false,
         }}
         request={getChatSessions}
         columns={columns}

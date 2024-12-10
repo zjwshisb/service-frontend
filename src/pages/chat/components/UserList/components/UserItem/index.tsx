@@ -19,8 +19,6 @@ const Index: React.FC<{
       user.unread = 0;
       if (user.messages.length > 0) {
         handleRead(user.id, user.messages[0].id).then().catch();
-      } else {
-        handleRead(user.id).then().catch();
       }
     }
     if (current) {
@@ -36,7 +34,7 @@ const Index: React.FC<{
       className={classNames('flex w-full min-h-[70px] p-2.5', {
         'bg-[#dedede]': current && current.id === user.id,
       })}
-      onClick={() => onClick()}
+      onClick={onClick}
     >
       <div
         className={classNames('flex-shrink-0 w-[50px] h-[50px]', {
@@ -49,8 +47,8 @@ const Index: React.FC<{
           </Avatar>
         </Badge>
       </div>
-      <div className={'flex-1 ml-2.5 overflow-hidden'}>
-        <div className={'w-full flex items-center'}>
+      <div className={'flex-1 ml-2 overflow-hidden'}>
+        <div className={'w-full flex items-center justify-between'}>
           <Typography.Text ellipsis={true}>{user.username}</Typography.Text>
           <div className={'w-24 text-[#acacac] text-sm text-right flex-shrink-0'}>
             {user.last_message && <LastTime time={user.last_message.received_at} />}

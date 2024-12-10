@@ -2,10 +2,9 @@ import { Image, ImageProps, Tooltip } from 'antd';
 import React, { HTMLProps } from 'react';
 import { Case, Else, If, Switch, Then } from 'react-if';
 import classNames from 'classnames';
-import AudioImg from './asset/audio.png';
-import VideoImg from './asset/video.png';
 import NoImageImg from './asset/no-image.png';
 import { ImagePreviewType } from 'rc-image';
+import FileImg from '@/components/FileItem/FileImg';
 
 type FileItemProps = {
   file: API.File;
@@ -77,10 +76,10 @@ const FileItem: React.FC<FileItemProps> = (props) => {
           ></Image>
         </Case>
         <Case condition={file.type === 'video'}>
-          <Image {...p} src={VideoImg}></Image>
+          <FileImg {...p} type={'video'} />
         </Case>
         <Case condition={file.type === 'audio'}>
-          <Image {...p} src={AudioImg}></Image>
+          <FileImg {...p} type={'audio'} />
         </Case>
       </Switch>
     );

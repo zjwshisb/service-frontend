@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, Card } from 'antd';
 import classNames from 'classnames';
+import FileImg from '@/components/FileItem/FileImg';
 
 const Index: React.FC<{
   item: API.Message;
@@ -16,8 +17,14 @@ const Index: React.FC<{
         </Card>
       );
       break;
-    case 'file':
+    case 'image':
       content = <Image src={props.item.content} />;
+      break;
+    case 'video':
+      content = <FileImg type={'video'}></FileImg>;
+      break;
+    case 'audio':
+      content = <FileImg type={'audio'}></FileImg>;
       break;
     case 'text':
       content = <>{props.item.content}</>;

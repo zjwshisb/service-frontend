@@ -10,10 +10,9 @@ const Index = () => {
 
   const columns = useTableColumn<API.Admin>([
     {
-      dataIndex: 'username',
       title: '用户名',
+      dataIndex: 'username',
       search: true,
-      width: 200,
     },
     {
       title: '在线情况',
@@ -27,6 +26,7 @@ const Index = () => {
         );
       },
     },
+
     {
       dataIndex: 'accepted_count',
       title: '当前接待数量',

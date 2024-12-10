@@ -4,7 +4,7 @@ import { join } from 'path';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 import routes from './routes';
-
+import zhCN from 'antd/locale/zh_CN';
 const { REACT_APP_ENV = 'dev' } = process.env;
 
 /**
@@ -89,7 +89,6 @@ export default defineConfig({
    */
   title: 'Ant Design Pro',
   layout: {
-    locale: true,
     ...defaultSettings,
   },
   /**
@@ -104,12 +103,19 @@ export default defineConfig({
   /**
    * @name 国际化插件
    * @doc https://umijs.org/docs/max/i18n
-   */ /**
+   */
+  locale: false,
+  /**
    * @name antd 插件
    * @description 内置了 babel import 插件
    * @doc https://umijs.org/docs/max/antd#antd
    */
-  antd: {},
+  antd: {
+    appConfig: {},
+    configProvider: {
+      locale: zhCN,
+    },
+  },
   /**
    * @name 网络请求配置
    * @description 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。

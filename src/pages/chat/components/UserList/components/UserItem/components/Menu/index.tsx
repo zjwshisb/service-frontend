@@ -1,14 +1,17 @@
 import React from 'react';
-import { Button, Modal, Space } from 'antd';
+import { App, Button } from 'antd';
 import { useModel } from '@umijs/max';
 import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { removeUser } from '@/services';
 import { MessageOutlined, CloseOutlined, SwapOutlined } from '@ant-design/icons';
+import { When } from 'react-if';
 
 const Index: React.FC<{
   user: API.User;
 }> = (props) => {
   const { setUser, setVisible } = useModel('chat.transfer');
+
+  const { modal } = App.useApp();
 
   const show = useModel('chat.historySession', (model) => model.show);
 
@@ -21,7 +24,7 @@ const Index: React.FC<{
           handleRemove(user);
         });
       } else {
-        Modal.confirm({
+        modal.confirm({
           title: '提示',
           content: '确定断开与该用户的会话?',
           onOk() {
@@ -32,41 +35,38 @@ const Index: React.FC<{
         });
       }
     },
-    [handleRemove],
+    [handleRemove, modal],
   );
 
   return (
     <div className={'w-full text-right'}>
-      <Space>
+      <Button type={'text'} size={'small'}>
+        <MessageOutlined
+          onClick={(e) => {
+            show(props.user.id);
+            e.stopPropagation();
+          }}
+        />
+      </Button>
+      <When condition={!props.user.disabled}>
         <Button type={'text'} size={'small'}>
-          <MessageOutlined
+          <SwapOutlined
             onClick={(e) => {
-              show(props.user.id);
+              setUser(props.user);
+              setVisible(true);
               e.stopPropagation();
             }}
           />
         </Button>
-
-        {!props.user.disabled && (
-          <Button type={'text'} size={'small'}>
-            <SwapOutlined
-              onClick={(e) => {
-                setUser(props.user);
-                setVisible(true);
-                e.stopPropagation();
-              }}
-            />
-          </Button>
-        )}
-        <Button type={'text'} size={'small'}>
-          <CloseOutlined
-            onClick={(e) => {
-              handleDelete(props.user);
-              e.stopPropagation();
-            }}
-          />
-        </Button>
-      </Space>
+      </When>
+      <Button type={'text'} size={'small'}>
+        <CloseOutlined
+          onClick={(e) => {
+            handleDelete(props.user);
+            e.stopPropagation();
+          }}
+        />
+      </Button>
     </div>
   );
 };

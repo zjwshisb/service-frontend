@@ -12,12 +12,12 @@
     routes: [
       {
         path: '/admin',
-        component: './admin/index/index',
+        component: './admin/index',
         name: '客服',
       },
       {
         path: '/admin/:id',
-        component: './admin/show/index',
+        component: './admin/show',
         name: '详情',
       },
     ],
@@ -109,8 +109,10 @@
     path: '/chat',
     component: './chat/index',
     name: '客服面板',
-    layout: false,
     target: '_blank',
+    headerRender: false,
+    footerRender: false,
+    menuRender: false,
   },
   { path: '/', redirect: '/welcome' },
   { path: '*', layout: false, component: './404' },

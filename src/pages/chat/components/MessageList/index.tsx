@@ -6,6 +6,7 @@ import { getMessages } from '@/services';
 import Empty from './components/Empty/index';
 import Notice from './components/Notice/index';
 import lodash from 'lodash';
+import { If, Then, Else, When } from 'react-if';
 
 // 默认渲染条数
 const pageSize = 20;
@@ -146,20 +147,25 @@ const Index: React.FC = () => {
       ref={ref}
       onScroll={onScroll}
     >
-      {current === undefined ? (
-        <Empty />
-      ) : (
-        <>
-          {loading && (
+      <If condition={current !== undefined}>
+        <Then>
+          <When condition={loading}>
             <div className={'text-center'}>
               <Spin />
             </div>
-          )}
-          {current?.disabled && <Notice>已失效，无法发送消息</Notice>}
+          </When>
+          <When condition={current?.disabled}>
+            <Notice>已失效，无法发送消息</Notice>
+          </When>
           {messagesView}
-          {current && noMore && <Notice>没有更多了</Notice>}
-        </>
-      )}
+          <When condition={current && noMore}>
+            <Notice>没有更多了</Notice>
+          </When>
+        </Then>
+        <Else>
+          <Empty />
+        </Else>
+      </If>
     </div>
   );
 };

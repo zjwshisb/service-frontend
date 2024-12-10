@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 import { Button, Modal, Space, Table } from 'antd';
-import myStyles from './index.less';
 import DraggableView from '@/components/DraggableView';
 import type { ColumnsType } from 'antd/es/table';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
@@ -56,7 +55,7 @@ const Index = () => {
               <Button
                 size={'small'}
                 type={'primary'}
-                onClick={() => handleAccept(record.session_id)}
+                onClick={() => handleAccept(record.to_session_id)}
               >
                 接入
               </Button>
@@ -101,7 +100,13 @@ const Index = () => {
         title={'转接用户'}
         defaultVisible={false}
         trigger={(visible) => (
-          <MenuItem title={'转接用户'} active={visible}>
+          <MenuItem
+            title={'转接用户'}
+            active={visible}
+            badge={{
+              count: transfers.length,
+            }}
+          >
             <InfoCircleOutlined />
           </MenuItem>
         )}
@@ -114,7 +119,7 @@ const Index = () => {
           pagination={false}
         />
         <Modal
-          width={'600px'}
+          width={'800px'}
           styles={{
             body: {
               padding: 0,
@@ -125,9 +130,7 @@ const Index = () => {
           footer={false}
           onCancel={() => setMessageVisible(false)}
         >
-          <div className={myStyles.messages}>
-            <MessageLine messages={messages} />
-          </div>
+          <MessageLine messages={messages} />
         </Modal>
       </DraggableView>
     );

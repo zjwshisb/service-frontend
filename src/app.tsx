@@ -8,8 +8,8 @@ import React from 'react';
 import defaultSettings from '../config/defaultSettings';
 import { errorConfig } from './requestErrorConfig';
 import { queryCurrentUser } from '@/services';
-import { App } from 'antd';
 import FileFinder from '@/components/FileFinder';
+import { App } from 'antd';
 
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/login';
@@ -124,14 +124,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         </>
       );
     },
+
     ...initialState?.settings,
   };
 };
-
 export function rootContainer(container: React.ReactNode) {
-  return React.createElement(App, null, <>{container}</>);
+  return React.createElement(App, null, container);
 }
-
 /**
  * @name request 配置，可以配置错误处理
  * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。

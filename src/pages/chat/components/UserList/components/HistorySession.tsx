@@ -6,7 +6,7 @@ import MessageLine from '@/components/MessageLine';
 import { useModel } from '@umijs/max';
 import { useBoolean } from 'ahooks';
 
-const Index = () => {
+const HistorySession = () => {
   const [messages, setMessages] = React.useState<API.Message[]>([]);
 
   const [open, openAction] = useBoolean(false);
@@ -47,11 +47,12 @@ const Index = () => {
   return (
     <>
       <Modal
-        zIndex={5000}
+        zIndex={1000}
         styles={{
           body: {
             padding: 0,
-            maxHeight: '100px',
+            maxHeight: '500px',
+            overflowY: 'auto',
           },
         }}
         footer={null}
@@ -67,7 +68,7 @@ const Index = () => {
       <Modal
         open={open}
         title={'对话详情'}
-        zIndex={5001}
+        zIndex={1001}
         footer={null}
         onCancel={(e) => {
           openAction.setFalse();
@@ -79,4 +80,4 @@ const Index = () => {
     </>
   );
 };
-export default Index;
+export default HistorySession;

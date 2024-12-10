@@ -32,7 +32,7 @@ export async function updateChatSetting(data: API.AdminChatSetting) {
   });
 }
 
-export async function handleCancelTransfer(id: React.ReactText) {
+export async function handleCancelTransfer(id: React.Key) {
   return request<API.Response>(`/ws/transfer/${id}/cancel`, {
     method: 'POST',
   });
@@ -149,8 +149,10 @@ export async function getChatSessionDetail(id: React.Key) {
   >(`/chat-sessions/${id}`);
 }
 
-export async function getTransfers() {
-  return request<API.Pagination<API.Transfer>>(`/transfers`);
+export async function getTransfers(params: FORM.Pagination) {
+  return request<API.Pagination<API.Transfer>>(`/transfers`, {
+    params,
+  });
 }
 
 export async function cancelTransfer(id: React.Key) {

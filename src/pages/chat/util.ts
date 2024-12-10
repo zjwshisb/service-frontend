@@ -1,6 +1,8 @@
 import { getReqId } from '@/services';
 import dayjs from 'dayjs';
-
+export async function isAdminSend(message: API.Message) {
+  return message.source === 0;
+}
 export async function createMsg(
   content: string,
   userId: number,
@@ -17,6 +19,7 @@ export async function createMsg(
       req_id: res.data.req_id,
       avatar: '',
       received_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      is_read: false,
     },
     time: new Date().getTime(),
   };

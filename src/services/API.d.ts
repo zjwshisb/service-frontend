@@ -38,7 +38,8 @@ declare namespace API {
     | 'other-login'
     | 'more-than-one'
     | 'user-transfer'
-    | 'error-message';
+    | 'error-message'
+    | 'read';
 
   type Action<T = any, A = ActionType> = {
     action: A;
@@ -49,6 +50,7 @@ declare namespace API {
   type Receipt = {
     user_id: number;
     req_id: string;
+    msg_id: number;
   };
 
   type MessageType = 'text' | 'navigator' | 'image' | 'audio' | 'video' | 'pdf';
@@ -78,6 +80,7 @@ declare namespace API {
     req_id: string;
     received_at: string;
     avatar: string;
+    is_read: boolean;
   };
 
   type OffLine = {
@@ -111,7 +114,8 @@ declare namespace API {
     accepted_at: string;
     canceled_at: string;
     remark: string;
-    session_id: number;
+    from_session_id: number;
+    to_session_id: number;
   };
 
   type User = {

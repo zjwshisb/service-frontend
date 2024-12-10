@@ -1,19 +1,21 @@
 import React from 'react';
 import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import { Avatar, Button, List, Modal, Popover, Skeleton, Typography } from 'antd';
+import { Avatar, Button, List, Popover, Skeleton, Typography, App } from 'antd';
 import DraggableView from '@/components/DraggableView';
 import { getMessageTypeLabel } from '@/pages/chat/util';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { cancelChatSessions } from '@/services';
 import MenuItem from '@/pages/chat/components/Menu/components/MenuItem';
-import { If, Then } from 'react-if';
+import { If, Then, When, Else } from 'react-if';
 
 const Index = () => {
   const { setOnMessage } = useModel('chat.websocket');
 
   const { waitingUsers, setWaitingUsers } = useModel('chat.waitingUsers');
   const { notify } = useModel('chat.notification');
+
+  const { modal } = App.useApp();
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.WaitingUser[]>) => {
@@ -38,8 +40,15 @@ const Index = () => {
     <DraggableView
       title={'待接入用户'}
       width={'400px'}
+      defaultVisible={false}
       trigger={(visible) => (
-        <MenuItem title={'待接入用户'} active={visible}>
+        <MenuItem
+          title={'待接入用户'}
+          badge={{
+            count: waitingUsers.length,
+          }}
+          active={visible}
+        >
           <MessageOutlined />
         </MenuItem>
       )}
@@ -74,7 +83,7 @@ const Index = () => {
                 key={'refuse'}
                 className={'red-6'}
                 onClick={(e) => {
-                  Modal.confirm({
+                  modal.confirm({
                     title: '提示',
                     content: '确定拒绝该会话?',
                     async onOk() {
@@ -118,20 +127,21 @@ const Index = () => {
                     </div>
                   }
                   description={
-                    <If condition={item.messages.length > 0}>
-                      <Then>
-                        {() => (
-                          <Typography.Text ellipsis={true}>
-                            {item.messages.length > 0
-                              ? getMessageTypeLabel(
-                                  item.messages[item.messages.length - 1].content,
-                                  item.messages[item.messages.length - 1].type,
-                                )
-                              : ''}
-                          </Typography.Text>
-                        )}
-                      </Then>
-                    </If>
+                    <When condition={item.messages.length > 0}>
+                      {() => (
+                        <Typography.Text ellipsis={true}>
+                          <If condition={item.messages.length}>
+                            <Then>
+                              {getMessageTypeLabel(
+                                item.messages[item.messages.length - 1].content,
+                                item.messages[item.messages.length - 1].type,
+                              )}
+                            </Then>
+                            <Else></Else>
+                          </If>
+                        </Typography.Text>
+                      )}
+                    </When>
                   }
                 />
               </Popover>

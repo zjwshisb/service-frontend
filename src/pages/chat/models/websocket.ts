@@ -25,7 +25,7 @@ export default function () {
   const { getUser, updateUser } = useModel('chat.users');
   const { setCurrent, current } = useModel('chat.currentUser');
 
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
 
   const connect = React.useCallback(() => {
     const url = `${WS_URL}?token=${getToken()}`;
@@ -35,17 +35,17 @@ export default function () {
   React.useEffect(() => {
     if (websocket) {
       websocket.onopen = (e) => {
-        message.success('连接聊天服务器成功');
         Modal.destroyAll();
         if (onOpen) {
           onOpen(e);
         }
+        message.success('连接服务器成功').then();
       };
       websocket.onerror = (e: Event) => {
-        message.error('连接服务器失败');
         if (onError) {
           onError(e);
         }
+        message.error('连接服务器失败').then();
       };
       websocket.onmessage = (e: MessageEvent) => {
         try {
@@ -61,7 +61,7 @@ export default function () {
       // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
       websocket.onclose = () => {
         if (!isShowNotice) {
-          Modal.error({
+          modal.error({
             title: '提示',
             content: '服务器连接已断开',
             onOk() {
@@ -72,7 +72,7 @@ export default function () {
         setWebsocket(undefined);
       };
     }
-  }, [connect, isShowNotice, message, onError, onMessage, onOpen, websocket]);
+  }, [connect, isShowNotice, message, modal, onError, onMessage, onOpen, websocket]);
 
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: API.ActionType): void => {
@@ -94,7 +94,7 @@ export default function () {
 
   React.useEffect(() => {
     setOnMessage(() => {
-      Modal.error({
+      modal.error({
         title: '提示',
         content: '账户已在别处登录',
         okText: '重新登录',
@@ -106,7 +106,7 @@ export default function () {
     }, 'other-login');
     setOnMessage(() => {
       setIsShowNotice(true);
-      Modal.error({
+      modal.error({
         title: '提示',
         content: '请勿打开多个客服页面',
         okText: '关闭',
@@ -115,9 +115,7 @@ export default function () {
         },
       });
     }, 'more-than-one');
-  }, [setOnMessage]);
-
-  React.useEffect(() => {}, [websocket]);
+  }, [modal, setOnMessage]);
 
   const sendAction: (msg: API.Action<API.Message>) => boolean = React.useCallback(
     (action: API.Action<API.Message>) => {
@@ -161,7 +159,7 @@ export default function () {
           return false;
         }
       } else {
-        Modal.error({
+        modal.error({
           title: '提示',
           content: '聊天服务器已断开',
           okText: '重新连接连接聊天服务器',
@@ -172,7 +170,7 @@ export default function () {
         return false;
       }
     },
-    [getUser, onSend, setCurrent, updateUser, websocket],
+    [getUser, modal, onSend, setCurrent, updateUser, websocket],
   );
 
   const send: (content: string, type: API.MessageType) => Promise<boolean> = React.useCallback(

@@ -149,6 +149,9 @@ const Index = () => {
         </Form.Item>
       </ModalForm>
       <ProTable<API.Setting>
+        scroll={{
+          x: 1500,
+        }}
         actionRef={action}
         rowKey={'id'}
         columns={columns}

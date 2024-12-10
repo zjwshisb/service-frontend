@@ -4,21 +4,21 @@ import Item from './components/Item';
 
 const Index: React.FC<{
   messages: API.Message[];
+  className?: string;
 }> = (props) => {
   return (
-    <Timeline mode="alternate">
-      {props.messages.map((v) => {
-        return (
-          <Timeline.Item
-            color={v.source === 0 ? 'red' : 'green'}
-            key={v.id}
-            position={v.source === 0 ? 'left' : 'right'}
-          >
-            <Item item={v} key={v.id} />
-          </Timeline.Item>
-        );
+    <Timeline
+      className={props.className}
+      mode="alternate"
+      items={props.messages.map((v) => {
+        return {
+          color: v.source === 0 ? 'red' : 'green',
+          key: v.id,
+          position: v.source === 0 ? 'left' : 'right',
+          children: <Item item={v} />,
+        };
       })}
-    </Timeline>
+    ></Timeline>
   );
 };
 export default Index;

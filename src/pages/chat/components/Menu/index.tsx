@@ -8,13 +8,13 @@ import Transfer from './components/Transfer/index';
 const Index = () => {
   return React.useMemo(() => {
     return (
-      <>
+      <div className={'w-full flex flex-col items-center'}>
         <WaitingUser />
         <Transfer />
         <Admins />
         <Setting />
         <UserInfo />
-      </>
+      </div>
     );
   }, []);
 };

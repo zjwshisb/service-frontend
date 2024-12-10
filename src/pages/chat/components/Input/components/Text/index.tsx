@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input } from 'antd';
 import { useModel } from '@umijs/max';
+import { TextAreaRef } from 'antd/es/input/TextArea';
 
 const Index: React.FC = () => {
   const { send } = useModel('chat.websocket');
@@ -9,7 +10,7 @@ const Index: React.FC = () => {
 
   const { text, setText, clear, append } = useModel('chat.input');
 
-  const ref = React.useRef<any>();
+  const ref = React.useRef<TextAreaRef>(null);
 
   React.useEffect(() => {
     if (!current?.disabled) {

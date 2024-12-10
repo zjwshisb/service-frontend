@@ -1,87 +1,76 @@
 import React from 'react';
-import { PageContainer, ProTable, ActionType, ProColumnType } from '@ant-design/pro-components';
+import { PageContainer, ProTable, ActionType } from '@ant-design/pro-components';
 import { getTransfers, cancelTransfer } from '@/services';
-import { Button, Modal, message } from 'antd';
+import DeleteAction from '@/components/DeleteAction';
+import useTableColumn from '@/hooks/useTableColumn';
 
 const Index = () => {
   const action = React.useRef<ActionType>();
 
-  const columns: ProColumnType<API.Transfer>[] =
-    React.useMemo((): ProColumnType<API.Transfer>[] => {
-      return [
-        {
-          dataIndex: 'username',
-          title: '被转接用户',
-          search: false,
+  const columns = useTableColumn<API.Transfer>(
+    [
+      {
+        dataIndex: 'username',
+        title: '被转接用户',
+        search: true,
+      },
+      {
+        dataIndex: 'from_admin_name',
+        title: '转接人',
+        search: true,
+      },
+      {
+        dataIndex: 'to_admin_name',
+        title: '转接给',
+        search: true,
+      },
+      {
+        dataIndex: 'remark',
+        title: '备注',
+      },
+      {
+        dataIndex: 'created_at',
+        title: '创建时间',
+      },
+      {
+        dataIndex: 'accepted_at',
+        title: '接入时间',
+      },
+      {
+        dataIndex: 'canceled_at',
+        title: '取消时间',
+      },
+      {
+        dataIndex: 'id',
+        title: '操作',
+        render(_, record, __, action) {
+          if (!record.canceled_at && !record.accepted_at) {
+            return (
+              <DeleteAction
+                request={cancelTransfer}
+                notice={'确定取消该转接'}
+                title={'取消'}
+                onSuccess={action?.reload}
+                id={record.id}
+              />
+            );
+          }
+          return '-';
         },
-        {
-          dataIndex: 'from_admin_name',
-          title: '转接人',
-          search: false,
-        },
-        {
-          dataIndex: 'to_admin_name',
-          title: '转接给',
-          search: false,
-        },
-        {
-          dataIndex: 'remark',
-          title: '备注',
-          search: false,
-        },
-        {
-          dataIndex: 'created_at',
-          valueType: 'dateTimeRange',
-          title: '创建时间',
-          search: false,
-        },
-        {
-          dataIndex: 'accepted_at',
-          valueType: 'dateTimeRange',
-          title: '接入时间',
-          search: false,
-        },
-        {
-          dataIndex: 'canceled_at',
-          valueType: 'dateTimeRange',
-          title: '取消时间',
-          search: false,
-        },
-        {
-          dataIndex: 'id',
-          title: '操作',
-          search: false,
-          render(_, record) {
-            if (!record.canceled_at && !record.accepted_at) {
-              return (
-                <Button
-                  danger={true}
-                  size={'small'}
-                  onClick={() => {
-                    Modal.confirm({
-                      title: '提示',
-                      content: '确定取消该转接？',
-                      onOk: async () => {
-                        await cancelTransfer(record.id);
-                        action.current?.reload();
-                        message.success('操作成功');
-                      },
-                    });
-                  }}
-                >
-                  取消
-                </Button>
-              );
-            }
-            return '-';
-          },
-        },
-      ];
-    }, []);
+      },
+    ],
+    {
+      created_at: false,
+      updated_at: false,
+    },
+  );
 
   return (
     <PageContainer>
       <ProTable<API.Transfer>
+        search={{
+          defaultCollapsed: false,
+        }}
         actionRef={action}
         request={getTransfers}
         columns={columns}

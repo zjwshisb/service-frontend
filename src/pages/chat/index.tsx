@@ -12,8 +12,8 @@ import { Modal } from 'antd';
 import Draggable from 'react-draggable';
 import { useMount } from 'ahooks';
 import useAutoAccept from '@/pages/chat/hooks/useAutoAccept';
-import FileFinder from '@/components/FileFinder';
 import HistorySession from './components/UserList/components/HistorySession';
+import { PageContainer } from '@ant-design/pro-components';
 
 const chatWidth = 1080;
 const chatHeight = 700;
@@ -86,6 +86,7 @@ const Index: React.FC = () => {
           const index = newUser.messages.findIndex((v) => v.req_id === action.data.req_id);
           if (index > -1) {
             newUser.messages[index].is_success = true;
+            newUser.messages[index].id = action.data.msg_id;
           }
           return newUser;
         }
@@ -112,6 +113,7 @@ const Index: React.FC = () => {
           const newState = lodash.cloneDeep(prevState);
           newState.unread = 0;
           newState.messages.unshift(msg);
+          newState.last_message = msg;
           notifyMessage(newState.username, msg);
           return newState;
         }
@@ -120,6 +122,7 @@ const Index: React.FC = () => {
       const user = getUser(msg.user_id);
       if (user) {
         user.messages.unshift(action.data);
+        user.last_message = action.data;
         user.unread += 1;
         updateUser(user);
         notifyMessage(user.username, msg);
@@ -143,6 +146,24 @@ const Index: React.FC = () => {
         updateUser(user);
       }
     }, 'user-online');
+  });
+
+  useMount(() => {
+    setOnMessage((action: API.Action<number[]>) => {
+      setCurrent((prev) => {
+        if (prev) {
+          const newStat = lodash.cloneDeep(prev);
+          newStat.messages = newStat.messages.map((v) => {
+            if (v.id && action.data.includes(v?.id)) {
+              v.is_read = true;
+            }
+            return v;
+          });
+          return newStat;
+        }
+        return undefined;
+      });
+    }, 'read');
   });
 
   useMount(() => {
@@ -191,36 +212,44 @@ const Index: React.FC = () => {
   }, [setting]);
 
   return (
-    <div
-      id="chat"
-      className={
-        'bg-[#fafafa] flex items-center justify-center  h-screen overflow-hidden bg-cover bg-no-repeat'
-      }
-      style={{ backgroundImage: `url(${bgImg})` }}
+    <PageContainer
+      title={false}
+      pageHeaderRender={false}
+      token={{
+        paddingBlockPageContainerContent: 0,
+        paddingInlinePageContainerContent: 0,
+      }}
     >
-      <HistorySession />
-      <FileFinder />
-      <Draggable handle={'#header'}>
-        <div
-          className={'flex overflow-hidden rounded'}
-          style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
-        >
-          <div className={'items-center w-[60px] h-full bg-[#ebeced]'}>
-            <Menu />
-          </div>
-          <div className={'flex flex-1 flex-col h-full bg-white'}>
-            <Header />
-            <div className={'flex  w-full flex-1 bg-[#f3f3f3] overflow-hidden'}>
-              <UserList />
-              <div className={'flex flex-1 flex-col'}>
-                <MessageList />
-                <InputArea />
+      <div
+        id="chat"
+        className={
+          'bg-[#fafafa] flex items-center justify-center  h-screen overflow-hidden bg-cover bg-no-repeat'
+        }
+        style={{ backgroundImage: `url(${bgImg})` }}
+      >
+        <HistorySession />
+        <Draggable handle={'#header'}>
+          <div
+            className={'flex overflow-hidden rounded'}
+            style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
+          >
+            <div className={'w-[60px] h-full bg-[#ebeced]'}>
+              <Menu />
+            </div>
+            <div className={'flex flex-1 flex-col h-full bg-white'}>
+              <Header />
+              <div className={'flex  w-full flex-1 bg-[#f3f3f3] overflow-hidden'}>
+                <UserList />
+                <div className={'flex flex-1 flex-col'}>
+                  <MessageList />
+                  <InputArea />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </Draggable>
-    </div>
+        </Draggable>
+      </div>
+    </PageContainer>
   );
 };
 export default Index;
