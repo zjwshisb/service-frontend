@@ -25,7 +25,7 @@ const Index = () => {
   return (
     <>
       <MenuItem title={'客服设置'} onClick={openAction.setTrue} active={open}>
-        <SettingOutlined data-active={open} />
+        <SettingOutlined />
       </MenuItem>
       <ModalForm
         formRef={form}

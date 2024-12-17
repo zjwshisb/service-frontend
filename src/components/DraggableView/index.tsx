@@ -1,9 +1,9 @@
 import React from 'react';
 import Draggable from 'react-draggable';
-import usePortal from '@/hooks/usePortal';
 import classNames from 'classnames';
 import { Icon } from '@iconify/react';
 import { Button } from 'antd';
+import ReactDom from 'react-dom';
 
 const Index: React.FC<
   React.PropsWithChildren<{
@@ -14,6 +14,7 @@ const Index: React.FC<
     left?: string;
     defaultVisible?: boolean;
     title?: string;
+    container?: Element;
   }>
 > = (props) => {
   const [visible, setVisible] = React.useState(() => {
@@ -22,25 +23,29 @@ const Index: React.FC<
     }
     return props.defaultVisible;
   });
+
+  const { top = '200px', left = '200px' } = props;
+
   return (
     <div>
       <div className={props.triggerClass} onClick={() => setVisible((prevState) => !prevState)}>
         {props.trigger(visible)}
       </div>
-      {usePortal(
+      {ReactDom.createPortal(
         <Draggable handle={'.header'}>
           <div
             className={classNames('fixed box-border bg-white rounded-lg overflow-hidden shadow', {
               hidden: !visible,
             })}
-            style={{ width: props.width, top: props.top, left: props.left }}
+            style={{ width: props.width, top, left }}
           >
             <div
-              className={`flex text-base cursor-move header px-2 py-1 bg-neutral-100 justify-between items-center`}
+              className={`flex text-sm cursor-move header px-2 bg-neutral-100 justify-between items-center`}
             >
               <div>{props.title}</div>
               <div className={'text-lg'}>
                 <Button
+                  size={'small'}
                   type={'text'}
                   onClick={() => {
                     setVisible(false);
@@ -53,7 +58,7 @@ const Index: React.FC<
             <div>{props.children}</div>
           </div>
         </Draggable>,
-        'chat',
+        props.container || document.body,
       )}
     </div>
   );

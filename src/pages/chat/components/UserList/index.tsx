@@ -5,7 +5,7 @@ import TransferForm from './components/TransferForm/index';
 import { Empty } from 'antd';
 import { If, Then, Else } from 'react-if';
 
-const Index: React.FC = () => {
+const UserList: React.FC = () => {
   const { current } = useModel('chat.currentUser');
   const { users } = useModel('chat.users');
 
@@ -48,4 +48,4 @@ const Index: React.FC = () => {
     </div>
   );
 };
-export default Index;
+export default UserList;

@@ -92,48 +92,46 @@ const Index = () => {
     ];
   }, [handleAccept]);
 
-  return React.useMemo(() => {
-    return (
-      <DraggableView
-        top={'500px'}
-        width={'700px'}
-        title={'转接用户'}
-        defaultVisible={false}
-        trigger={(visible) => (
-          <MenuItem
-            title={'转接用户'}
-            active={visible}
-            badge={{
-              count: transfers.length,
-            }}
-          >
-            <InfoCircleOutlined />
-          </MenuItem>
-        )}
-      >
-        <Table
-          rowKey={'id'}
-          dataSource={transfers}
-          columns={columns}
-          size={'small'}
-          pagination={false}
-        />
-        <Modal
-          width={'800px'}
-          styles={{
-            body: {
-              padding: 0,
-            },
+  return (
+    <DraggableView
+      top={'500px'}
+      width={'700px'}
+      title={'转接用户'}
+      defaultVisible={false}
+      trigger={(visible) => (
+        <MenuItem
+          title={'转接用户'}
+          active={visible}
+          badge={{
+            count: transfers.length,
           }}
-          title={'会话详情'}
-          open={messageVisible}
-          footer={false}
-          onCancel={() => setMessageVisible(false)}
         >
-          <MessageLine messages={messages} />
-        </Modal>
-      </DraggableView>
-    );
-  }, [columns, messageVisible, messages, transfers]);
+          <InfoCircleOutlined />
+        </MenuItem>
+      )}
+    >
+      <Table
+        rowKey={'id'}
+        dataSource={transfers}
+        columns={columns}
+        size={'small'}
+        pagination={false}
+      />
+      <Modal
+        width={'800px'}
+        styles={{
+          body: {
+            padding: 0,
+          },
+        }}
+        title={'会话详情'}
+        open={messageVisible}
+        footer={false}
+        onCancel={() => setMessageVisible(false)}
+      >
+        <MessageLine messages={messages} />
+      </Modal>
+    </DraggableView>
+  );
 };
 export default Index;

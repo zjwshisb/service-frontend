@@ -40,6 +40,7 @@ const Index = () => {
     <DraggableView
       title={'待接入用户'}
       width={'400px'}
+      top={'200px'}
       defaultVisible={false}
       trigger={(visible) => (
         <MenuItem

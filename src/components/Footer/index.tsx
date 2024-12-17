@@ -8,10 +8,16 @@ const Footer: React.FC = () => {
       style={{
         background: 'none',
       }}
+      copyright={'2025'}
       links={[
         {
           key: 'github',
-          title: <GithubOutlined />,
+          title: (
+            <div>
+              <GithubOutlined />
+              <span className={'ml-1'}>go-chat-service</span>
+            </div>
+          ),
           href: 'https://github.com/zjwshisb/go-chat-service',
           blankTarget: true,
         },

@@ -5,7 +5,7 @@ import { handleTransfer } from '@/services';
 import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { App } from 'antd';
 
-const Index: React.FC = () => {
+const TransferForm: React.FC = () => {
   const { visible, setVisible, user, setUser } = useModel('chat.transfer');
   const initialState = useModel('@@initialState');
   const { admins } = useModel('chat.admins');
@@ -68,4 +68,4 @@ const Index: React.FC = () => {
     </ModalForm>
   );
 };
-export default Index;
+export default TransferForm;

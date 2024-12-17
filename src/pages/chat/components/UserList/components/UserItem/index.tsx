@@ -5,22 +5,15 @@ import lodash from 'lodash';
 import LastTime from './components/LastTime';
 import LastMessage from './components/LastMessage';
 import Menu from './components/Menu/index';
-import { handleRead } from '@/services';
 import classNames from 'classnames';
 
-const Index: React.FC<{
+const UserItem: React.FC<{
   user: API.User;
 }> = ({ user }) => {
   const { setCurrent, current, goTop } = useModel('chat.currentUser');
   const { removeUser, addUser } = useModel('chat.users');
 
   const onClick = React.useCallback(() => {
-    if (user.unread > 0) {
-      user.unread = 0;
-      if (user.messages.length > 0) {
-        handleRead(user.id, user.messages[0].id).then().catch();
-      }
-    }
     if (current) {
       addUser(current);
     }
@@ -66,4 +59,4 @@ const Index: React.FC<{
     </div>
   );
 };
-export default Index;
+export default UserItem;
