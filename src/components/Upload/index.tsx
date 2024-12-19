@@ -1,124 +1,82 @@
 import React from 'react';
-import { Upload, message, Image, Tooltip } from 'antd';
+import { Upload, App } from 'antd';
 import { getToken } from '@/utils/auth';
-import type { RcFile } from 'antd/lib/upload';
-import ImgCrop from 'antd-img-crop';
 import type { UploadChangeParam } from 'antd/es/upload';
-import { PlusOutlined } from '@ant-design/icons';
-import { CloseCircleOutlined } from '@ant-design/icons/lib';
-
-const maxSize = 1024 * 1024 * 5;
+import lodash from 'lodash';
 
 const Index: React.FC<
   React.PropsWithChildren<{
-    corp?: boolean;
-    onChange?: (value?: API.File) => void;
-    value?: API.File;
-    width?: string;
-    height?: string;
+    onSuccess?: (file: API.File) => void;
+    fileType?: API.FileType[] | API.FileType;
+    dir?: API.File;
+    multiple?: boolean;
+    isResource?: boolean;
   }>
-> = (props) => {
-  const { width = '120px', height = '120px', corp = false } = props;
-
+> = ({ onSuccess, fileType, dir, children, isResource = true, multiple = true }) => {
   const headers = {
     Authorization: `bearer ${getToken()}`,
   };
 
-  const [file, setFile] = React.useState<API.File | undefined>();
-
-  React.useEffect(() => {
-    setFile(props.value);
-  }, [props.value]);
-
-  const beforeUpload = React.useCallback((file: RcFile) => {
-    const { size } = file;
-    if (size > maxSize) {
-      message.error('图片文件必须小于5M').then();
-      return false;
-    }
-    return true;
-  }, []);
+  const { message } = App.useApp();
 
   const onChange = React.useCallback(
     (e: UploadChangeParam) => {
-      if (e.file.status === 'done' && props.onChange) {
-        props.onChange(e.file.response.data);
+      if (e.file.status === 'done') {
+        const { response } = e.file;
+        if (response) {
+          if (response.success) {
+            if (onSuccess) {
+              onSuccess(response.data);
+            }
+          } else {
+            message.error(response.message).then();
+          }
+        } else {
+          message.error('网络错误').then();
+        }
+      }
+      // 422
+      if (e.file.status === 'error') {
+        const { response } = e.file;
+        if (response.message) {
+          message.error(response.message).then();
+        }
       }
     },
-    [props],
+    [message, onSuccess],
   );
 
-  const clear = React.useCallback(() => {
-    setFile(undefined);
-    if (props.onChange) {
-      props.onChange(undefined);
+  const accept = React.useMemo(() => {
+    if (!fileType) {
+      return undefined;
     }
-  }, [props]);
+    if (lodash.isArray(fileType)) {
+      return fileType
+        .map((v) => {
+          return `${v}/*`;
+        })
+        .join(',');
+    }
+    return `${fileType}/*`;
+  }, [fileType]);
 
-  const uploadButton = props.children ? (
-    props.children
-  ) : (
-    <div>
-      <div
-        style={{ width, height }}
-        className={
-          'flex relative border-dashed border-2 items-center justify-center cursor-pointer'
-        }
-      >
-        {file ? (
-          <>
-            <div className={'w-full h-full overflow-hidden'}>
-              <Tooltip title={file.name}>
-                <Image
-                  className={'object-fill'}
-                  src={file.thumb_url}
-                  alt=""
-                  preview={false}
-                ></Image>
-              </Tooltip>
-            </div>
-            <CloseCircleOutlined
-              className={'text-red-600 absolute top-[-10px] right-[-10px]'}
-              onClick={(e) => {
-                clear();
-                e.stopPropagation();
-              }}
-            />
-          </>
-        ) : (
-          <PlusOutlined />
-        )}
-      </div>
-    </div>
-  );
-
-  return corp ? (
-    <ImgCrop quality={1} modalWidth={700}>
-      <Upload
-        className={'flex'}
-        onChange={onChange}
-        action={BASE_URL + '/images'}
-        accept="image/*"
-        withCredentials={false}
-        showUploadList={false}
-        headers={headers}
-        beforeUpload={beforeUpload}
-      >
-        {uploadButton}
-      </Upload>
-    </ImgCrop>
-  ) : (
+  return (
     <Upload
       onChange={onChange}
+      data={{
+        pid: dir ? dir.id : 0,
+        isResource,
+      }}
       className={'flex'}
-      action={BASE_URL + '/images'}
-      accept="image/*"
+      action={BASE_URL + '/files'}
+      accept={accept}
       withCredentials={false}
       showUploadList={false}
       headers={headers}
-      beforeUpload={beforeUpload}
+      maxCount={5}
+      multiple={multiple}
     >
-      {uploadButton}
+      {children}
     </Upload>
   );
 };

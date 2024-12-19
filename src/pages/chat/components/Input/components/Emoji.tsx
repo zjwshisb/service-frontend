@@ -2,12 +2,11 @@ import React from 'react';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { Popover } from 'antd';
-import { SmileOutlined } from '@ant-design/icons/lib';
-import { useModel } from '@umijs/max';
+import { Icon } from '@iconify/react';
 
-const Emoji = () => {
-  const { append } = useModel('chat.input');
-
+const Emoji: React.FC<{
+  onSelect: (v: string) => void;
+}> = (props) => {
   return (
     <div>
       <Popover
@@ -17,7 +16,7 @@ const Emoji = () => {
             data={data}
             onEmojiSelect={(e: { native: string }) => {
               if ('native' in e && e.native) {
-                append(e.native);
+                props.onSelect(e.native);
               }
             }}
             title={'emoji表情'}
@@ -26,7 +25,7 @@ const Emoji = () => {
         }
         trigger={['click']}
       >
-        <SmileOutlined className={'action-icon'} />
+        <Icon icon={'mdi:emoji-outline'} className={'cursor-pointer'}></Icon>
       </Popover>
     </div>
   );

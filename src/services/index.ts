@@ -160,3 +160,15 @@ export async function cancelTransfer(id: React.Key) {
     method: 'post',
   });
 }
+
+export async function getChatFiles(params: FORM.Pagination) {
+  return request<API.Pagination<API.ChatFile>>(`/chat-files`, {
+    params,
+  });
+}
+
+export async function deleteChatFile(id: React.Key) {
+  return request<API.Response>(`/chat-files/${id}`, {
+    method: 'DELETE',
+  });
+}

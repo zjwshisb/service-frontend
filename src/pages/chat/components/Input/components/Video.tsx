@@ -1,14 +1,10 @@
 import React from 'react';
-import { PictureOutlined } from '@ant-design/icons/lib';
+import { Icon } from '@iconify/react';
 import { useModel } from '@umijs/max';
-
-const type = 'image';
-
-const Image = () => {
-  const { selectFile } = useModel('fileModel');
-
+const type = 'video';
+const Video = () => {
   const { send } = useModel('chat.websocket');
-
+  const { selectFile } = useModel('fileModel');
   const onClick = React.useCallback(() => {
     selectFile({
       type,
@@ -20,6 +16,6 @@ const Image = () => {
     });
   }, [selectFile, send]);
 
-  return <PictureOutlined onClick={onClick} className={'action-icon cursor-pointer'} />;
+  return <Icon icon={'tabler:video'} onClick={onClick} className={'cursor-pointer'} />;
 };
-export default Image;
+export default Video;

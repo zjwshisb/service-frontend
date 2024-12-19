@@ -7,9 +7,9 @@ import { App } from 'antd';
 import ProFormFileSelect from '@/components/ProFormFileSelect';
 import { useBoolean } from 'ahooks';
 import { FormInstance } from 'antd/es';
-import MenuItem from '../MenuItem';
+import Wrapper from './Wrapper';
 
-const Index = () => {
+const Setting = () => {
   const [open, openAction] = useBoolean(false);
   const { setting, fetchSetting } = useModel('chat.adminSetting');
   const { message } = App.useApp();
@@ -24,9 +24,9 @@ const Index = () => {
 
   return (
     <>
-      <MenuItem title={'客服设置'} onClick={openAction.setTrue} active={open}>
+      <Wrapper title={'客服设置'} onClick={openAction.setTrue} active={open}>
         <SettingOutlined />
-      </MenuItem>
+      </Wrapper>
       <ModalForm
         formRef={form}
         modalProps={{
@@ -80,4 +80,4 @@ const Index = () => {
     </>
   );
 };
-export default Index;
+export default Setting;

@@ -22,7 +22,6 @@ export default function () {
 
   const [isShowNotice, setIsShowNotice] = React.useState(false);
 
-  const { getUser, updateUser } = useModel('chat.users');
   const { setCurrent, current } = useModel('chat.currentUser');
 
   const { message, modal } = App.useApp();
@@ -77,7 +76,7 @@ export default function () {
   const setOnMessage = React.useCallback(
     <T>(callback: ActionHandle<T>, type: API.ActionType): void => {
       updateOnMessage((prevState) => {
-        const newState = lodash.clone(prevState);
+        const newState = lodash.cloneDeep(prevState);
         newState.set(type, callback);
         return newState;
       });
@@ -126,7 +125,7 @@ export default function () {
           setTimeout(() => {
             setCurrent((user) => {
               if (user && user.id === action.data.user_id) {
-                const newUser = lodash.clone(user);
+                const newUser = lodash.cloneDeep(user);
                 const { length } = newUser.messages;
                 for (let i = 0; i < length; i += 1) {
                   if (newUser.messages[i].req_id === action.data.req_id) {
@@ -140,16 +139,6 @@ export default function () {
               }
               return user;
             });
-            const user = getUser(action.data.user_id);
-            if (user !== undefined) {
-              const index = user.messages.findIndex((v) => v.req_id === action.data.req_id);
-              if (index > -1) {
-                if (user.messages[index].is_success === undefined) {
-                  user.messages[index].is_success = false;
-                }
-              }
-              updateUser(user);
-            }
           }, 2000);
           if (onSend) {
             onSend(action);
@@ -170,7 +159,7 @@ export default function () {
         return false;
       }
     },
-    [getUser, modal, onSend, setCurrent, updateUser, websocket],
+    [modal, onSend, setCurrent, websocket],
   );
 
   const send: (content: string, type: API.MessageType) => Promise<boolean> = React.useCallback(

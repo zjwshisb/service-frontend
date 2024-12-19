@@ -1,12 +1,12 @@
 import React from 'react';
-import { App, Button } from 'antd';
+import { App, Space } from 'antd';
 import { useModel } from '@umijs/max';
 import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { removeUser } from '@/services';
 import { MessageOutlined, CloseOutlined, SwapOutlined } from '@ant-design/icons';
 import { When } from 'react-if';
 
-const Index: React.FC<{
+const Menu: React.FC<{
   user: API.User;
 }> = (props) => {
   const { setUser, setVisible } = useModel('chat.transfer');
@@ -39,17 +39,15 @@ const Index: React.FC<{
   );
 
   return (
-    <div className={'w-full text-right'}>
-      <Button type={'text'} size={'small'}>
+    <div className={'w-full text-right text-sm leading-3'}>
+      <Space size={'small'}>
         <MessageOutlined
           onClick={(e) => {
             show(props.user.id);
             e.stopPropagation();
           }}
         />
-      </Button>
-      <When condition={!props.user.disabled}>
-        <Button type={'text'} size={'small'}>
+        <When condition={!props.user.disabled}>
           <SwapOutlined
             onClick={(e) => {
               setUser(props.user);
@@ -57,17 +55,15 @@ const Index: React.FC<{
               e.stopPropagation();
             }}
           />
-        </Button>
-      </When>
-      <Button type={'text'} size={'small'}>
+        </When>
         <CloseOutlined
           onClick={(e) => {
             handleDelete(props.user);
             e.stopPropagation();
           }}
         />
-      </Button>
+      </Space>
     </div>
   );
 };
-export default Index;
+export default Menu;

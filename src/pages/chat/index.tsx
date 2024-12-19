@@ -1,18 +1,17 @@
 import React from 'react';
-import UserList from './components/UserList/index';
-import MessageList from './components/MessageList/index';
+import UserList from './components/UserList';
+import MessageList from './components/MessageList';
 import InputArea from './components/Input/index';
-import Header from './components/Header/index';
+import Header from './components/Header';
 import Menu from './components/Menu/index';
 import { useModel } from '@umijs/max';
 import lodash from 'lodash';
 import { getUsers, handleRead } from '@/services';
 import BackgroundImg from '@/assets/images/background.png';
-import { Modal } from 'antd';
+import { App } from 'antd';
 import Draggable from 'react-draggable';
 import { useMount } from 'ahooks';
 import useAutoAccept from '@/pages/chat/hooks/useAutoAccept';
-import HistorySession from './components/UserList/components/HistorySession';
 import { PageContainer } from '@ant-design/pro-components';
 
 const chatWidth = 1080;
@@ -29,7 +28,7 @@ const Index: React.FC = () => {
     fetchSetting();
   }, [fetchSetting]);
 
-  const { notifyMessage, requestPermission } = useModel('chat.notification');
+  const { requestPermission } = useModel('chat.notification');
 
   // 请求浏览器通知
   React.useEffect(() => {
@@ -37,6 +36,8 @@ const Index: React.FC = () => {
   }, [requestPermission]);
 
   useAutoAccept();
+
+  const { modal } = App.useApp();
 
   React.useEffect(() => {
     setOnSend(() => {
@@ -71,7 +72,7 @@ const Index: React.FC = () => {
 
   useMount(() => {
     setOnMessage((action: API.Action<string>) => {
-      Modal.error({
+      modal.error({
         title: '提示',
         content: action.data,
       });
@@ -114,18 +115,15 @@ const Index: React.FC = () => {
           newState.unread = 0;
           newState.messages.unshift(msg);
           newState.last_message = msg;
-          notifyMessage(newState.username, msg);
           return newState;
         }
         return prevState;
       });
       const user = getUser(msg.user_id);
       if (user) {
-        user.messages.unshift(action.data);
-        user.last_message = action.data;
+        user.last_message = msg;
         user.unread += 1;
         updateUser(user);
-        notifyMessage(user.username, msg);
       }
     }, 'receive-message');
   });
@@ -134,8 +132,9 @@ const Index: React.FC = () => {
     setOnMessage((action: API.Action<API.OnLine>) => {
       setCurrent((prevState) => {
         if (action.data.user_id === prevState?.id) {
-          const newState = lodash.clone(prevState);
+          const newState = lodash.cloneDeep(prevState);
           newState.online = true;
+          newState.platform = action.data.platform;
           return newState;
         }
         return prevState;
@@ -143,6 +142,7 @@ const Index: React.FC = () => {
       const user = getUser(action.data.user_id);
       if (user) {
         user.online = true;
+        user.platform = action.data.platform;
         updateUser(user);
       }
     }, 'user-online');
@@ -170,8 +170,9 @@ const Index: React.FC = () => {
     setOnMessage((action: API.Action<API.OffLine>) => {
       setCurrent((prevState) => {
         if (action.data.user_id === prevState?.id) {
-          const newState = lodash.clone(prevState);
+          const newState = lodash.cloneDeep(prevState);
           newState.online = false;
+          newState.platform = '';
           return newState;
         }
         return prevState;
@@ -227,20 +228,19 @@ const Index: React.FC = () => {
         }
         style={{ backgroundImage: `url(${bgImg})` }}
       >
-        <HistorySession />
         <Draggable handle={'#header'}>
           <div
             className={'flex overflow-hidden rounded'}
             style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
           >
-            <div className={'w-[60px] h-full bg-[#ebeced]'}>
-              <Menu />
-            </div>
+            <Menu />
             <div className={'flex flex-1 flex-col h-full bg-white'}>
               <Header />
-              <div className={'flex  w-full flex-1 bg-[#f3f3f3] overflow-hidden'}>
-                <UserList />
-                <div className={'flex flex-1 flex-col'}>
+              <div className={'w-full flex-1 flex flex-row  bg-[#f3f3f3] overflow-hidden'}>
+                <div className={'w-[280px] h-full overflow-hidden flex-shrink-0 border-r'}>
+                  <UserList />
+                </div>
+                <div className={'flex-1 flex-col flex'}>
                   <MessageList />
                   <InputArea />
                 </div>

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Avatar, Badge, Typography } from 'antd';
 import { useModel } from '@umijs/max';
-import lodash from 'lodash';
-import LastTime from './components/LastTime';
-import LastMessage from './components/LastMessage';
-import Menu from './components/Menu/index';
+import Menu from './components/Menu';
 import classNames from 'classnames';
+import { formatTime } from '@/utils/utils';
+import { getMessageTypeLabel } from '@/pages/chat/util';
+import Platform from './components/Platform';
 
 const UserItem: React.FC<{
   user: API.User;
@@ -18,13 +18,14 @@ const UserItem: React.FC<{
       addUser(current);
     }
     removeUser(user);
-    setCurrent(lodash.cloneDeep(user));
+    user.unread = 0;
+    setCurrent(user);
     goTop();
   }, [addUser, current, goTop, removeUser, setCurrent, user]);
 
   return (
     <div
-      className={classNames('flex w-full min-h-[70px] p-2.5', {
+      className={classNames('flex min-h-[70px] p-2', {
         'bg-[#dedede]': current && current.id === user.id,
       })}
       onClick={onClick}
@@ -42,15 +43,28 @@ const UserItem: React.FC<{
       </div>
       <div className={'flex-1 ml-2 overflow-hidden'}>
         <div className={'w-full flex items-center justify-between'}>
-          <Typography.Text ellipsis={true}>{user.username}</Typography.Text>
-          <div className={'w-24 text-[#acacac] text-sm text-right flex-shrink-0'}>
-            {user.last_message && <LastTime time={user.last_message.received_at} />}
+          <div className={'flex-1 overflow-hidden pr-2 flex items-center'}>
+            <Typography.Text ellipsis={true} className={'text-sm leading-4'}>
+              {user.username}
+            </Typography.Text>
           </div>
+
+          {user.last_message && (
+            <div className={'flex-shrink-0 flex items-center w-[110px] justify-end'}>
+              <Typography.Text ellipsis={true} className={'text-xs text-gray-500'}>
+                {formatTime(user.last_message?.received_at)}
+              </Typography.Text>
+            </div>
+          )}
         </div>
+        <Platform platform={user.platform}></Platform>
         <div className={'flex justify-between text-[#888] mt-1'}>
-          <Typography.Text ellipsis={true}>
-            {user.last_message && <LastMessage message={user.last_message} />}
-          </Typography.Text>
+          <div className={'flex-1 overflow-hidden flex items-center'}>
+            <Typography.Text ellipsis={true} className={'text-xs leading-3 text-gray-500'}>
+              {user.last_message &&
+                getMessageTypeLabel(user.last_message.content, user.last_message.type)}
+            </Typography.Text>
+          </div>
           <div className={'flex-shrink-0 w-[100px]'}>
             <Menu user={user} />
           </div>

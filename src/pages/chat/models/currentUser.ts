@@ -1,5 +1,4 @@
 import React from 'react';
-
 /**
  * 当前聊天对象
  */

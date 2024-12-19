@@ -4,7 +4,7 @@
     layout: false,
     component: './Login',
   },
-  { path: '/welcome', name: '欢迎', icon: 'smile', component: './Welcome' },
+  { path: '/dashboard', name: 'dashboard', component: './Dashboard' },
   {
     path: '/admin',
     name: '客服',
@@ -106,6 +106,11 @@
     ],
   },
   {
+    path: '/chat-files',
+    component: './file/index',
+    name: '聊天文件',
+  },
+  {
     path: '/chat',
     component: './chat/index',
     name: '客服面板',
@@ -114,6 +119,6 @@
     footerRender: false,
     menuRender: false,
   },
-  { path: '/', redirect: '/welcome' },
+  { path: '/', redirect: '/dashboard' },
   { path: '*', layout: false, component: './404' },
 ];

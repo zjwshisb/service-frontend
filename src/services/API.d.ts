@@ -55,6 +55,8 @@ declare namespace API {
 
   type MessageType = 'text' | 'navigator' | 'image' | 'audio' | 'video' | 'pdf';
 
+  type Platform = 'h5' | 'app' | 'weapp' | 'web' | '';
+
   type NavigatorContent = {
     title: string;
     content: string;
@@ -89,6 +91,7 @@ declare namespace API {
 
   type OnLine = {
     user_id: number;
+    platform: Platform;
   };
 
   type WaitingUser = {
@@ -99,7 +102,7 @@ declare namespace API {
     last_time: string;
     messages: {
       type: MessageType;
-      time: number;
+      time: string;
       content: string;
     }[];
     message_count: number;
@@ -128,6 +131,7 @@ declare namespace API {
     last_chat_time: string;
     unread: number;
     disabled: boolean;
+    platform: Platform;
   };
 
   type Setting = {
@@ -226,4 +230,10 @@ declare namespace API {
     label: string;
     category: string;
   };
+
+  type ChatFile = {
+    admin_name: string;
+    user_name: string;
+    created_at: string;
+  } & API.File;
 }

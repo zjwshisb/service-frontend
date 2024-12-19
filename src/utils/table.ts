@@ -15,6 +15,7 @@ export function genTableColumns<T extends Record<any, any>>(
     column.unshift({
       title: '#',
       valueType: 'index',
+      width: 80,
     });
   }
   if (created_at) {

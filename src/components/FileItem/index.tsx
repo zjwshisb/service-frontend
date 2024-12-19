@@ -3,7 +3,6 @@ import React, { HTMLProps } from 'react';
 import { Case, Else, If, Switch, Then } from 'react-if';
 import classNames from 'classnames';
 import NoImageImg from './asset/no-image.png';
-import { ImagePreviewType } from 'rc-image';
 import FileImg from '@/components/FileItem/FileImg';
 
 type FileItemProps = {
@@ -28,7 +27,7 @@ const FileItem: React.FC<FileItemProps> = (props) => {
     preview = true,
   } = props;
 
-  const previewProps: ImagePreviewType | boolean = React.useMemo(() => {
+  const previewProps: ImageProps['preview'] | boolean = React.useMemo(() => {
     if (!preview) {
       return false;
     }

@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-  ActionType,
-  PageContainer,
-  ProTable,
-  ProFormInstance,
-  ProForm,
-  ModalForm,
-  ProFormText,
-} from '@ant-design/pro-components';
-import { getSettings, updateSetting } from '@/services';
-import { App, Form, Input, Select } from 'antd';
-import ProFormFileSelect from '@/components/ProFormFileSelect';
+import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
+import { getSettings } from '@/services';
+import { App } from 'antd';
+
 import FileItem from '@/components/FileItem';
 import EditAction from '@/components/EditAction';
 import useTableColumn from '@/hooks/useTableColumn';
+import SettingForm from './components/SettingForm';
 
 const Index = () => {
   const [editRow, setEditRow] = React.useState<API.Setting>();
@@ -58,7 +51,7 @@ const Index = () => {
       valueType: 'option',
       fixed: 'right',
       width: 200,
-      render: (text, record) => {
+      render: (_, record) => {
         return (
           <EditAction
             onClick={() => {
@@ -70,88 +63,22 @@ const Index = () => {
     },
   ]);
 
-  const formRef = React.useRef<ProFormInstance>();
-
   const action = React.useRef<ActionType>();
 
   return (
     <PageContainer>
-      <ModalForm
-        width={500}
-        onFinish={async (form) => {
-          if (editRow) {
-            await updateSetting(editRow?.id, form.value);
-            setEditRow(undefined);
-            message.success('操作成功');
-            action.current?.reload();
-          }
+      <SettingForm
+        row={editRow}
+        onCancel={() => {
+          setEditRow(undefined);
         }}
-        formRef={formRef}
-        onOpenChange={(v) => {
-          if (!v) {
-            setEditRow(undefined);
-          } else {
-            formRef.current?.setFieldsValue({
-              title: editRow?.title,
-              value: editRow?.value,
-              type: editRow?.type,
-            });
-          }
+        onSuccess={() => {
+          setEditRow(undefined);
+          message.success('操作成功').then();
+          action.current?.reload();
         }}
-        open={!!editRow}
-        title={'配置修改'}
-      >
-        <ProForm.Group>
-          <ProFormText width="xl" name="title" readonly={true} label={'配置名称'} />
-        </ProForm.Group>
-        <Form.Item
-          shouldUpdate={(prevValues, currentValues) => prevValues.type !== currentValues.type}
-        >
-          {({ getFieldValue }) => {
-            const type = getFieldValue('type');
-            switch (type) {
-              case 'select': {
-                return (
-                  <Form.Item label={'值'} name={'value'}>
-                    <Select options={editRow?.options} />
-                  </Form.Item>
-                );
-              }
-              case 'text': {
-                return (
-                  <Form.Item
-                    label={'值'}
-                    name="value"
-                    rules={[
-                      {
-                        max: 10,
-                      },
-                    ]}
-                  >
-                    <Input placeholder="请输入名称" />
-                  </Form.Item>
-                );
-              }
-              case 'image': {
-                return (
-                  <ProFormFileSelect
-                    fieldProps={{
-                      type: 'image',
-                    }}
-                    name={'value'}
-                    label={'值'}
-                  />
-                );
-              }
-            }
-            return <></>;
-          }}
-        </Form.Item>
-      </ModalForm>
+      />
       <ProTable<API.Setting>
-        scroll={{
-          x: 1500,
-        }}
         actionRef={action}
         rowKey={'id'}
         columns={columns}

@@ -1,9 +1,9 @@
 import React from 'react';
-
+import Wrapper from './Wrapper';
 const Video: React.FC<{
   content: string;
 }> = () => {
-  return <div>audio</div>;
+  return <Wrapper>video</Wrapper>;
 };
 
 export default Video;

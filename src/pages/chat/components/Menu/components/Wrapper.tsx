@@ -3,7 +3,7 @@ import { Badge, BadgeProps, Button, Tooltip } from 'antd';
 import classNames from 'classnames';
 import { Else, If, Then } from 'react-if';
 
-const MenuItem: React.FC<
+const Wrapper: React.FC<
   React.PropsWithChildren<{
     onClick?: React.MouseEventHandler<HTMLDivElement>;
     active?: boolean;
@@ -50,4 +50,4 @@ const MenuItem: React.FC<
     </Tooltip>
   );
 };
-export default MenuItem;
+export default Wrapper;

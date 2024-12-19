@@ -3,12 +3,13 @@ import { Input } from 'antd';
 import { useModel } from '@umijs/max';
 import { TextAreaRef } from 'antd/es/input/TextArea';
 
-const Index: React.FC = () => {
+const Text: React.FC<{
+  value: string;
+  onChange: (s: string) => void;
+}> = (props) => {
   const { send } = useModel('chat.websocket');
 
   const { current } = useModel('chat.currentUser');
-
-  const { text, setText, clear, append } = useModel('chat.input');
 
   const ref = React.useRef<TextAreaRef>(null);
 
@@ -21,27 +22,30 @@ const Index: React.FC = () => {
   const sendMsg = React.useCallback(
     (event: React.KeyboardEvent) => {
       if (event.code === 'Enter' && !event.shiftKey) {
-        if (text !== '') {
-          send(text, 'text');
-          clear();
+        if (props.value !== '') {
+          send(props.value, 'text');
+          props.onChange('');
         }
         event.preventDefault();
       }
       if (event.shiftKey && event.code === 'Enter') {
-        append('\n');
+        props.onChange(props.value + '\n');
         event.preventDefault();
       }
     },
-    [text, send, clear, append],
+    [props, send],
   );
+
   return (
     <div className={'flex px-1.5'}>
       <Input.TextArea
         ref={ref}
         showCount={true}
         maxLength={512}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
+        value={props.value}
+        onChange={(e) => {
+          props.onChange(e.target.value);
+        }}
         placeholder={'enter发送/shirt enter 换行'}
         variant={'filled'}
         autoSize={{ maxRows: 6, minRows: 6 }}
@@ -50,4 +54,4 @@ const Index: React.FC = () => {
     </div>
   );
 };
-export default Index;
+export default Text;

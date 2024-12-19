@@ -6,8 +6,9 @@ import DraggableView from '@/components/DraggableView';
 import { getMessageTypeLabel } from '@/pages/chat/util';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { cancelChatSessions } from '@/services';
-import MenuItem from '@/pages/chat/components/Menu/components/MenuItem';
-import { If, Then, When, Else } from 'react-if';
+import Wrapper from '../Wrapper';
+import { When } from 'react-if';
+import { formatTime } from '@/utils/utils';
 
 const Index = () => {
   const { setOnMessage } = useModel('chat.websocket');
@@ -43,7 +44,7 @@ const Index = () => {
       top={'200px'}
       defaultVisible={false}
       trigger={(visible) => (
-        <MenuItem
+        <Wrapper
           title={'待接入用户'}
           badge={{
             count: waitingUsers.length,
@@ -51,7 +52,7 @@ const Index = () => {
           active={visible}
         >
           <MessageOutlined />
-        </MenuItem>
+        </Wrapper>
       )}
     >
       <List
@@ -82,7 +83,6 @@ const Index = () => {
                 type={'text'}
                 danger={true}
                 key={'refuse'}
-                className={'red-6'}
                 onClick={(e) => {
                   modal.confirm({
                     title: '提示',
@@ -108,7 +108,7 @@ const Index = () => {
                     renderItem={(i) => {
                       return (
                         <List.Item className={'overflow-hidden flex items-center'}>
-                          <span className={'flex-shrink-0'}>{i.time}</span>
+                          <span className={'flex-shrink-0'}>{formatTime(i.time)}</span>
                           <Typography.Text ellipsis={true} className={'ml-2'}>
                             {getMessageTypeLabel(i.content, i.type)}
                           </Typography.Text>
@@ -123,23 +123,24 @@ const Index = () => {
                   avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
                   title={
                     <div className={'w-full text-sm'}>
-                      <div>{item.username}</div>
-                      <div>{item.last_time}</div>
+                      <div>
+                        <Typography.Text ellipsis={true}>{item.username}</Typography.Text>
+                      </div>
+                      <div>
+                        <Typography.Text ellipsis={true} className={'text-xs text-gray-500'}>
+                          {formatTime(item.last_time)}
+                        </Typography.Text>
+                      </div>
                     </div>
                   }
                   description={
                     <When condition={item.messages.length > 0}>
                       {() => (
-                        <Typography.Text ellipsis={true}>
-                          <If condition={item.messages.length}>
-                            <Then>
-                              {getMessageTypeLabel(
-                                item.messages[item.messages.length - 1].content,
-                                item.messages[item.messages.length - 1].type,
-                              )}
-                            </Then>
-                            <Else></Else>
-                          </If>
+                        <Typography.Text ellipsis={true} className={'text-xs text-gray-500'}>
+                          {getMessageTypeLabel(
+                            item.messages[item.messages.length - 1].content,
+                            item.messages[item.messages.length - 1].type,
+                          )}
                         </Typography.Text>
                       )}
                     </When>

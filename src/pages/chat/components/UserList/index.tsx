@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import UserItem from './components/UserItem/index';
+import UserItem from './components/UserItem';
 import { useModel, Helmet } from '@umijs/max';
-import TransferForm from './components/TransferForm/index';
+import TransferForm from './components/TransferForm';
 import { Empty } from 'antd';
 import { If, Then, Else } from 'react-if';
+import HistorySession from './components/HistorySession';
+import CusDiv from '@/components/CusDiv';
 
 const UserList: React.FC = () => {
   const { current } = useModel('chat.currentUser');
@@ -34,18 +36,21 @@ const UserList: React.FC = () => {
   }, [current, users]);
 
   return (
-    <div className={'flex-shrink-0 overflow-x-hidden w-[300px] overflow-y-auto border-r h-full'}>
+    <CusDiv className={'overflow-x-hidden h-full'}>
       <TransferForm />
+      <HistorySession />
       <Helmet defer={false}>
         <title>{title}</title>
       </Helmet>
       <If condition={userList.length > 0}>
         <Then>{userList}</Then>
         <Else>
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={'暂无会话'} />
+          <div className={'w-full h-full flex items-center justify-center'}>
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={'暂无会话'} />
+          </div>
         </Else>
       </If>
-    </div>
+    </CusDiv>
   );
 };
 export default UserList;

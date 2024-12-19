@@ -66,7 +66,6 @@ const Index = () => {
       {
         dataIndex: 'id',
         title: '操作',
-        valueType: 'option',
         render(_, record, __, action) {
           const buttons = [
             <Button size={'small'} key={1} onClick={() => history.push(`/session/${record.id}`)}>

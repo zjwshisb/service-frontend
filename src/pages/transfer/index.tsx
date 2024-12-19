@@ -1,12 +1,10 @@
 import React from 'react';
-import { PageContainer, ProTable, ActionType } from '@ant-design/pro-components';
+import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { getTransfers, cancelTransfer } from '@/services';
 import DeleteAction from '@/components/DeleteAction';
 import useTableColumn from '@/hooks/useTableColumn';
 
 const Index = () => {
-  const action = React.useRef<ActionType>();
-
   const columns = useTableColumn<API.Transfer>(
     [
       {
@@ -29,20 +27,22 @@ const Index = () => {
         title: '备注',
       },
       {
-        dataIndex: 'created_at',
-        title: '创建时间',
-      },
-      {
-        dataIndex: 'accepted_at',
-        title: '接入时间',
-      },
-      {
-        dataIndex: 'canceled_at',
-        title: '取消时间',
+        dataIndex: 'status',
+        title: '状态',
+        render(_, record) {
+          return (
+            <div>
+              <div>{_}</div>
+              {record.canceled_at && <div>取消时间: {record.canceled_at}</div>}
+              {record.accepted_at && <div>接入时间: {record.accepted_at}</div>}
+            </div>
+          );
+        },
       },
       {
         dataIndex: 'id',
         title: '操作',
+        fixed: 'right',
         render(_, record, __, action) {
           if (!record.canceled_at && !record.accepted_at) {
             return (
@@ -60,7 +60,6 @@ const Index = () => {
       },
     ],
     {
-      created_at: false,
       updated_at: false,
     },
   );
@@ -71,7 +70,6 @@ const Index = () => {
         search={{
           defaultCollapsed: false,
         }}
-        actionRef={action}
         request={getTransfers}
         columns={columns}
         rowKey={'id'}

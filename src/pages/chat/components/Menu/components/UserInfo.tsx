@@ -4,9 +4,9 @@ import { useModel } from '@umijs/max';
 import DraggableView from '@/components/DraggableView';
 import { Descriptions, Empty } from 'antd';
 import { getUserInfo } from '@/services';
-import MenuItem from '../MenuItem';
+import Wrapper from './Wrapper';
 
-const Index = () => {
+const UserInfo = () => {
   const { current } = useModel('chat.currentUser');
   const [info, setInfo] = useState<Record<string, any>>({});
 
@@ -26,9 +26,9 @@ const Index = () => {
       defaultVisible={false}
       top="300px"
       trigger={(visible) => (
-        <MenuItem title={'用户信息'} active={visible}>
+        <Wrapper title={'用户信息'} active={visible}>
           <AuditOutlined />
-        </MenuItem>
+        </Wrapper>
       )}
     >
       <div>
@@ -42,4 +42,4 @@ const Index = () => {
     </DraggableView>
   );
 };
-export default Index;
+export default UserInfo;

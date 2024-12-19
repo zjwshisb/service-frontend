@@ -1,8 +1,5 @@
 import { getReqId } from '@/services';
 import dayjs from 'dayjs';
-export async function isAdminSend(message: API.Message) {
-  return message.source === 0;
-}
 export async function createMsg(
   content: string,
   userId: number,

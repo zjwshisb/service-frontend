@@ -3,7 +3,7 @@ import { CustomerServiceFilled } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 import { Avatar, Drawer, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import MenuItem from '../MenuItem';
+import Wrapper from './Wrapper';
 
 const columns: ColumnsType<API.Admin> = [
   {
@@ -24,7 +24,7 @@ const columns: ColumnsType<API.Admin> = [
   },
 ];
 
-const Index = () => {
+const Admins = () => {
   const { admins, setAdmins } = useModel('chat.admins');
 
   const setOnMessage = useModel('chat.websocket', (model) => model.setOnMessage);
@@ -39,9 +39,9 @@ const Index = () => {
 
   return (
     <>
-      <MenuItem title={'在线客服'} onClick={() => setVisible(true)} active={visible}>
+      <Wrapper title={'在线客服'} onClick={() => setVisible(true)} active={visible}>
         <CustomerServiceFilled />
-      </MenuItem>
+      </Wrapper>
       <Drawer
         open={visible}
         placement={'right'}
@@ -67,4 +67,4 @@ const Index = () => {
     </>
   );
 };
-export default Index;
+export default Admins;

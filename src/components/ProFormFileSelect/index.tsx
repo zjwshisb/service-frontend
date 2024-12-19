@@ -1,4 +1,4 @@
-import { FormItemProps } from '@ant-design/pro-form';
+import { FormItemProps } from '@ant-design/pro-components';
 import { Form } from 'antd';
 import React from 'react';
 import { Icon } from '@iconify/react';

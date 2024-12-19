@@ -6,10 +6,10 @@ import DraggableView from '@/components/DraggableView';
 import type { ColumnsType } from 'antd/es/table';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { getTransferMessage, handleCancelTransfer } from '@/services';
-import MessageLine from '@/components/MessageLine/index';
-import MenuItem from '../MenuItem';
+import MessageLine from '@/components/MessageLine';
+import Wrapper from './Wrapper';
 
-const Index = () => {
+const TransferUsers = () => {
   const { setOnMessage } = useModel('chat.websocket');
   const { transfers, setTransfers } = useModel('chat.transfer');
   const [messageVisible, setMessageVisible] = useState(false);
@@ -99,7 +99,7 @@ const Index = () => {
       title={'转接用户'}
       defaultVisible={false}
       trigger={(visible) => (
-        <MenuItem
+        <Wrapper
           title={'转接用户'}
           active={visible}
           badge={{
@@ -107,7 +107,7 @@ const Index = () => {
           }}
         >
           <InfoCircleOutlined />
-        </MenuItem>
+        </Wrapper>
       )}
     >
       <Table
@@ -134,4 +134,4 @@ const Index = () => {
     </DraggableView>
   );
 };
-export default Index;
+export default TransferUsers;

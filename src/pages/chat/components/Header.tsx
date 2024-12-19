@@ -2,7 +2,7 @@ import React from 'react';
 import { Avatar } from 'antd';
 import { useModel } from '@@/exports';
 
-const Index: React.FC = () => {
+const Header: React.FC = () => {
   const initialState = useModel('@@initialState');
 
   const { setting } = useModel('chat.adminSetting');
@@ -17,7 +17,7 @@ const Index: React.FC = () => {
       <div className={'flex'} />
       <div className={'flex px-2.5'}>
         <div className={'flex items-center h-full'}>
-          <Avatar src={setting?.avatar?.thumb_url} shape="square" className={'cursor-pointer'}>
+          <Avatar src={setting?.avatar?.thumb_url} shape="square">
             {initialState.initialState?.currentUser?.username}
           </Avatar>
         </div>
@@ -25,4 +25,4 @@ const Index: React.FC = () => {
     </div>
   );
 };
-export default Index;
+export default Header;

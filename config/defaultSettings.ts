@@ -15,10 +15,9 @@ const Settings: ProLayoutProps & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'Ant Design Pro',
+  title: 'go chat service',
   locale: 'zh-CN',
   pwa: true,
-  logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
   iconfontUrl: '',
 };
 

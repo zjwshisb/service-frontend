@@ -23,8 +23,8 @@ export default function () {
     (username: string, message: API.Message) => {
       const options: NotificationOptions = {};
       let notice = '';
-      if (message.type === 'file') {
-        options.body = '[文件]';
+      if (message.type === 'image') {
+        options.body = '[图片]';
         notice = `<${username}>发来了一张图片`;
       }
       if (message.type === 'text') {

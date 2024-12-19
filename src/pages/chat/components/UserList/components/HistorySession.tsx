@@ -30,8 +30,8 @@ const HistorySession = () => {
             onClick={(e) => {
               e.stopPropagation();
               getChatSessionDetail(val).then((res) => {
-                openAction.setTrue();
                 setMessages(res.data.messages);
+                openAction.setTrue();
               });
             }}
           >
