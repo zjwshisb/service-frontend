@@ -193,21 +193,14 @@ declare namespace API {
     scenes: string[];
   };
   declare namespace Dashboard {
-    type QueryInfo = {
-      user_count: number;
-      message_count: number;
-      max_time: number;
-      avg_time: number;
-      chart: {
-        label: string;
-        count: number;
-        category: string;
-      }[];
+    type SimpleUser = {
+      id: number;
+      username: string;
     };
     type OnlineInfo = {
-      user_count: number;
-      waiting_user_count: number;
-      admin_count: number;
+      user: number;
+      waiting: number;
+      admin: number;
     };
   }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar } from 'antd';
-import { useModel } from '@@/exports';
+import { useModel } from '@umijs/max';
 
 const Header: React.FC = () => {
   const initialState = useModel('@@initialState');

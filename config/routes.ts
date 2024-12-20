@@ -4,7 +4,7 @@
     layout: false,
     component: './Login',
   },
-  { path: '/dashboard', name: 'dashboard', component: './Dashboard' },
+  { path: '/dashboard', name: 'dashboard', component: './dashboard' },
   {
     path: '/admin',
     name: '客服',
