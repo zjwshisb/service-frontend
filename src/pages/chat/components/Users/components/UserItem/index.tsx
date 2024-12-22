@@ -10,18 +10,19 @@ import Platform from './components/Platform';
 const UserItem: React.FC<{
   user: API.User;
 }> = ({ user }) => {
-  const { setCurrent, current, goTop } = useModel('chat.currentUser');
-  const { removeUser, addUser } = useModel('chat.users');
+  const { setCurrent, current } = useModel('chat.currentUser');
+  const { updateUser } = useModel('chat.users');
 
   const onClick = React.useCallback(() => {
-    if (current) {
-      addUser(current);
-    }
-    removeUser(user);
     user.unread = 0;
-    setCurrent(user);
-    goTop();
-  }, [addUser, current, goTop, removeUser, setCurrent, user]);
+    updateUser(user);
+    setCurrent({
+      id: user.id,
+      avatar: user.avatar,
+      messages: [],
+      disabled: user.disabled,
+    });
+  }, [setCurrent, updateUser, user]);
 
   return (
     <div

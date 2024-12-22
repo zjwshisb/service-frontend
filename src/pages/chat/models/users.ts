@@ -1,5 +1,6 @@
 import { useMap } from 'ahooks';
 import React from 'react';
+import lodash from 'lodash';
 
 /**
  * 聊天用户map
@@ -9,7 +10,7 @@ export default function () {
 
   const updateUser = React.useCallback(
     (user: API.User) => {
-      usersAction.set(user.id, user);
+      usersAction.set(user.id, lodash.cloneDeep(user));
     },
     [usersAction],
   );
@@ -27,6 +28,10 @@ export default function () {
     },
     [usersAction],
   );
+
+  React.useEffect(() => {
+    console.log(users);
+  }, [users]);
 
   return {
     users: users,

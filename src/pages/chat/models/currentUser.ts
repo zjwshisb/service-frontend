@@ -1,21 +1,14 @@
-import React from 'react';
+import { useGetState } from 'ahooks';
+
 /**
  * 当前聊天对象
  */
 export default function () {
-  const [current, setCurrent] = React.useState<API.User | undefined>();
-
-  const [top, setTop] = React.useState<boolean>(false);
-
-  // 消息列表滚动到最底部
-  const goTop = React.useCallback(() => {
-    setTop((prevState) => !prevState);
-  }, []);
+  const [current, setCurrent, getCurrent] = useGetState<API.CurrentChatUser | undefined>();
 
   return {
     current,
     setCurrent,
-    goTop,
-    top,
+    getCurrent,
   };
 }

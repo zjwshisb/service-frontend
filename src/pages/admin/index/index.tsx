@@ -2,7 +2,7 @@ import React from 'react';
 import { getAdmins } from '@/services';
 import { Button } from 'antd';
 import { history } from '@@/core/history';
-import { ProTable, ActionType, PageContainer } from '@ant-design/pro-components';
+import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
 import useTableColumn from '@/hooks/useTableColumn';
 
 const Index = () => {
@@ -18,11 +18,12 @@ const Index = () => {
       title: '在线情况',
       dataIndex: 'online',
       width: 100,
+      valueType: 'switch',
       render(_, record) {
         return record.online ? (
-          <span className={'green-6'}>在线</span>
+          <span className={'text-green-600'}>在线</span>
         ) : (
-          <span className={'red-6'}>离线</span>
+          <span className={'text-red-600'}>离线</span>
         );
       },
     },

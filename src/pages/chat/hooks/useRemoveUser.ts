@@ -3,15 +3,14 @@ import { useModel } from '@umijs/max';
 
 export default function useRemoveUser() {
   const { removeUser } = useModel('chat.users');
-  const { current, setCurrent } = useModel('chat.currentUser');
+  const { setCurrent, getCurrent } = useModel('chat.currentUser');
   return React.useCallback(
     (user: API.User) => {
-      if (current && current.id === user.id) {
+      if (getCurrent()?.id === user.id) {
         setCurrent(undefined);
-      } else {
-        removeUser(user);
       }
+      removeUser(user);
     },
-    [current, removeUser, setCurrent],
+    [getCurrent, removeUser, setCurrent],
   );
 }

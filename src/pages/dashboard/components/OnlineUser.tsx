@@ -16,7 +16,7 @@ const Index: React.FC = () => {
 
   return (
     <StatisticCard
-      footer={<div className={'border-t mt-4'}>今日活跃: {data?.active_count}</div>}
+      footer={<div className={'border-t pt-3'}>今日活跃: {data?.active_count}</div>}
       statistic={{
         title: '在线用户',
         value: data?.users.length,

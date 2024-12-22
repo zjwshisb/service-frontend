@@ -6,7 +6,7 @@ import { getMessages } from '@/services';
 import Empty from './components/Empty';
 import Notice from './components/Notice';
 import lodash from 'lodash';
-import { If, Then, Else, When } from 'react-if';
+import { Else, If, Then, When } from 'react-if';
 import CusDiv from '@/components/CusDiv';
 
 const pageSize = 50;
@@ -15,16 +15,18 @@ const pageSize = 50;
  * 聊天列表组件
  */
 const MessageList: React.FC = () => {
-  const { current, setCurrent, top } = useModel('chat.currentUser');
+  const { current, setCurrent } = useModel('chat.currentUser');
 
   const ref = React.useRef<HTMLDivElement>(null);
 
+  const { getUser, updateUser } = useModel('chat.users');
+
+  const { setting } = useModel('chat.adminSetting');
   const [loading, setLoading] = React.useState(false);
 
   const [noMore, setNoMore] = React.useState(false);
 
-  // 保存上一帧的聊天对象
-  const userRef = React.useRef<API.User>();
+  const { setOnSend } = useModel('chat.websocket');
 
   const fetchMessages = React.useCallback(async (uid: number, mid?: number) => {
     let res: API.Response<API.Message[]>;
@@ -41,36 +43,47 @@ const MessageList: React.FC = () => {
     return res.data;
   }, []);
 
-  // 切换当前聊天用户
-  // 接受到当前聊天用户的消息
-  // 给当前聊天用户发送消息
+  // 当前用户变化
   React.useEffect(() => {
-    const prevUser = userRef.current;
-    userRef.current = current;
-    if (current) {
-      if (prevUser && prevUser.id === current.id) {
-        // 当前用户没有变化
-        // setMessages(current.messages.slice(0, offset.current));
-      } else {
-        fetchMessages(current.id).then((msgs) => {
-          setCurrent((prevState) => {
-            if (prevState) {
-              const newState = lodash.cloneDeep(prevState);
-              newState.messages = msgs;
-              return newState;
-            }
-            return prevState;
-          });
+    if (current?.id) {
+      fetchMessages(current.id).then((msgs) => {
+        setCurrent((prevState) => {
+          if (prevState) {
+            const newState = lodash.cloneDeep(prevState);
+            newState.messages = msgs;
+            return newState;
+          }
+          return prevState;
         });
-      }
+      });
     }
-  }, [current, fetchMessages, setCurrent]);
+  }, [current?.id, fetchMessages, setCurrent]);
 
   React.useEffect(() => {
-    if (ref.current) {
-      ref.current.scrollTop = 0;
-    }
-  }, [top]);
+    setOnSend(() => {
+      return (action: API.Action<API.Message>) => {
+        const msg = action.data;
+        msg.avatar = setting?.avatar?.thumb_url || '';
+        setCurrent((prevState) => {
+          if (prevState?.id === action.data.user_id) {
+            const newState = lodash.cloneDeep(prevState);
+            newState.messages.unshift(msg);
+            return newState;
+          }
+          return prevState;
+        });
+        const user = getUser(msg.user_id);
+        if (user) {
+          user.last_message = msg;
+          user.last_chat_time = msg.received_at;
+          updateUser(user);
+        }
+        if (ref.current) {
+          ref.current.scrollTop = 0;
+        }
+      };
+    });
+  }, [getUser, setCurrent, setOnSend, setting?.avatar?.thumb_url, updateUser]);
 
   // 滚动加载更多聊天消息
   const onScroll = useCallback(
@@ -79,25 +92,23 @@ const MessageList: React.FC = () => {
       const { scrollHeight, scrollTop, clientHeight } = el;
       // 滚动到顶部30个像素触发
       if (scrollHeight + scrollTop - clientHeight <= 30) {
-        if (current && current.messages.length >= 20 && !loading) {
-          if (!noMore) {
-            setLoading(true);
-            let mid;
-            if (current.messages.length > 0) {
-              const lastMessage = current.messages[current.messages.length - 1];
-              mid = lastMessage.id;
-            }
-            const moreMsg = await fetchMessages(current.id, mid);
-            setCurrent((prevState) => {
-              if (prevState) {
-                const newState = lodash.cloneDeep(prevState);
-                newState.messages = [...prevState.messages].concat(moreMsg);
-                return newState;
-              }
-              return prevState;
-            });
-            setLoading(false);
+        if (current && !loading && !noMore) {
+          setLoading(true);
+          let mid;
+          if (current.messages.length > 0) {
+            const lastMessage = current.messages[current.messages.length - 1];
+            mid = lastMessage.id;
           }
+          const moreMsg = await fetchMessages(current.id, mid);
+          setCurrent((prevState) => {
+            if (prevState) {
+              const newState = lodash.cloneDeep(prevState);
+              newState.messages = prevState.messages.concat(moreMsg);
+              return newState;
+            }
+            return prevState;
+          });
+          setLoading(false);
         }
       }
     },
@@ -106,7 +117,6 @@ const MessageList: React.FC = () => {
 
   const messagesView = React.useMemo(() => {
     if (current) {
-      console.log(current.messages.length);
       const { length } = current.messages;
       return current?.messages.map((v, index) => {
         return (
@@ -129,15 +139,15 @@ const MessageList: React.FC = () => {
     >
       <If condition={current !== undefined}>
         <Then>
-          <When condition={loading}>
-            <div className={'text-center'}>
-              <Spin />
-            </div>
-          </When>
           <When condition={current?.disabled}>
             <Notice>已失效，无法发送消息</Notice>
           </When>
           {messagesView}
+          <When condition={loading}>
+            <div className={'text-center mt-1'}>
+              <Spin />
+            </div>
+          </When>
           <When condition={current && noMore}>
             <Notice>没有更多了</Notice>
           </When>

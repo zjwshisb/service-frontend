@@ -22,6 +22,11 @@ export async function getAdminInfo() {
   >('/dashboard/admin-info');
 }
 
-export async function getWaitingUsers() {
-  return request<API.Response<API.Dashboard.SimpleUser[]>>('/dashboard/waiting-users');
+export async function getWaitingUserInfo() {
+  return request<
+    API.Response<{
+      users: API.Dashboard.SimpleUser[];
+      today_total: number;
+    }>
+  >('/dashboard/waiting-user-info');
 }

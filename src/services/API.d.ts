@@ -121,12 +121,15 @@ declare namespace API {
     to_session_id: number;
   };
 
+  type CurrentChatUser = Pick<User, 'id' | 'avatar' | 'disabled'> & {
+    messages: API.Message[];
+  };
+
   type User = {
     id: number;
     username: string;
     avatar?: string;
     online: boolean;
-    messages: API.Message[];
     last_message?: API.Message;
     last_chat_time: string;
     unread: number;
@@ -216,12 +219,6 @@ declare namespace API {
     type_label: string;
     status: ChatSessionStatus;
     canceled_at: string;
-  };
-
-  type Line = {
-    value: number;
-    label: string;
-    category: string;
   };
 
   type ChatFile = {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Table, Button } from 'antd';
+import { Button, Modal, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { getChatSessionDetail } from '@/services';
 import MessageLine from '@/components/MessageLine';
@@ -49,9 +49,14 @@ const HistorySession = () => {
       <Modal
         zIndex={1000}
         styles={{
-          body: {
+          header: {
+            padding: '10px 24px',
+          },
+          content: {
             padding: 0,
-            maxHeight: '500px',
+            paddingBottom: '10px',
+          },
+          body: {
             overflowY: 'auto',
           },
         }}
