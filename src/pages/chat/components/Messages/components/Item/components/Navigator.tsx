@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card } from 'antd';
 import Wrapper from './Wrapper';
+
 const Navigator: React.FC<{
   content: string;
 }> = (props) => {
@@ -14,7 +15,7 @@ const Navigator: React.FC<{
             padding: '5px',
           },
         }}
-        cover={<img src={item.content} style={{ width: '300px', height: '150px' }} />}
+        cover={<img src={item.image} style={{ width: '300px', height: '150px' }} />}
       >
         <Card.Meta title={item.title} />
       </Card>

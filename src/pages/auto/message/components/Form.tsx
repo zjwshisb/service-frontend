@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import {
+  ProCard,
+  ProForm,
   ProFormDependency,
   ProFormSelect,
   ProFormText,
   ProFormTextArea,
-  ProForm,
-  ProCard,
 } from '@ant-design/pro-components';
 import NavigatorCardField from './NavigatorCard';
 import { getAutoMessageForm, storeAutoMessage, updateAutoMessage } from '@/services/auto';
@@ -93,9 +93,17 @@ const Form: React.FC<{
               case 'navigator': {
                 return <NavigatorCardField />;
               }
-              default:
+              case 'audio':
+              case 'image':
+              case 'video':
                 return (
                   <ProFormFileSelect
+                    rules={[
+                      {
+                        required: true,
+                        message: '请选择文件',
+                      },
+                    ]}
                     fieldProps={{
                       type: type,
                     }}
@@ -103,6 +111,9 @@ const Form: React.FC<{
                     label={'文件'}
                   ></ProFormFileSelect>
                 );
+              default: {
+                return <></>;
+              }
             }
           }}
         </ProFormDependency>
