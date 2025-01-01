@@ -1,16 +1,16 @@
 import React from 'react';
 import Wrapper from './Wrapper';
-import { MessageSourceType } from '../index';
+import { MessageDirection } from '../index';
 import { Icon } from '@iconify/react';
 
 const Audio: React.FC<{
   content: string;
-  sourceType: MessageSourceType;
-}> = ({ content, sourceType }) => {
+  direction: MessageDirection;
+}> = ({ content, direction }) => {
   const [duration, setDuration] = React.useState(0);
 
   return (
-    <Wrapper bgColor={true} sourceType={sourceType}>
+    <Wrapper bgColor={true} direction={direction}>
       <audio
         src={content}
         onLoadedData={(e) => {

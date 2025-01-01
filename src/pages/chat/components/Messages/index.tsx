@@ -122,7 +122,7 @@ const MessageList: React.FC = () => {
         return (
           <Item
             message={v}
-            key={v.source + v.req_id}
+            key={v.req_id}
             prev={index + 1 < length ? current.messages[index + 1] : undefined}
           />
         );
@@ -133,7 +133,7 @@ const MessageList: React.FC = () => {
 
   return (
     <CusDiv
-      className={'flex flex-1 flex-col-reverse p-2.5 bg-[#f5f5f5] border-b'}
+      className={'flex flex-1 flex-col-reverse p-2.5 border-b border-[#e1e1e1]'}
       ref={ref}
       onScroll={onScroll}
     >

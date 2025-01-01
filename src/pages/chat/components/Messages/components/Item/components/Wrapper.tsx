@@ -1,21 +1,22 @@
 import React from 'react';
 import classNames from 'classnames';
-import { MessageSourceType } from '../index';
+import { MessageDirection } from '../index';
+
 const Wrapper: React.FC<
   React.PropsWithChildren<{
-    sourceType?: MessageSourceType;
+    direction?: MessageDirection;
     bgColor?: boolean;
     className?: string;
   }>
 > = (props) => {
-  const { bgColor = false, className, sourceType = 'send' } = props;
+  const { bgColor = false, className, direction } = props;
 
   return (
     <div
       className={classNames(className, 'text-base whitespace-pre-wrap break-all', {
-        'bg-white': sourceType === 'receive' && bgColor,
-        'bg-[#95ec69]': sourceType === 'send' && bgColor,
-        'text-[#0f170a]': sourceType === 'send' && bgColor,
+        'bg-white': direction === 'left' && bgColor,
+        'bg-[#95ec69]': direction === 'right' && bgColor,
+        'text-[#0f170a]': direction === 'right' && bgColor,
         'p-1 rounded': bgColor,
       })}
     >

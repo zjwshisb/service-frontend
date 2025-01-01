@@ -21,13 +21,14 @@ const UserItem: React.FC<{
       avatar: user.avatar,
       messages: [],
       disabled: user.disabled,
+      username: user.username,
     });
   }, [setCurrent, updateUser, user]);
 
   return (
     <div
       className={classNames('flex min-h-[70px] p-2', {
-        'bg-[#dedede]': current && current.id === user.id,
+        'bg-[#e1e1e1] ': current && current.id === user.id,
       })}
       onClick={onClick}
     >

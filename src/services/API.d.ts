@@ -121,7 +121,7 @@ declare namespace API {
     to_session_id: number;
   };
 
-  type CurrentChatUser = Pick<User, 'id' | 'avatar' | 'disabled'> & {
+  type CurrentChatUser = Pick<User, 'id' | 'avatar' | 'disabled' | 'username'> & {
     messages: API.Message[];
   };
 

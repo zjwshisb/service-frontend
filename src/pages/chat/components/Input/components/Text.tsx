@@ -39,6 +39,10 @@ const Text: React.FC<{
   return (
     <div className={'flex px-1.5'}>
       <Input.TextArea
+        style={{
+          background: '#f3f3f3',
+          borderColor: '#f3f3f3',
+        }}
         ref={ref}
         showCount={true}
         maxLength={512}

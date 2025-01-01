@@ -10,12 +10,12 @@ import IsRead from './components/IsRead';
 import Notice from '../Notice';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
-import { When, Switch, Case } from 'react-if';
+import { Case, Switch, When } from 'react-if';
 import { formatTime } from '@/utils/utils';
 import { useModel } from '@umijs/max';
 import lodash from 'lodash';
 
-export type MessageSourceType = 'send' | 'receive';
+export type MessageDirection = 'left' | 'right';
 
 const Index: React.FC<{
   message: API.Message;
@@ -52,15 +52,15 @@ const Index: React.FC<{
     send(message.content, message.type);
   }, [message.content, message.req_id, message.type, send, setCurrent]);
 
-  const sourceType: MessageSourceType = React.useMemo(() => {
-    return message.source === 1 ? 'send' : 'receive';
+  const direction: MessageDirection = React.useMemo(() => {
+    return message.source === 1 ? 'right' : 'left';
   }, [message.source]);
 
   return (
     <>
       <div
         className={classNames('flex items-start w-full mt-3.5', {
-          'flex-row-reverse': message.source === 1,
+          'flex-row-reverse': direction === 'right',
         })}
       >
         <div className={'self-start w-[30px] h-[30px]'}>
@@ -70,7 +70,7 @@ const Index: React.FC<{
           <div>
             <Switch>
               <Case condition={message.type === 'text'}>
-                <Text sourceType={sourceType} content={message.content} />
+                <Text direction={direction} content={message.content} />
               </Case>
               <Case condition={message.type === 'image'}>
                 <Image content={message.content} />
@@ -79,18 +79,18 @@ const Index: React.FC<{
                 <Navigator content={message.content} />
               </Case>
               <Case condition={message.type === 'audio'}>
-                <Audio content={message.content} sourceType={sourceType} />
+                <Audio content={message.content} direction={direction} />
               </Case>
               <Case condition={message.type === 'video'}>
                 <Video content={message.content} />
               </Case>
             </Switch>
           </div>
-          <When condition={sourceType === 'send' && message.is_success !== undefined}>
+          <When condition={direction === 'right' && message.is_success !== undefined}>
             <IsRead isRead={message.is_read} />
           </When>
         </div>
-        <When condition={sourceType === 'send'}>
+        <When condition={direction === 'right'}>
           <Status isSuccess={message.is_success} onResend={resendMsg} />
         </When>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { UnorderedListOutlined } from '@ant-design/icons/lib';
-import { Popover, List, App, Typography } from 'antd';
+import { App, List, Popover, Typography } from 'antd';
 import { useModel, useRequest } from '@umijs/max';
 import { getAutoMessage } from '@/services/auto';
 
@@ -11,7 +11,7 @@ const ShortcutReply = () => {
 
   const { message } = App.useApp();
 
-  const messageToContent = React.useCallback((msg: API.AutoMessage) => {
+  const getContent = React.useCallback((msg: API.AutoMessage) => {
     switch (msg.type) {
       case 'text':
         return msg.content;
@@ -56,7 +56,7 @@ const ShortcutReply = () => {
                 <List.Item
                   className={'cursor-pointer hover:bg-stone-100'}
                   onClick={() => {
-                    const content = messageToContent(item);
+                    const content = getContent(item);
                     if (content === '') {
                       message.error('该快捷回复无内容').then();
                     } else {

@@ -1,14 +1,15 @@
 import React from 'react';
 import { isUrl } from '@/utils/utils';
 import Wrapper from './Wrapper';
+import { MessageDirection } from '../index';
 
 const Text: React.FC<{
   content: string;
   className?: string;
-  sourceType: 'send' | 'receive';
+  direction: MessageDirection;
 }> = (props) => {
   return (
-    <Wrapper sourceType={props.sourceType} bgColor={true}>
+    <Wrapper direction={props.direction} bgColor={true}>
       {isUrl(props.content) ? (
         <a target="_blank" href={props.content} rel="noreferrer">
           {props.content}

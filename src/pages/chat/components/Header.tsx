@@ -1,26 +1,19 @@
 import React from 'react';
-import { Avatar } from 'antd';
 import { useModel } from '@umijs/max';
 
 const Header: React.FC = () => {
-  const initialState = useModel('@@initialState');
-
-  const { setting } = useModel('chat.adminSetting');
+  const { current } = useModel('chat.currentUser');
 
   return (
     <div
       className={
-        'border-b cursor-move flex flex-shrink-0 justify-between w-full h-[60px] bg-[#f3f3f3]'
+        'border-b border-[#e1e1e1] cursor-move flex flex-shrink-0 justify-between w-full h-[60px] bg-[#f3f3f3] px-2.5 items-center'
       }
       id={'header'}
     >
-      <div className={'flex'} />
-      <div className={'flex px-2.5'}>
-        <div className={'flex items-center h-full'}>
-          <Avatar src={setting?.avatar?.thumb_url} shape="square">
-            {initialState.initialState?.currentUser?.username}
-          </Avatar>
-        </div>
+      <div className={'flex text-xl'}>{current?.username}</div>
+      <div className={'flex'}>
+        <div className={'flex'}></div>
       </div>
     </div>
   );

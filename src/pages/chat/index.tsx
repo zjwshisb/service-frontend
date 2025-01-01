@@ -64,7 +64,7 @@ const Index: React.FC = () => {
       <div
         id="chat"
         className={
-          'bg-[#fafafa] flex items-center justify-center  h-screen overflow-hidden bg-cover bg-no-repeat'
+          'flex items-center justify-center  h-screen overflow-hidden bg-cover bg-no-repeat '
         }
         style={{ backgroundImage: `url(${setting?.background?.url || BackgroundImg})` }}
       >
@@ -74,13 +74,17 @@ const Index: React.FC = () => {
             style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
           >
             <LeftMenu />
+            <div
+              className={
+                'w-[280px] h-full overflow-hidden flex-shrink-0 border-r border-[#e1e1e1] bg-[#f7f7f7]'
+              }
+            >
+              <Users />
+            </div>
             <div className={'flex flex-1 flex-col h-full bg-white'}>
               <Header />
-              <div className={'w-full flex-1 flex flex-row  bg-[#f3f3f3] overflow-hidden'}>
-                <div className={'w-[280px] h-full overflow-hidden flex-shrink-0 border-r'}>
-                  <Users />
-                </div>
-                <div className={'flex-1 flex-col flex'}>
+              <div className={'w-full flex-1 flex flex-row  overflow-hidden'}>
+                <div className={'flex-1 flex-col flex bg-[#f3f3f3]'}>
                   <Messages />
                   <InputArea />
                 </div>
