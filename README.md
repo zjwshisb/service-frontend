@@ -1,57 +1,20 @@
-# Ant Design Pro
+# websocket 实现的客服系统(客服前端代码)
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+基于 and-design-pro,TypeScript,React 实现  
+需要与下面后端代码配合适用
 
-## Environment Prepare
+- [客服后端代码](https://github.com/zjwshisb/go-chat-service)
 
-Install `node_modules`:
+### 开始
 
-```bash
-npm install
-```
+详见[ant-design-pro](https://github.com/ant-design/ant-design-pro)
 
-or
+### 演示地址
 
-```bash
-yarn
-```
+小水管: [http://119.29.196.153/admin](http://119.29.196.153/admin)  
+账号: admin(1-20) #admin1-admin20  
+密码: admin(1-20) #admin1-admin20
 
-## Provided Scripts
+### 更新日志
 
-Ant Design Pro provides some useful script to help you quick start and build with web project, code style check and test.
-
-Scripts provided in `package.json`. It's safe to modify or add additional script:
-
-### Start project
-
-```bash
-npm start
-```
-
-### Build project
-
-```bash
-npm run build
-```
-
-### Check code style
-
-```bash
-npm run lint
-```
-
-You can also use script to auto fix some lint error:
-
-```bash
-npm run lint:fix
-```
-
-### Test code
-
-```bash
-npm test
-```
-
-## More
-
-You can view full document on our [official website](https://pro.ant.design). And welcome any feedback in our [github](https://github.com/ant-design/ant-design-pro).
+2025.1.3 更新到ant-design-pro v6
