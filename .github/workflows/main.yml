@@ -26,3 +26,4 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "dist/*"
           target: "/home/wwwroot/default/server"
+          strip_components: 1
