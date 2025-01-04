@@ -1,7 +1,5 @@
 import React from 'react';
 import { getAdmins } from '@/services';
-import { Button } from 'antd';
-import { history } from '@@/core/history';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
 import useTableColumn from '@/hooks/useTableColumn';
 
@@ -27,22 +25,9 @@ const Index = () => {
         );
       },
     },
-
     {
       dataIndex: 'accepted_count',
       title: '当前接待数量',
-    },
-    {
-      dataIndex: 'id',
-      title: '操作',
-      fixed: 'right',
-      render(_, record) {
-        return (
-          <Button size={'small'} onClick={() => history.push(`/admin/${record.id}`)}>
-            详情
-          </Button>
-        );
-      },
     },
   ]);
 
