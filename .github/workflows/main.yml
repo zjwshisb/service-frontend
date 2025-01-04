@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   run:
-    runs-on: "ubuntu-latest"
+    runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,7 +16,7 @@ jobs:
       - name: install deps
         run: npm install
       - name: build
-        run: npm run build
+        run: npm run build:pre
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -24,6 +24,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "dist/*"
-          target: "/home/wwwroot/default/server"
+          source: 'dist/*'
+          target: '/home/wwwroot/default/server'
           strip_components: 1
