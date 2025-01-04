@@ -7,4 +7,5 @@ export default defineConfig({
     WS_URL: 'http://120.77.242.145:8080/api/backend/ws',
   },
   publicPath: '/server/',
+  base: '/server/',
 });
