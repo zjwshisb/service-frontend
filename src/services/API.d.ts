@@ -85,6 +85,12 @@ declare namespace API {
     is_read: boolean;
   };
 
+  type UserInfoItem = {
+    label: string;
+    name: string;
+    description: string;
+  };
+
   type OffLine = {
     user_id: number;
   };

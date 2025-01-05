@@ -34,7 +34,7 @@ const Index: React.FC<
       {ReactDom.createPortal(
         <Draggable handle={'.header'}>
           <div
-            className={classNames('fixed box-border bg-white rounded-lg overflow-hidden shadow', {
+            className={classNames('fixed box-border bg-white rounded overflow-hidden shadow', {
               hidden: !visible,
             })}
             style={{ width: props.width, top, left }}

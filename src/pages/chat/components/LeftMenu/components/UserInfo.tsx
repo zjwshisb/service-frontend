@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { AuditOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 import DraggableView from '@/components/DraggableView';
-import { Descriptions, Empty } from 'antd';
+import { Descriptions } from 'antd';
 import { getUserInfo } from '@/services';
 import Wrapper from './Wrapper';
 
 const UserInfo = () => {
   const { current } = useModel('chat.currentUser');
-  const [info, setInfo] = useState<Record<string, any>>({});
+  const [info, setInfo] = useState<API.UserInfoItem[]>([]);
 
   React.useEffect(() => {
     if (current?.id) {
@@ -16,7 +16,7 @@ const UserInfo = () => {
         setInfo(res.data);
       });
     } else {
-      setInfo({});
+      setInfo([]);
     }
   }, [current?.id]);
 
@@ -32,12 +32,15 @@ const UserInfo = () => {
       )}
     >
       <div>
-        {Object.keys(info).length > 0 && (
-          <Descriptions column={1} bordered size={'small'}>
-            <Descriptions.Item label={'用户名称'}>{info.username}</Descriptions.Item>
-          </Descriptions>
-        )}
-        {Object.keys(info).length <= 0 && <Empty />}
+        <Descriptions column={1} bordered className={'border-none'} size={'small'}>
+          {info.map((v) => {
+            return (
+              <Descriptions.Item key={v.name} label={v.label}>
+                {v.description}
+              </Descriptions.Item>
+            );
+          })}
+        </Descriptions>
       </div>
     </DraggableView>
   );

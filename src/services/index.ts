@@ -63,7 +63,7 @@ export async function getTransferMessage(id: number) {
 }
 
 export async function getUserInfo(uid: number) {
-  return request<API.Response<Record<string, string>>>(`/ws/chat-user/${uid}`);
+  return request<API.Response<API.UserInfoItem[]>>(`/ws/chat-user/${uid}`);
 }
 
 export async function getUsers() {
