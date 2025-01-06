@@ -1,7 +1,7 @@
 import React from 'react';
 import { CustomerServiceFilled } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import { Avatar, Drawer, Table } from 'antd';
+import { Drawer, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import Wrapper from './Wrapper';
 
@@ -9,14 +9,6 @@ const columns: ColumnsType<API.Admin> = [
   {
     dataIndex: 'username',
     title: '客服',
-    render(value, record) {
-      return (
-        <span>
-          <Avatar src={record.avatar} />
-          {value}
-        </span>
-      );
-    },
   },
   {
     dataIndex: 'accepted_count',

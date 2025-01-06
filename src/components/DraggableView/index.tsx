@@ -34,15 +34,15 @@ const Index: React.FC<
       {ReactDom.createPortal(
         <Draggable handle={'.header'}>
           <div
-            className={classNames('fixed box-border bg-white rounded overflow-hidden shadow', {
+            className={classNames('fixed bg-white rounded overflow-hidden', {
               hidden: !visible,
             })}
             style={{ width: props.width, top, left }}
           >
             <div
-              className={`flex text-sm cursor-move header px-2 bg-neutral-100 justify-between items-center`}
+              className={`flex text-sm cursor-move header px-2 bg-[#F5F5F5FF]  justify-between items-center`}
             >
-              <div>{props.title}</div>
+              <div className={'text-[#000000E0]'}>{props.title}</div>
               <div className={'text-lg'}>
                 <Button
                   size={'small'}
