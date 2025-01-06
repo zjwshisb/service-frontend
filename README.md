@@ -12,8 +12,8 @@
 ### 演示地址
 
 小水管: [http://120.77.242.145/server](http://120.77.242.145/server)  
-账号: admin(1-20) #admin1-admin20  
-密码: admin(1-20) #admin1-admin20
+账号: admin(0-19) #admin0-admin19  
+密码: admin(0-19) #admin0-admin19
 
 ### 更新日志
 
