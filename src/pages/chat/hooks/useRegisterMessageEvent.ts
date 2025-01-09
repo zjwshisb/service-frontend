@@ -7,7 +7,7 @@ import { App } from 'antd';
 export function useRegisterMessageEvent() {
   const { setOnMessage } = useModel('chat.websocket');
   const { getUser, updateUser } = useModel('chat.users');
-  const { setCurrent } = useModel('chat.currentUser');
+  const { setCurrent, getCurrent } = useModel('chat.currentUser');
 
   const { modal } = App.useApp();
 
@@ -47,8 +47,10 @@ export function useRegisterMessageEvent() {
       });
       const user = getUser(msg.user_id);
       if (user) {
-        user.unread += 1;
         user.last_message = msg;
+        if (user.id !== getCurrent()?.id) {
+          user.unread += 1;
+        }
         updateUser(user);
       }
     }, 'receive-message');
