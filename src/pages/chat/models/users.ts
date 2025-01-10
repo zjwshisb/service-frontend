@@ -29,10 +29,6 @@ export default function () {
     [usersAction],
   );
 
-  React.useEffect(() => {
-    console.log(users);
-  }, [users]);
-
   return {
     users: users,
     addUser,

@@ -14,6 +14,10 @@ const columns: ColumnsType<API.Admin> = [
     dataIndex: 'accepted_count',
     title: '当前接待',
   },
+  {
+    dataIndex: 'online',
+    title: '在线',
+  },
 ];
 
 const Admins = () => {

@@ -15,10 +15,10 @@ const Settings: ProLayoutProps & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: 'go chat service',
+  title: 'go chat',
   locale: 'zh-CN',
   pwa: true,
-  iconfontUrl: '',
+  logo: undefined,
 };
 
 export default Settings;
