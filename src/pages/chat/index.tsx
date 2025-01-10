@@ -70,7 +70,7 @@ const Index: React.FC = () => {
       >
         <Draggable handle={'#header'}>
           <div
-            className={'flex overflow-hidden rounded'}
+            className={'flex rounded overflow-hidden'}
             style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
           >
             <LeftMenu />

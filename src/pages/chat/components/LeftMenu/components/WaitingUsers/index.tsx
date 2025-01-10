@@ -1,22 +1,16 @@
 import React from 'react';
-import { MessageOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
-import { App, Avatar, Button, List, Popover, Skeleton, Typography } from 'antd';
-import DraggableView from '@/components/DraggableView';
-import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import Wrapper from '../Wrapper';
-import { cancelChatSessions } from '@/services';
-import { formatTime } from '@/utils/utils';
-import { getMessageTypeLabel } from '@/pages/chat/util';
-import { When } from 'react-if';
+import classNames from 'classnames';
+import { MessageOutlined } from '@ant-design/icons';
+import { Empty, Segmented } from 'antd';
+import WaitingItem from './WaitingItem';
 
 const Index = () => {
   const { setOnMessage } = useModel('chat.websocket');
 
   const { waitingUsers, setWaitingUsers } = useModel('chat.waitingUsers');
   const { notify } = useModel('chat.notification');
-
-  const { modal } = App.useApp();
 
   React.useEffect(() => {
     setOnMessage((action: API.Action<API.WaitingUser[]>) => {
@@ -31,129 +25,81 @@ const Index = () => {
     }, 'waiting-users');
   }, [notify, setOnMessage, setWaitingUsers]);
 
-  const accept = useAcceptUser();
-
   const reverseData = React.useMemo(() => {
     return [...waitingUsers].reverse();
   }, [waitingUsers]);
 
+  const [active, setActive] = React.useState(false);
+
+  const [types, setTypes] = React.useState('user');
+
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  const [select, setSelect] = React.useState<API.WaitingUser>();
+
+  React.useEffect(() => {
+    if (!active) {
+      setSelect(undefined);
+    }
+  }, [active]);
+
   return (
-    <DraggableView
-      title={'待接入用户'}
-      width={'400px'}
-      top={'200px'}
-      defaultVisible={false}
-      trigger={(visible) => (
-        <Wrapper
-          title={'待接入用户'}
-          badge={{
-            count: waitingUsers.length,
-          }}
-          active={visible}
-        >
-          <MessageOutlined />
-        </Wrapper>
-      )}
-    >
-      <List
-        itemLayout="horizontal"
-        dataSource={reverseData}
-        size={'small'}
-        renderItem={(item) => {
-          return (
-            <List.Item
-              styles={{
-                actions: {
-                  marginLeft: 10,
-                },
-              }}
-              actions={[
-                <Button
-                  size={'small'}
-                  type={'text'}
-                  key={'accept'}
-                  onClick={(e) => {
-                    accept(item.session_id);
-                    e.stopPropagation();
-                  }}
-                >
-                  接入
-                </Button>,
-                <Button
-                  size={'small'}
-                  type={'text'}
-                  danger={true}
-                  key={'refuse'}
-                  onClick={(e) => {
-                    modal.confirm({
-                      title: '提示',
-                      content: '确定拒绝该会话?',
-                      async onOk() {
-                        await cancelChatSessions(item.session_id);
-                      },
-                    });
-                    e.stopPropagation();
-                  }}
-                >
-                  拒绝
-                </Button>,
-              ]}
-            >
-              <Skeleton avatar title={false} active loading={false}>
-                <Popover
-                  content={
-                    <List
-                      className={'max-w-96'}
-                      dataSource={[...item.messages].reverse()}
-                      size={'small'}
-                      renderItem={(i) => {
-                        return (
-                          <List.Item className={'overflow-hidden flex items-center'}>
-                            <span className={'flex-shrink-0'}>{formatTime(i.time)}</span>
-                            <Typography.Text ellipsis={true} className={'ml-2'}>
-                              {getMessageTypeLabel(i.content, i.type)}
-                            </Typography.Text>
-                          </List.Item>
-                        );
-                      }}
-                    />
-                  }
-                  placement={'bottom'}
-                >
-                  <List.Item.Meta
-                    avatar={<Avatar src={item.avatar}>{item.username}</Avatar>}
-                    title={
-                      <div className={'w-full text-sm'}>
-                        <div>
-                          <Typography.Text ellipsis={true}>{item.username}</Typography.Text>
-                        </div>
-                        <div>
-                          <Typography.Text ellipsis={true} className={'text-xs text-gray-500'}>
-                            {formatTime(item.last_time)}
-                          </Typography.Text>
-                        </div>
-                      </div>
-                    }
-                    description={
-                      <When condition={item.messages.length > 0}>
-                        {() => (
-                          <Typography.Text ellipsis={true} className={'text-xs text-gray-500'}>
-                            {getMessageTypeLabel(
-                              item.messages[item.messages.length - 1].content,
-                              item.messages[item.messages.length - 1].type,
-                            )}
-                          </Typography.Text>
-                        )}
-                      </When>
-                    }
-                  />
-                </Popover>
-              </Skeleton>
-            </List.Item>
-          );
+    <>
+      <div
+        ref={ref}
+        className={classNames(
+          'absolute border-r z-30 top-0 flex flex-col left-[60px] h-full bg-[#f7f7f7] overflow-hidden transition-all',
+          {
+            'w-0': !active,
+            'w-[280px]': active,
+          },
+        )}
+      >
+        <div className={'flex items-center justify-center py-4 flex-shrink-0'}>
+          <Segmented
+            value={types}
+            onChange={setTypes}
+            options={[
+              {
+                label: `待接入用户(${reverseData.length})`,
+                value: 'user',
+              },
+              {
+                label: '转接用户',
+                value: 'transfer',
+              },
+            ]}
+          />
+        </div>
+        <div className={'flex-1'}>
+          <div>
+            {reverseData.map((item) => {
+              return (
+                <WaitingItem
+                  active={item.id === select?.id}
+                  user={item}
+                  key={item.id}
+                  onClick={() => setSelect(item)}
+                />
+              );
+            })}
+            {reverseData.length === 0 && <Empty className={'mt-4'}></Empty>}
+          </div>
+        </div>
+      </div>
+      <Wrapper
+        onClick={() => {
+          setActive((v) => !v);
         }}
-      />
-    </DraggableView>
+        title={'待接入用户'}
+        badge={{
+          count: waitingUsers.length,
+        }}
+        active={active}
+      >
+        <MessageOutlined />
+      </Wrapper>
+    </>
   );
 };
 export default Index;

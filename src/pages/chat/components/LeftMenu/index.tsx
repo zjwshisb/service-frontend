@@ -12,7 +12,7 @@ const Index = () => {
 
   const { setting } = useModel('chat.adminSetting');
   return (
-    <div className={'w-[60px] h-full bg-[#e1e1e1] flex flex-col items-center py-10'}>
+    <div className={'w-[60px] h-full bg-[#e1e1e1] flex flex-col items-center py-10 relative'}>
       <Avatar src={setting?.avatar?.thumb_url} shape="square" className={'rounded mb-2'}>
         {initialState.initialState?.currentUser?.username}
       </Avatar>

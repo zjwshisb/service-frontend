@@ -102,7 +102,7 @@ declare namespace API {
 
   type WaitingUser = {
     session_id: number;
-    user_id: number;
+    id: number;
     username: string;
     avatar: string;
     last_time: string;
