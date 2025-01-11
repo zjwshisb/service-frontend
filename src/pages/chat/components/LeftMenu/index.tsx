@@ -2,7 +2,6 @@ import React from 'react';
 import Admins from './components/Admins';
 import WaitingUsers from './components/WaitingUsers';
 import Setting from './components/Setting';
-import UserInfo from './components/UserInfo';
 import TransferUsers from './components/TransferUsers';
 import { Avatar } from 'antd';
 import { useModel } from '@umijs/max';
@@ -20,7 +19,6 @@ const Index = () => {
       <TransferUsers />
       <Admins />
       <Setting />
-      <UserInfo />
     </div>
   );
 };

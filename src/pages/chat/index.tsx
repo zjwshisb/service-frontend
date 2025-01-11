@@ -12,6 +12,7 @@ import useAutoAccept from '@/pages/chat/hooks/useAutoAccept';
 import { PageContainer } from '@ant-design/pro-components';
 import { useRegisterStatusEvent } from './hooks/useRegisterStatusEvent';
 import { useRegisterMessageEvent } from '@/pages/chat/hooks/useRegisterMessageEvent';
+import CurrentUser from './components/CurrentUser';
 
 const chatWidth = 1080;
 const chatHeight = 700;
@@ -70,14 +71,12 @@ const Index: React.FC = () => {
       >
         <Draggable handle={'#header'}>
           <div
-            className={'flex rounded overflow-hidden'}
+            className={'flex rounded relative'}
             style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
           >
             <LeftMenu />
             <div
-              className={
-                'w-[280px] h-full overflow-hidden flex-shrink-0 border-r border-[#e1e1e1] bg-[#f7f7f7]'
-              }
+              className={'w-[280px] h-full flex-shrink-0 border-r border-[#e1e1e1] bg-[#f7f7f7]'}
             >
               <Users />
             </div>
@@ -90,6 +89,7 @@ const Index: React.FC = () => {
                 </div>
               </div>
             </div>
+            <CurrentUser />
           </div>
         </Draggable>
       </div>

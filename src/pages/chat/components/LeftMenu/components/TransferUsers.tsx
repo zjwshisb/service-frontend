@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 import { Button, Modal, Space, Table } from 'antd';
-import DraggableView from '@/components/DraggableView';
 import type { ColumnsType } from 'antd/es/table';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { getTransferMessage, handleCancelTransfer } from '@/services';
@@ -92,32 +91,45 @@ const TransferUsers = () => {
     ];
   }, [handleAccept]);
 
+  const [visible, setVisible] = React.useState(false);
+
   return (
-    <DraggableView
-      top={'500px'}
-      width={'700px'}
-      title={'转接用户'}
-      defaultVisible={false}
-      trigger={(visible) => (
-        <Wrapper
-          title={'转接用户'}
-          active={visible}
-          badge={{
-            count: transfers.length,
-          }}
-        >
-          <InfoCircleOutlined />
-        </Wrapper>
-      )}
-    >
-      <Table
-        rowKey={'id'}
-        dataSource={transfers}
-        columns={columns}
-        size={'small'}
-        pagination={false}
-      />
+    <>
+      <Wrapper
+        onClick={() => setVisible((p) => !p)}
+        active={visible}
+        badge={{
+          count: transfers.length,
+        }}
+      >
+        <InfoCircleOutlined />
+      </Wrapper>
       <Modal
+        width={600}
+        open={visible}
+        title={`转接用户(${transfers.length})`}
+        footer={false}
+        zIndex={39}
+        onCancel={() => setVisible(false)}
+        styles={{
+          header: {
+            padding: '0 10px',
+          },
+          content: {
+            padding: '20px 0',
+          },
+        }}
+      >
+        <Table
+          rowKey={'id'}
+          dataSource={transfers}
+          columns={columns}
+          size={'small'}
+          pagination={false}
+        />
+      </Modal>
+      <Modal
+        zIndex={40}
         width={'800px'}
         styles={{
           body: {
@@ -131,7 +143,7 @@ const TransferUsers = () => {
       >
         <MessageLine messages={messages} />
       </Modal>
-    </DraggableView>
+    </>
   );
 };
 export default TransferUsers;

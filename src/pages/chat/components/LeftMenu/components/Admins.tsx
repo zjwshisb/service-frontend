@@ -35,7 +35,7 @@ const Admins = () => {
 
   return (
     <>
-      <Wrapper title={'在线客服'} onClick={() => setVisible(true)} active={visible}>
+      <Wrapper onClick={() => setVisible(true)} active={visible}>
         <CustomerServiceFilled />
       </Wrapper>
       <Drawer

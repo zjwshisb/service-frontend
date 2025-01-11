@@ -7,7 +7,7 @@ import { App } from 'antd';
 export function useRegisterMessageEvent() {
   const { setOnMessage } = useModel('chat.websocket');
   const { getUser, updateUser } = useModel('chat.users');
-  const { setCurrent, getCurrent } = useModel('chat.currentUser');
+  const { setCurrent } = useModel('chat.currentUser');
 
   const { modal } = App.useApp();
 
@@ -43,16 +43,16 @@ export function useRegisterMessageEvent() {
           newState.messages.unshift(msg);
           return newState;
         }
+        const user = getUser(msg.user_id);
+        if (user) {
+          user.last_message = msg;
+          if (user.id !== prevState?.id) {
+            user.unread += 1;
+          }
+          updateUser(user);
+        }
         return prevState;
       });
-      const user = getUser(msg.user_id);
-      if (user) {
-        user.last_message = msg;
-        if (user.id !== getCurrent()?.id) {
-          user.unread += 1;
-        }
-        updateUser(user);
-      }
     }, 'receive-message');
 
     setOnMessage((action: API.Action<number[]>) => {

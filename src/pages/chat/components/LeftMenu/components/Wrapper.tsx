@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, BadgeProps, Button, Tooltip } from 'antd';
+import { Badge, BadgeProps, Button } from 'antd';
 import classNames from 'classnames';
 import { Else, If, Then } from 'react-if';
 
@@ -7,7 +7,6 @@ const Wrapper: React.FC<
   React.PropsWithChildren<{
     onClick?: React.MouseEventHandler<HTMLDivElement>;
     active?: boolean;
-    title?: string;
     badge?: BadgeProps;
   }>
 > = (props) => {
@@ -29,25 +28,23 @@ const Wrapper: React.FC<
   );
 
   return (
-    <Tooltip title={props.title} placement={'left'}>
-      <If condition={props.badge !== undefined}>
-        <Then>
-          <Badge
-            {...props.badge}
-            size={'small'}
-            styles={{
-              indicator: {
-                top: '10px',
-                right: '10px',
-              },
-            }}
-          >
-            {child}
-          </Badge>
-        </Then>
-        <Else>{child}</Else>
-      </If>
-    </Tooltip>
+    <If condition={props.badge !== undefined}>
+      <Then>
+        <Badge
+          {...props.badge}
+          size={'small'}
+          styles={{
+            indicator: {
+              top: '10px',
+              right: '10px',
+            },
+          }}
+        >
+          {child}
+        </Badge>
+      </Then>
+      <Else>{child}</Else>
+    </If>
   );
 };
 export default Wrapper;

@@ -24,7 +24,7 @@ const Setting = () => {
 
   return (
     <>
-      <Wrapper title={'客服设置'} onClick={openAction.setTrue} active={open}>
+      <Wrapper onClick={openAction.setTrue} active={open}>
         <SettingOutlined />
       </Wrapper>
       <ModalForm

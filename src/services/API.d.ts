@@ -110,6 +110,7 @@ declare namespace API {
       type: MessageType;
       time: string;
       content: string;
+      id: number;
     }[];
     message_count: number;
   };

@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { MessageOutlined } from '@ant-design/icons';
 import { Empty, Segmented } from 'antd';
 import WaitingItem from './WaitingItem';
+import { useClickAway } from 'ahooks';
 
 const Index = () => {
   const { setOnMessage } = useModel('chat.websocket');
@@ -35,22 +36,18 @@ const Index = () => {
 
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const [select, setSelect] = React.useState<API.WaitingUser>();
-
-  React.useEffect(() => {
-    if (!active) {
-      setSelect(undefined);
-    }
-  }, [active]);
-
+  useClickAway(() => {
+    setActive(false);
+  }, ref.current?.parentElement);
   return (
     <>
       <div
         ref={ref}
         className={classNames(
-          'absolute border-r z-30 top-0 flex flex-col left-[60px] h-full bg-[#f7f7f7] overflow-hidden transition-all',
+          'absolute z-30 top-0 flex flex-col left-[60px] h-full bg-[#f7f7f7] overflow-hidden transition-all',
           {
             'w-0': !active,
+            'border-r': active,
             'w-[280px]': active,
           },
         )}
@@ -64,24 +61,13 @@ const Index = () => {
                 label: `待接入用户(${reverseData.length})`,
                 value: 'user',
               },
-              {
-                label: '转接用户',
-                value: 'transfer',
-              },
             ]}
           />
         </div>
         <div className={'flex-1'}>
           <div>
             {reverseData.map((item) => {
-              return (
-                <WaitingItem
-                  active={item.id === select?.id}
-                  user={item}
-                  key={item.id}
-                  onClick={() => setSelect(item)}
-                />
-              );
+              return <WaitingItem user={item} key={item.id} />;
             })}
             {reverseData.length === 0 && <Empty className={'mt-4'}></Empty>}
           </div>
@@ -91,7 +77,6 @@ const Index = () => {
         onClick={() => {
           setActive((v) => !v);
         }}
-        title={'待接入用户'}
         badge={{
           count: waitingUsers.length,
         }}
