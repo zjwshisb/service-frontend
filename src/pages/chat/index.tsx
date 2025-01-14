@@ -13,6 +13,7 @@ import { PageContainer } from '@ant-design/pro-components';
 import { useRegisterStatusEvent } from './hooks/useRegisterStatusEvent';
 import { useRegisterMessageEvent } from '@/pages/chat/hooks/useRegisterMessageEvent';
 import CurrentUser from './components/CurrentUser';
+import CusDiv from '@/components/CusDiv';
 
 const chatWidth = 1080;
 const chatHeight = 700;
@@ -75,11 +76,9 @@ const Index: React.FC = () => {
             style={{ width: `${chatWidth}px`, height: `${chatHeight}px` }}
           >
             <LeftMenu />
-            <div
-              className={'w-[280px] h-full flex-shrink-0 border-r border-[#e1e1e1] bg-[#f7f7f7]'}
-            >
+            <CusDiv className={'w-[280px] h-full flex-shrink-0 border-r bg-[#f7f7f7]'}>
               <Users />
-            </div>
+            </CusDiv>
             <div className={'flex flex-1 flex-col h-full bg-white'}>
               <Header />
               <div className={'w-full flex-1 flex flex-row  overflow-hidden'}>

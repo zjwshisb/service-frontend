@@ -1,13 +1,14 @@
 import React from 'react';
 import { useModel } from '@umijs/max';
+import CusDiv from '@/components/CusDiv';
 
 const Header: React.FC = () => {
   const { current, setDetailShow } = useModel('chat.currentUser');
 
   return (
-    <div
+    <CusDiv
       className={
-        'border-b border-[#e1e1e1]  flex flex-shrink-0 justify-between w-full h-[60px] bg-[#f3f3f3] px-2.5 items-center'
+        'border-b flex flex-shrink-0 justify-between w-full h-[60px] bg-[#f3f3f3] px-2.5 items-center'
       }
     >
       <div className={'flex text-xl'}>{current?.username}</div>
@@ -17,7 +18,7 @@ const Header: React.FC = () => {
           ...
         </div>
       </div>
-    </div>
+    </CusDiv>
   );
 };
 export default Header;

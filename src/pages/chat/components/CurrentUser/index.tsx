@@ -24,7 +24,7 @@ const Index: React.FC = () => {
   return (
     <CusDiv
       className={classNames(
-        'absolute left-[1080px] bg-[#f3f3f3] border-l border-[#e1e1e1] transition-all h-full overflow-hidden box-border pt-2',
+        'absolute left-[1080px] bg-[#f3f3f3] border-l transition-all h-full overflow-hidden box-border pt-2',
         {
           'w-56': detailShow,
           'w-0': !detailShow,

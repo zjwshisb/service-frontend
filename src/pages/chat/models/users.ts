@@ -30,7 +30,7 @@ export default function () {
   );
 
   return {
-    users: users,
+    users,
     addUser,
     updateUser,
     setUsers: usersAction.setAll,

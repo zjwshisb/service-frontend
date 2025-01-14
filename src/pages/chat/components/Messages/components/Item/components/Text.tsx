@@ -5,11 +5,10 @@ import { MessageDirection } from '../index';
 
 const Text: React.FC<{
   content: string;
-  className?: string;
   direction: MessageDirection;
 }> = (props) => {
   return (
-    <Wrapper direction={props.direction} bgColor={true}>
+    <Wrapper showAnchor={true} className="relative" direction={props.direction} bgColor={true}>
       {isUrl(props.content) ? (
         <a target="_blank" href={props.content} rel="noreferrer">
           {props.content}

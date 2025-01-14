@@ -12,7 +12,7 @@ const CusDiv: React.ForwardRefRenderFunction<
   return (
     <div
       ref={ref}
-      className={classNames(className, {
+      className={classNames(className, 'border-[#e1e1e1]', {
         'overflow-y-auto scrollbar-track-transparent scrollbar-thin scrollbar-thumb-gray-400':
           scrollPrettify,
       })}

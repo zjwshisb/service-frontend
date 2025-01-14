@@ -46,11 +46,11 @@ const MessageList: React.FC = () => {
   // 当前用户变化
   React.useEffect(() => {
     if (current?.id) {
-      fetchMessages(current.id).then((msgs) => {
+      fetchMessages(current.id).then((messages) => {
         setCurrent((prevState) => {
           if (prevState) {
             const newState = lodash.cloneDeep(prevState);
-            newState.messages = msgs;
+            newState.messages = messages;
             return newState;
           }
           return prevState;
@@ -132,11 +132,7 @@ const MessageList: React.FC = () => {
   }, [current]);
 
   return (
-    <CusDiv
-      className={'flex flex-1 flex-col-reverse p-2.5 border-b border-[#e1e1e1]'}
-      ref={ref}
-      onScroll={onScroll}
-    >
+    <CusDiv className={'flex flex-1 flex-col-reverse p-2.5 border-b'} ref={ref} onScroll={onScroll}>
       <If condition={current !== undefined}>
         <Then>
           <When condition={current?.disabled}>
