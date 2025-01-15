@@ -1,9 +1,9 @@
 import React from 'react';
-import { CustomerServiceFilled } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 import { Drawer, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import Wrapper from './Wrapper';
+import { CheckOutlined, CloseOutlined, CustomerServiceFilled } from '@ant-design/icons';
 
 const columns: ColumnsType<API.Admin> = [
   {
@@ -17,6 +17,17 @@ const columns: ColumnsType<API.Admin> = [
   {
     dataIndex: 'online',
     title: '在线',
+    render(val) {
+      return (
+        <div>
+          {val ? (
+            <CheckOutlined className={'text-green-600'} />
+          ) : (
+            <CloseOutlined className={'text-red-600'} />
+          )}
+        </div>
+      );
+    },
   },
 ];
 

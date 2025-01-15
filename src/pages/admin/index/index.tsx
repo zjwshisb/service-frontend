@@ -2,6 +2,7 @@ import React from 'react';
 import { getAdmins } from '@/services';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
 import useTableColumn from '@/hooks/useTableColumn';
+import { getDefaultConfig } from '@/utils/table';
 
 const Index = () => {
   const action = React.useRef<ActionType>();
@@ -33,7 +34,12 @@ const Index = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.Admin> actionRef={action} request={getAdmins} columns={columns} rowKey={'id'} />
+      <ProTable<API.Admin>
+        {...getDefaultConfig()}
+        actionRef={action}
+        request={getAdmins}
+        columns={columns}
+      />
     </PageContainer>
   );
 };

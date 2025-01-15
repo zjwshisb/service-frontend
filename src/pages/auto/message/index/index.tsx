@@ -8,6 +8,7 @@ import StoreAction from '@/components/StoreAction';
 import useTableColumn from '@/hooks/useTableColumn';
 import MessageContent from '@/pages/auto/message/components/MessageContent';
 import { useModel } from '@@/exports';
+import { getDefaultConfig } from '@/utils/table';
 
 const Index = () => {
   const { getOptions } = useModel('options');
@@ -55,11 +56,8 @@ const Index = () => {
   ]);
   return (
     <PageContainer>
-      <ProTable
-        search={{
-          collapsed: false,
-        }}
-        rowKey={'id'}
+      <ProTable<API.AutoMessage>
+        {...getDefaultConfig()}
         columns={columns}
         request={getAutoMessage}
         toolBarRender={() => [<StoreAction key={'store'} path={'/auto/message/add'}></StoreAction>]}

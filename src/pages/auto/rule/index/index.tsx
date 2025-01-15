@@ -8,6 +8,7 @@ import DeleteAction from '@/components/DeleteAction';
 import EditAction from '@/components/EditAction';
 import MessageContent from '@/pages/auto/message/components/MessageContent';
 import { useModel } from '@umijs/max';
+import { getDefaultConfig } from '@/utils/table';
 
 const Index = () => {
   const { getOptions } = useModel('options');
@@ -99,15 +100,12 @@ const Index = () => {
   return (
     <PageContainer>
       <ProTable<API.AutoRule>
+        {...getDefaultConfig()}
         scroll={{
           x: 1200,
         }}
-        search={{
-          collapsed: false,
-        }}
         request={getAutoRules}
         columns={columns}
-        rowKey={'id'}
         toolBarRender={() => [<StoreAction path={'/auto/rule/add'} key={'store'} />]}
       />
     </PageContainer>

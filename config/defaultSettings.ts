@@ -18,7 +18,7 @@ const Settings: ProLayoutProps & {
   title: 'go chat',
   locale: 'zh-CN',
   pwa: true,
-  logo: undefined,
+  logo: 'logo.jpg',
 };
 
 export default Settings;

@@ -2,6 +2,7 @@
 import { defineConfig } from '@umijs/max';
 import { join } from 'path';
 const PUBLIC_PATH = '/server/';
+import defaultSettings from './defaultSettings';
 export default defineConfig({
   define: {
     BASE_URL: 'http://120.77.242.145:8080/api/backend',
@@ -20,4 +21,8 @@ export default defineConfig({
       async: true,
     },
   ],
+  layout: {
+    ...defaultSettings,
+    logo: join(PUBLIC_PATH, 'logo.jpg'),
+  },
 });

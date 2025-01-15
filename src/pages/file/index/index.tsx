@@ -4,6 +4,7 @@ import useTableColumn from '@/hooks/useTableColumn';
 import { getChatFiles, deleteChatFile } from '@/services';
 import FileItem from '@/components/FileItem';
 import DeleteAction from '@/components/DeleteAction';
+import { getDefaultConfig } from '@/utils/table';
 
 const Index = () => {
   const columns = useTableColumn<API.ChatFile>(
@@ -47,14 +48,7 @@ const Index = () => {
   );
   return (
     <PageContainer>
-      <ProTable<API.ChatFile>
-        search={{
-          defaultCollapsed: false,
-        }}
-        request={getChatFiles}
-        columns={columns}
-        rowKey={'id'}
-      />
+      <ProTable<API.ChatFile> {...getDefaultConfig()} request={getChatFiles} columns={columns} />
     </PageContainer>
   );
 };

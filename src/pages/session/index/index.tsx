@@ -5,6 +5,7 @@ import { history, useModel } from '@umijs/max';
 import { getChatSessions, cancelChatSessions } from '@/services';
 import useTableColumn from '@/hooks/useTableColumn';
 import DeleteAction from '@/components/DeleteAction';
+import { getDefaultConfig } from '@/utils/table';
 
 const Index = () => {
   const { getOptions } = useModel('options');
@@ -95,12 +96,9 @@ const Index = () => {
   return (
     <PageContainer>
       <ProTable<API.ChatSession>
-        search={{
-          defaultCollapsed: false,
-        }}
+        {...getDefaultConfig()}
         request={getChatSessions}
         columns={columns}
-        rowKey={'id'}
       />
     </PageContainer>
   );

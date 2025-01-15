@@ -52,7 +52,11 @@ const TransferForm: React.FC = () => {
           })
           .map((v) => {
             return {
-              label: v.username,
+              label: (
+                <div>
+                  {v.username}({v.online ? '在线' : '离线'})
+                </div>
+              ),
               value: v.id,
             };
           })}

@@ -21,10 +21,18 @@ const Index: React.FC<{
       content = <Image src={props.item.content} />;
       break;
     case 'video':
-      content = <FileImg type={'video'}></FileImg>;
+      content = (
+        <a href={props.item.content}>
+          <FileImg type={'video'}></FileImg>
+        </a>
+      );
       break;
     case 'audio':
-      content = <FileImg type={'audio'}></FileImg>;
+      content = (
+        <a href={props.item.content}>
+          <FileImg type={'audio'}></FileImg>
+        </a>
+      );
       break;
     case 'text':
       content = <>{props.item.content}</>;

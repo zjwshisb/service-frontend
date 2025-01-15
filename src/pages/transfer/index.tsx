@@ -3,6 +3,7 @@ import { PageContainer, ProTable } from '@ant-design/pro-components';
 import { getTransfers, cancelTransfer } from '@/services';
 import DeleteAction from '@/components/DeleteAction';
 import useTableColumn from '@/hooks/useTableColumn';
+import { getDefaultConfig } from '@/utils/table';
 
 const Index = () => {
   const columns = useTableColumn<API.Transfer>(
@@ -66,14 +67,7 @@ const Index = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.Transfer>
-        search={{
-          defaultCollapsed: false,
-        }}
-        request={getTransfers}
-        columns={columns}
-        rowKey={'id'}
-      />
+      <ProTable<API.Transfer> {...getDefaultConfig()} request={getTransfers} columns={columns} />
     </PageContainer>
   );
 };

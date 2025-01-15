@@ -1,4 +1,4 @@
-import { ProColumnType } from '@ant-design/pro-components';
+import { ProColumnType, ProTableProps, ParamsType } from '@ant-design/pro-components';
 
 export type GenTableColumnsOption = {
   index?: boolean;
@@ -39,4 +39,19 @@ export function genTableColumns<T extends Record<any, any>>(
       align: v.align || 'center',
     };
   });
+}
+export function getDefaultConfig<
+  DataType extends Record<string, any>,
+  Params extends ParamsType = ParamsType,
+  ValueType = 'text',
+>(): ProTableProps<DataType, Params, ValueType> {
+  return {
+    rowKey: 'id',
+    search: {
+      defaultCollapsed: true,
+    },
+    form: {
+      syncToUrl: true,
+    },
+  };
 }
