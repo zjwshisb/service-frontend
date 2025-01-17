@@ -19,7 +19,7 @@ const MessageList: React.FC = () => {
 
   const ref = React.useRef<HTMLDivElement>(null);
 
-  const { getUser, updateUser } = useModel('chat.users');
+  const { getUser, updateUser, users } = useModel('chat.users');
 
   const { setting } = useModel('chat.adminSetting');
   const [loading, setLoading] = React.useState(false);
@@ -58,6 +58,30 @@ const MessageList: React.FC = () => {
       });
     }
   }, [current?.id, fetchMessages, setCurrent]);
+
+  // 从localStorage加载当前聊天用户时
+  // 处理可能出现的数据不一致
+  React.useEffect(() => {
+    if (current?.id && users.size > 0) {
+      const u = getUser(current.id);
+      if (!u) {
+        setCurrent(undefined);
+      } else {
+        if (u.disabled !== current.disabled || u.username !== current.username) {
+          setCurrent((prevState) => {
+            if (prevState) {
+              return {
+                ...prevState,
+                disabled: u.disabled,
+                username: u.username,
+              };
+            }
+            return prevState;
+          });
+        }
+      }
+    }
+  }, [current?.disabled, current?.id, current?.username, getUser, setCurrent, users.size]);
 
   React.useEffect(() => {
     setOnSend(() => {

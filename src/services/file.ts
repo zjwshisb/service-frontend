@@ -1,5 +1,5 @@
-import { request } from '@@/exports';
 import React from 'react';
+import { request } from '@@/exports';
 
 export async function getFiles(params?: {
   type?: API.FileType;

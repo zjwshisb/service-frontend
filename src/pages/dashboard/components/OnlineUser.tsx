@@ -5,7 +5,7 @@ import { getOnlineUserInfo } from '@/services/dashboard';
 import { Icon } from '@iconify/react';
 
 const Index: React.FC = () => {
-  const { data, run, loading } = useRequest(getOnlineUserInfo);
+  const { data, run } = useRequest(getOnlineUserInfo);
 
   React.useEffect(() => {
     const i = setInterval(() => run(), 10 * 1000);
@@ -18,7 +18,6 @@ const Index: React.FC = () => {
     <StatisticCard
       footer={<div className={'border-t pt-3'}>今日活跃: {data?.active_count}</div>}
       statistic={{
-        loading,
         title: '在线用户',
         value: data?.users.length,
         icon: <Icon className={'text-2xl'} icon={'tdesign:user'}></Icon>,

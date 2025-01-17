@@ -37,4 +37,9 @@ declare namespace FORM {
     key: string;
     scenes: string[];
   };
+
+  type AdminForm = {
+    username: string;
+    password: string;
+  };
 }

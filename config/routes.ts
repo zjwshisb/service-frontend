@@ -16,9 +16,9 @@
         name: '客服',
       },
       {
-        path: '/admin/:id',
-        component: './admin/show',
-        name: '详情',
+        path: '/admin/add',
+        component: './admin/add',
+        name: '新增',
       },
     ],
   },

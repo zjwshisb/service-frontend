@@ -1,9 +1,5 @@
 import { request } from '@umijs/max';
 
-export async function getOnlineInfo() {
-  return request<API.Response<API.Dashboard.OnlineInfo>>('/dashboard/online-info');
-}
-
 export async function getOnlineUserInfo() {
   return request<
     API.Response<{

@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import { getWaitingUserInfo } from '@/services/dashboard';
 
 const Index: React.FC = () => {
-  const { data, run, loading } = useRequest(getWaitingUserInfo);
+  const { data, run } = useRequest(getWaitingUserInfo);
 
   React.useEffect(() => {
     const i = setInterval(() => run(), 10 * 1000);
@@ -18,7 +18,6 @@ const Index: React.FC = () => {
     <StatisticCard
       footer={<div className={'border-t pt-3'}>今日总咨询用户数: {data?.today_total}</div>}
       statistic={{
-        loading,
         value: data?.users.length,
         title: '待接入用户',
         icon: <Icon className={'text-2xl'} icon={'guidance:waiting-room'}></Icon>,

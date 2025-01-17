@@ -3,6 +3,7 @@ import { getAdmins } from '@/services';
 import { ActionType, PageContainer, ProTable } from '@ant-design/pro-components';
 import useTableColumn from '@/hooks/useTableColumn';
 import { getDefaultConfig } from '@/utils/table';
+import StoreAction from '@/components/StoreAction';
 
 const Index = () => {
   const action = React.useRef<ActionType>();
@@ -36,6 +37,7 @@ const Index = () => {
     <PageContainer>
       <ProTable<API.Admin>
         {...getDefaultConfig()}
+        toolBarRender={() => [<StoreAction key={'store'} path={'/admin/add'}></StoreAction>]}
         actionRef={action}
         request={getAdmins}
         columns={columns}

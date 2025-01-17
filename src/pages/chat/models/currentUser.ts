@@ -5,7 +5,9 @@ import { useLocalStorageState } from 'ahooks';
  * 当前聊天对象
  */
 export default function () {
-  const [current, setCurrent] = useLocalStorageState<API.CurrentChatUser | undefined>('current');
+  const [current, setCurrent] = useLocalStorageState<API.CurrentChatUser | undefined>(
+    'currentUser',
+  );
 
   const [detailShow, setDetailShow] = React.useState(false);
 

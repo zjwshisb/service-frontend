@@ -233,4 +233,32 @@ declare namespace API {
     user_name: string;
     created_at: string;
   } & API.File;
+
+  type Admin = {
+    id: number;
+    username: string;
+    avatar: string;
+    online: boolean;
+    accepted_count: number;
+  };
+
+  type AdminChatSetting = {
+    background: API.File | null;
+    is_auto_accept: boolean;
+    welcome_content: string;
+    offline_content: string;
+    name: string;
+    avatar: API.File | null;
+  };
+
+  type FileType = 'image' | 'video' | 'audio' | 'dir';
+
+  type File = {
+    id: number;
+    name: string;
+    url: string;
+    thumb_url: string;
+    type: API.FileType;
+    path: string;
+  };
 }
