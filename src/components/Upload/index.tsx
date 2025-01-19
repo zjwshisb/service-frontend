@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, App } from 'antd';
+import { App, Upload } from 'antd';
 import { getToken } from '@/utils/auth';
 import type { UploadChangeParam } from 'antd/es/upload';
 import lodash from 'lodash';
@@ -7,7 +7,7 @@ import lodash from 'lodash';
 const Index: React.FC<
   React.PropsWithChildren<{
     onSuccess?: (file: API.File) => void;
-    fileType?: API.FileType[] | API.FileType;
+    fileType?: API.SelectFileType[] | API.SelectFileType;
     dir?: API.File;
     multiple?: boolean;
     isResource?: boolean;
@@ -46,6 +46,13 @@ const Index: React.FC<
     [message, onSuccess],
   );
 
+  const getSingleMime = React.useCallback((f: API.SelectFileType) => {
+    if (f === 'pdf') {
+      return 'application/pdf';
+    }
+    return `${f}/*`;
+  }, []);
+
   const accept = React.useMemo(() => {
     if (!fileType) {
       return undefined;
@@ -53,12 +60,12 @@ const Index: React.FC<
     if (lodash.isArray(fileType)) {
       return fileType
         .map((v) => {
-          return `${v}/*`;
+          return getSingleMime(v);
         })
         .join(',');
     }
-    return `${fileType}/*`;
-  }, [fileType]);
+    return getSingleMime(fileType);
+  }, [fileType, getSingleMime]);
 
   return (
     <Upload

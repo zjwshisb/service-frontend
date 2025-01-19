@@ -45,6 +45,11 @@ const FileItem: React.FC<FileItemProps> = (props) => {
           },
         };
       }
+      case 'pdf': {
+        return {
+          src: file.url,
+        };
+      }
       case 'audio': {
         return {
           toolbarRender: () => <></>,
@@ -79,6 +84,9 @@ const FileItem: React.FC<FileItemProps> = (props) => {
         </Case>
         <Case condition={file.type === 'audio'}>
           <FileImg {...p} type={'audio'} />
+        </Case>
+        <Case condition={file.type === 'pdf'}>
+          <FileImg {...p} type={'pdf'} />
         </Case>
       </Switch>
     );

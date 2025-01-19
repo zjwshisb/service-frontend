@@ -7,6 +7,7 @@ import Emoji from './components/Emoji';
 import Image from './components/Image';
 import Audio from './components/Audio';
 import Video from './components/Video';
+import File from './components/File';
 import ShortcutReply from './components/ShortcutReply';
 
 const Index: React.FC = () => {
@@ -29,6 +30,7 @@ const Index: React.FC = () => {
           <Image />
           <Audio />
           <Video />
+          <File />
           <ShortcutReply />
         </Space>
       </div>

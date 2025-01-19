@@ -4,8 +4,10 @@ import { values } from 'lodash';
 import { useModel } from '@umijs/max';
 import { useDebounce, useHistoryTravel } from 'ahooks';
 
+type fileTypes = API.SelectFileType | API.SelectFileType[];
+
 type selectFileProps = {
-  type?: API.FileType;
+  type?: API.SelectFileType | API.SelectFileType[];
   count?: number;
   defaultValue?: API.File[];
 };
@@ -14,7 +16,7 @@ export default function FileModel() {
   const [open, setOpen] = useState(false);
 
   const [count, setCount] = useState(1);
-  const [fileType, setFileType] = useState<API.FileType | API.FileType[] | undefined>();
+  const [fileType, setFileType] = useState<fileTypes | undefined>();
 
   const { getOptions } = useModel('options');
 

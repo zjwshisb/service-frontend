@@ -207,11 +207,6 @@ declare namespace API {
       id: number;
       username: string;
     };
-    type OnlineInfo = {
-      user: number;
-      waiting: number;
-      admin: number;
-    };
   }
 
   type ChatSessionStatus = 'cancel' | 'accept' | 'wait' | 'close';
@@ -251,7 +246,9 @@ declare namespace API {
     avatar: API.File | null;
   };
 
-  type FileType = 'image' | 'video' | 'audio' | 'dir';
+  type FileType = 'image' | 'video' | 'audio' | 'dir' | 'pdf';
+
+  type SelectFileType = Omit<FileType, 'dir'>;
 
   type File = {
     id: number;

@@ -8,6 +8,7 @@ import Audio from './components/Audio';
 import Video from './components/Video';
 import IsRead from './components/IsRead';
 import Notice from '../Notice';
+import Pdf from './components/Pdf';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { Case, Switch, When } from 'react-if';
@@ -83,6 +84,9 @@ const Index: React.FC<{
               </Case>
               <Case condition={message.type === 'video'}>
                 <Video content={message.content} />
+              </Case>
+              <Case condition={message.type === 'pdf'}>
+                <Pdf content={message.content} direction={direction} />
               </Case>
             </Switch>
           </div>
