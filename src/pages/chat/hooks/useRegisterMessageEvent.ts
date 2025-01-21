@@ -37,12 +37,6 @@ export function useRegisterMessageEvent() {
     setOnMessage((action: API.Action<API.Message>) => {
       const msg = action.data;
       setCurrent((prevState) => {
-        if (msg.user_id === prevState?.id) {
-          handleRead(prevState.id, msg.id).then();
-          const newState = lodash.cloneDeep(prevState);
-          newState.messages.unshift(msg);
-          return newState;
-        }
         const user = getUser(msg.user_id);
         if (user) {
           user.last_message = msg;
@@ -50,6 +44,12 @@ export function useRegisterMessageEvent() {
             user.unread += 1;
           }
           updateUser(user);
+        }
+        if (msg.user_id === prevState?.id) {
+          handleRead(prevState.id, msg.id).then();
+          const newState = lodash.cloneDeep(prevState);
+          newState.messages.unshift(msg);
+          return newState;
         }
         return prevState;
       });
