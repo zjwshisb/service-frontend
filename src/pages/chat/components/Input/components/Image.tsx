@@ -3,12 +3,14 @@ import { PictureOutlined } from '@ant-design/icons/lib';
 import { useModel } from '@umijs/max';
 import { Dropdown } from 'antd';
 import Upload from '@/components/Upload';
+import { useSnapshot } from '@@/exports';
+import websocket from '@/pages/chat/store/websocket';
 const type = 'image';
 
 const Image = () => {
   const { selectFile } = useModel('fileModel');
 
-  const { send } = useModel('chat.websocket');
+  const { send } = useSnapshot(websocket);
 
   return (
     <Dropdown

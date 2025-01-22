@@ -1,13 +1,14 @@
 import React from 'react';
 import { UnorderedListOutlined } from '@ant-design/icons/lib';
 import { App, List, Popover, Typography } from 'antd';
-import { useModel, useRequest } from '@umijs/max';
+import { useRequest, useSnapshot } from '@umijs/max';
 import { getAutoMessage } from '@/services/auto';
+import websocket from '../../../store/websocket';
 
 const ShortcutReply = () => {
   const { data } = useRequest(() => getAutoMessage({ current: 1, pageSize: 100 }));
 
-  const { send } = useModel('chat.websocket');
+  const { send } = useSnapshot(websocket);
 
   const { message } = App.useApp();
 

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import UserItem from './components/UserItem';
-import { Helmet, useModel } from '@umijs/max';
+import { Helmet, useSnapshot } from '@umijs/max';
 import TransferForm from './components/TransferForm';
 import { Empty, Input } from 'antd';
 import { Else, If, Then } from 'react-if';
 import HistorySession from './components/HistorySession';
 import CusDiv from '@/components/CusDiv';
 import { useDebounce } from 'ahooks';
+import usersStore from '@/pages/chat/store/users';
 
 const UserList: React.FC = () => {
-  const { users } = useModel('chat.users');
+  const { users } = useSnapshot(usersStore);
 
   const [title, setTile] = useState('');
 

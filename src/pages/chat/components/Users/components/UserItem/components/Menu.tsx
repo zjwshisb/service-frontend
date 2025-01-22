@@ -1,19 +1,21 @@
 import React from 'react';
 import { App, Space } from 'antd';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { removeUser } from '@/services';
 import { MessageOutlined, CloseOutlined, SwapOutlined } from '@ant-design/icons';
 import { When } from 'react-if';
+import transfer from '@/pages/chat/store/transfer';
+import historySession from '@/pages/chat/store/historySession';
 
 const Menu: React.FC<{
   user: API.User;
 }> = (props) => {
-  const { setUser, setVisible } = useModel('chat.transfer');
+  const { setUser, setVisible } = useSnapshot(transfer);
 
   const { modal } = App.useApp();
 
-  const show = useModel('chat.historySession', (model) => model.show);
+  const sessionStore = useSnapshot(historySession);
 
   const handleRemove = useRemoveUser();
 
@@ -43,7 +45,7 @@ const Menu: React.FC<{
       <Space size={'small'}>
         <MessageOutlined
           onClick={(e) => {
-            show(props.user.id);
+            sessionStore.show(props.user.id);
             e.stopPropagation();
           }}
         />

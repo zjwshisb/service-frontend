@@ -3,8 +3,9 @@ import { Button, Modal, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { getChatSessionDetail } from '@/services';
 import MessageLine from '@/components/MessageLine';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import { useBoolean } from 'ahooks';
+import historySession from '@/pages/chat/store/historySession';
 
 const HistorySession = () => {
   const [messages, setMessages] = React.useState<API.Message[]>([]);
@@ -42,7 +43,7 @@ const HistorySession = () => {
     },
   ];
 
-  const { visible, setVisible, sessions } = useModel('chat.historySession');
+  const { visible, sessions } = useSnapshot(historySession);
 
   return (
     <>
@@ -64,7 +65,7 @@ const HistorySession = () => {
         title={'历史对话'}
         open={visible}
         onCancel={(e) => {
-          setVisible(false);
+          historySession.visible = false;
           e.stopPropagation();
         }}
       >

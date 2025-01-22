@@ -1,6 +1,6 @@
 import React from 'react';
 import Input from './components/Text';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import { When } from 'react-if';
 import { Space } from 'antd';
 import Emoji from './components/Emoji';
@@ -9,9 +9,10 @@ import Audio from './components/Audio';
 import Video from './components/Video';
 import File from './components/File';
 import ShortcutReply from './components/ShortcutReply';
+import currentUser from '@/pages/chat/store/currentUser';
 
 const Index: React.FC = () => {
-  const { current } = useModel('chat.currentUser');
+  const { current } = useSnapshot(currentUser);
 
   const [input, setInput] = React.useState('');
 

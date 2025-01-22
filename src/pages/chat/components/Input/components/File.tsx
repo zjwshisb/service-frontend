@@ -1,13 +1,15 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
 import { useModel } from '@umijs/max';
+import { useSnapshot } from '@@/exports';
+import websocket from '@/pages/chat/store/websocket';
 
 const type: API.FileType[] = ['pdf'];
 
 const Audio = () => {
   const { selectFile } = useModel('fileModel');
 
-  const { send } = useModel('chat.websocket');
+  const { send } = useSnapshot(websocket);
 
   const onClick = React.useCallback(() => {
     selectFile({

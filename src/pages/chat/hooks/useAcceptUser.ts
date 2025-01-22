@@ -1,11 +1,13 @@
 import React from 'react';
 import { handleAccept } from '@/services';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import { App } from 'antd';
+import currentUser from '@/pages/chat/store/currentUser';
+import users from '@/pages/chat/store/users';
 
 export default function useAccept() {
-  const { addUser } = useModel('chat.users');
-  const { current, setCurrent } = useModel('chat.currentUser');
+  const { addUser } = useSnapshot(users);
+  const { current, setCurrent } = useSnapshot(currentUser);
 
   const { message } = App.useApp();
 

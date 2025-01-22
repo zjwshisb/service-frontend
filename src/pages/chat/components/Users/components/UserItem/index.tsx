@@ -1,27 +1,30 @@
 import React from 'react';
 import { Avatar, Badge, Typography } from 'antd';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import Menu from './components/Menu';
 import classNames from 'classnames';
 import { formatTime } from '@/utils/utils';
 import { getMessageTypeLabel } from '@/pages/chat/util';
 import Platform from './components/Platform';
+import currentUser from '@/pages/chat/store/currentUser';
+import userStore from '@/pages/chat/store/users';
 
 const UserItem: React.FC<{
   user: API.User;
 }> = ({ user }) => {
-  const { setCurrent, current } = useModel('chat.currentUser');
-  const { updateUser } = useModel('chat.users');
+  const { setCurrent, current } = useSnapshot(currentUser);
+  const { updateUser } = useSnapshot(userStore);
 
   const onClick = React.useCallback(() => {
-    user.unread = 0;
-    updateUser(user);
     setCurrent({
       id: user.id,
       avatar: user.avatar,
       messages: [],
       disabled: user.disabled,
       username: user.username,
+    });
+    updateUser(user.id, {
+      unread: 0,
     });
   }, [setCurrent, updateUser, user]);
 

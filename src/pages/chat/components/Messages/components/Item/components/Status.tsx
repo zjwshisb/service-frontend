@@ -9,7 +9,7 @@ const Status: React.FC<{
   return React.useMemo(() => {
     return (
       <>
-        {props.isSuccess === undefined && <Spin />}
+        {props.isSuccess === undefined && <Spin className={'mt-2'} size={'small'} />}
         {props.isSuccess === false && (
           <Dropdown
             menu={{

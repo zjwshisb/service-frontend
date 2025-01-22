@@ -1,6 +1,6 @@
 import React from 'react';
 import { SettingOutlined } from '@ant-design/icons/lib';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import { ModalForm, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-components';
 import { updateChatSetting } from '@/services';
 import { App } from 'antd';
@@ -8,10 +8,11 @@ import ProFormFileSelect from '@/components/ProFormFileSelect';
 import { useBoolean } from 'ahooks';
 import { FormInstance } from 'antd/es';
 import Wrapper from './Wrapper';
+import adminSetting from '@/pages/chat/store/adminSetting';
 
 const Setting = () => {
   const [open, openAction] = useBoolean(false);
-  const { setting, fetchSetting } = useModel('chat.adminSetting');
+  const { setting, fetchSetting } = useSnapshot(adminSetting);
   const { message } = App.useApp();
 
   const form = React.useRef<FormInstance>();

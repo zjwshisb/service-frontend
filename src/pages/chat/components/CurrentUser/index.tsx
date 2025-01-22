@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import classNames from 'classnames';
 import { getUserInfo } from '@/services';
 import { Else, If, Then } from 'react-if';
 import { Avatar, Descriptions, Empty } from 'antd';
 import CusDiv from '@/components/CusDiv';
+import currentUser from '@/pages/chat/store/currentUser';
 
 const Index: React.FC = () => {
-  const { current, detailShow } = useModel('chat.currentUser');
+  const { current, detailShow } = useSnapshot(currentUser);
 
   const [info, setInfo] = useState<API.UserInfoItem[]>([]);
 

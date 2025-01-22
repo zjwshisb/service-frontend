@@ -4,55 +4,45 @@ import Messages from './components/Messages';
 import InputArea from './components/Input/index';
 import Header from './components/Header';
 import LeftMenu from '@/pages/chat/components/LeftMenu/index';
-import { useModel } from '@umijs/max';
-import { getUsers } from '@/services';
+import { useSnapshot } from '@umijs/max';
 import BackgroundImg from '@/assets/images/background.png';
 import Draggable from 'react-draggable';
 import useAutoAccept from '@/pages/chat/hooks/useAutoAccept';
 import { PageContainer } from '@ant-design/pro-components';
-import { useRegisterStatusEvent } from './hooks/useRegisterStatusEvent';
-import { useRegisterMessageEvent } from '@/pages/chat/hooks/useRegisterMessageEvent';
 import CurrentUser from './components/CurrentUser';
 import CusDiv from '@/components/CusDiv';
+import users from './store/users';
+import websocket from '@/pages/chat/store/websocket';
+import adminSetting from '@/pages/chat/store/adminSetting';
+import { requestPermission } from '@/pages/chat/notification';
 
 const chatWidth = 1080;
 const chatHeight = 700;
 
 const Index: React.FC = () => {
-  const { connect, close } = useModel('chat.websocket');
-  const { setUsers } = useModel('chat.users');
+  const { connect, close } = useSnapshot(websocket);
+  const { fetchUsers } = useSnapshot(users);
 
-  const { setting, fetchSetting } = useModel('chat.adminSetting');
-
-  useRegisterStatusEvent();
-  useRegisterMessageEvent();
+  const { setting, fetchSetting } = useSnapshot(adminSetting);
 
   React.useEffect(() => {
     fetchSetting();
   }, [fetchSetting]);
 
-  const { requestPermission } = useModel('chat.notification');
-
-  // 请求浏览器通知
-  React.useEffect(() => {
-    requestPermission();
-  }, [requestPermission]);
-
   useAutoAccept();
 
   React.useEffect(() => {
-    getUsers().then((res) => {
-      const map = new Map<number, API.User>();
-      res.data.forEach((v) => {
-        map.set(v.id, v);
-      });
+    requestPermission();
+  }, []);
+
+  React.useEffect(() => {
+    fetchUsers().then(() => {
       connect();
-      setUsers(map);
     });
     return () => {
       close();
     };
-  }, [close, connect, setUsers]);
+  }, [close, connect, fetchUsers]);
 
   return (
     <PageContainer

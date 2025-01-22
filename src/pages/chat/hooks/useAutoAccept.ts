@@ -1,23 +1,25 @@
 import React from 'react';
 import useAccept from '@/pages/chat/hooks/useAcceptUser';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
+import waitingUsers from '@/pages/chat/store/waitingUsers';
+import adminSetting from '@/pages/chat/store/adminSetting';
 
 export default function useAutoAccept() {
   const accept = useAccept();
 
-  const { waitingUsers } = useModel('chat.waitingUsers');
+  const store = useSnapshot(waitingUsers);
 
-  const { setting } = useModel('chat.adminSetting');
+  const { setting } = useSnapshot(adminSetting);
 
   React.useEffect(() => {
     if (setting?.is_auto_accept) {
       const i = setInterval(() => {
-        if (waitingUsers.length > 0) {
-          accept(waitingUsers[0].session_id);
+        if (store.waitingUsers.length > 0) {
+          accept(store.waitingUsers[0].session_id);
         }
       }, 3000);
       return () => clearInterval(i);
     }
     return () => {};
-  }, [accept, setting?.is_auto_accept, waitingUsers]);
+  }, [accept, setting?.is_auto_accept, store.waitingUsers]);
 }

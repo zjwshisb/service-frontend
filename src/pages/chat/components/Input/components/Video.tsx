@@ -1,9 +1,10 @@
 import React from 'react';
 import { Icon } from '@iconify/react';
-import { useModel } from '@umijs/max';
+import { useModel, useSnapshot } from '@umijs/max';
+import websocket from '@/pages/chat/store/websocket';
 const type = 'video';
 const Video = () => {
-  const { send } = useModel('chat.websocket');
+  const { send } = useSnapshot(websocket);
   const { selectFile } = useModel('fileModel');
   const onClick = React.useCallback(() => {
     selectFile({

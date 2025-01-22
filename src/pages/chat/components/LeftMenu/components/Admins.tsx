@@ -1,10 +1,10 @@
 import React from 'react';
-import { useModel } from '@umijs/max';
 import { Drawer, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import Wrapper from './Wrapper';
 import { CheckOutlined, CloseOutlined, CustomerServiceFilled } from '@ant-design/icons';
-
+import adminStore from '../../../store/admin';
+import { useSnapshot } from '@umijs/max';
 const columns: ColumnsType<API.Admin> = [
   {
     dataIndex: 'username',
@@ -32,15 +32,7 @@ const columns: ColumnsType<API.Admin> = [
 ];
 
 const Admins = () => {
-  const { admins, setAdmins } = useModel('chat.admins');
-
-  const setOnMessage = useModel('chat.websocket', (model) => model.setOnMessage);
-
-  React.useEffect(() => {
-    setOnMessage((action: API.Action<API.Admin[]>) => {
-      setAdmins(action.data);
-    }, 'admins');
-  }, [setOnMessage, setAdmins]);
+  const snap = useSnapshot(adminStore);
 
   const [visible, setVisible] = React.useState(false);
 
@@ -66,7 +58,7 @@ const Admins = () => {
         <Table<API.Admin>
           rowKey={'id'}
           size={'small'}
-          dataSource={admins}
+          dataSource={snap.admins}
           pagination={false}
           columns={columns}
         />

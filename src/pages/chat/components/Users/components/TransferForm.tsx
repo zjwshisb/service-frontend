@@ -1,15 +1,18 @@
 import React from 'react';
 import { ModalForm, ProFormSelect, ProFormTextArea } from '@ant-design/pro-components';
-import { useModel } from '@umijs/max';
+import { useModel, useSnapshot } from '@umijs/max';
 import { handleTransfer } from '@/services';
 import useRemoveUser from '@/pages/chat/hooks/useRemoveUser';
 import { App } from 'antd';
+import adminStore from '../../../store/admin';
+import transfer from '@/pages/chat/store/transfer';
 
 const TransferForm: React.FC = () => {
-  const { visible, setVisible, user, setUser } = useModel('chat.transfer');
+  const { visible, setVisible, user, setUser } = useSnapshot(transfer);
   const initialState = useModel('@@initialState');
-  const { admins } = useModel('chat.admins');
   const handleRemoveUser = useRemoveUser();
+
+  const { admins } = useSnapshot(adminStore);
 
   const { message } = App.useApp();
 

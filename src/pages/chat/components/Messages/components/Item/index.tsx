@@ -13,8 +13,9 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { Case, Switch, When } from 'react-if';
 import { formatTime } from '@/utils/utils';
-import { useModel } from '@umijs/max';
-import lodash from 'lodash';
+import { useSnapshot } from '@umijs/max';
+import currentUser from '@/pages/chat/store/currentUser';
+import websocket from '@/pages/chat/store/websocket';
 
 export type MessageDirection = 'left' | 'right';
 
@@ -24,9 +25,9 @@ const Index: React.FC<{
 }> = (props) => {
   const { message } = props;
 
-  const { setCurrent } = useModel('chat.currentUser');
+  const { removeMessage } = useSnapshot(currentUser);
 
-  const { send } = useModel('chat.websocket');
+  const { send } = useSnapshot(websocket);
 
   let time = React.useMemo(() => {
     const currentTime = dayjs(message.received_at);
@@ -40,18 +41,11 @@ const Index: React.FC<{
   }, [message.received_at, props.prev]);
 
   const resendMsg = React.useCallback(() => {
-    setCurrent((prev) => {
-      if (prev) {
-        const index = prev.messages.findIndex((item) => item.req_id === message.req_id);
-        if (index > -1) {
-          prev.messages.splice(index, 1);
-        }
-        return lodash.cloneDeep(prev);
-      }
-      return prev;
-    });
-    send(message.content, message.type);
-  }, [message.content, message.req_id, message.type, send, setCurrent]);
+    const msg = removeMessage(props.message.req_id);
+    if (msg) {
+      send(msg.content, msg.type);
+    }
+  }, [props.message.req_id, removeMessage, send]);
 
   const direction: MessageDirection = React.useMemo(() => {
     return message.source === 1 ? 'right' : 'left';

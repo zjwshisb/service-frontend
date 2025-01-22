@@ -1,34 +1,19 @@
 import React from 'react';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import Wrapper from '../Wrapper';
 import classNames from 'classnames';
 import { MessageOutlined } from '@ant-design/icons';
 import { Empty, Segmented } from 'antd';
 import WaitingItem from './WaitingItem';
 import { useClickAway } from 'ahooks';
+import waitingUsers from '@/pages/chat/store/waitingUsers';
 
 const Index = () => {
-  const { setOnMessage } = useModel('chat.websocket');
-
-  const { waitingUsers, setWaitingUsers } = useModel('chat.waitingUsers');
-  const { notify } = useModel('chat.notification');
-
-  React.useEffect(() => {
-    setOnMessage((action: API.Action<API.WaitingUser[]>) => {
-      if (action.action === 'waiting-users') {
-        setWaitingUsers((prevState) => {
-          if (prevState.length < action.data.length) {
-            notify('有新的用户待接入');
-          }
-          return action.data;
-        });
-      }
-    }, 'waiting-users');
-  }, [notify, setOnMessage, setWaitingUsers]);
+  const store = useSnapshot(waitingUsers);
 
   const reverseData = React.useMemo(() => {
-    return [...waitingUsers].reverse();
-  }, [waitingUsers]);
+    return [...store.waitingUsers].reverse();
+  }, [store.waitingUsers]);
 
   const [active, setActive] = React.useState(false);
 
@@ -67,7 +52,7 @@ const Index = () => {
         <div className={'flex-1'}>
           <div>
             {reverseData.map((item) => {
-              return <WaitingItem user={item} key={item.id} />;
+              return <WaitingItem user={item as API.WaitingUser} key={item.id} />;
             })}
             {reverseData.length === 0 && <Empty className={'mt-4'}></Empty>}
           </div>
@@ -78,7 +63,7 @@ const Index = () => {
           setActive((v) => !v);
         }}
         badge={{
-          count: waitingUsers.length,
+          count: reverseData.length,
         }}
         active={active}
       >

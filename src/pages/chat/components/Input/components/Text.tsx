@@ -1,15 +1,17 @@
 import React from 'react';
 import { Input } from 'antd';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import { TextAreaRef } from 'antd/es/input/TextArea';
+import currentUser from '@/pages/chat/store/currentUser';
+import websocket from '@/pages/chat/store/websocket';
 
 const Text: React.FC<{
   value: string;
   onChange: (s: string) => void;
 }> = (props) => {
-  const { send } = useModel('chat.websocket');
+  const { send } = useSnapshot(websocket);
 
-  const { current } = useModel('chat.currentUser');
+  const { current } = useSnapshot(currentUser);
 
   const ref = React.useRef<TextAreaRef>(null);
 

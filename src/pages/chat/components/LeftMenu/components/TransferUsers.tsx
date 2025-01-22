@@ -1,28 +1,20 @@
 import React, { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons/lib';
-import { useModel } from '@umijs/max';
+import { useSnapshot } from '@umijs/max';
 import { Button, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import useAcceptUser from '@/pages/chat/hooks/useAcceptUser';
 import { getTransferMessage, handleCancelTransfer } from '@/services';
 import MessageLine from '@/components/MessageLine';
 import Wrapper from './Wrapper';
+import transfer from '@/pages/chat/store/transfer';
 
 const TransferUsers = () => {
-  const { setOnMessage } = useModel('chat.websocket');
-  const { transfers, setTransfers } = useModel('chat.transfer');
+  const { transfers } = useSnapshot(transfer);
   const [messageVisible, setMessageVisible] = useState(false);
   const [messages, setMessages] = useState<API.Message[]>([]);
 
   const handleAccept = useAcceptUser();
-
-  React.useEffect(() => {
-    setOnMessage((action: API.Action<API.Transfer[]>) => {
-      if (action.action === 'user-transfer') {
-        setTransfers(action.data);
-      }
-    }, 'user-transfer');
-  }, [setOnMessage, setTransfers]);
 
   const columns = React.useMemo((): ColumnsType<API.Transfer> => {
     return [
