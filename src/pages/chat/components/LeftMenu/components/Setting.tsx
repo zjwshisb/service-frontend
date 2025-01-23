@@ -12,7 +12,7 @@ import adminSetting from '@/pages/chat/store/adminSetting';
 
 const Setting = () => {
   const [open, openAction] = useBoolean(false);
-  const { setting, fetchSetting } = useSnapshot(adminSetting);
+  const { setting } = useSnapshot(adminSetting);
   const { message } = App.useApp();
 
   const form = React.useRef<FormInstance>();
@@ -42,7 +42,7 @@ const Setting = () => {
         onFinish={async (data: API.AdminChatSetting) => {
           await updateChatSetting(data);
           message.success('设置成功');
-          fetchSetting();
+          adminSetting.fetchSetting();
           return true;
         }}
         layout="horizontal"

@@ -16,7 +16,7 @@ import { isDev } from '@/utils';
 const store = proxy<{
   websocket?: WebSocket;
   connect: () => void;
-  sendAction: (action: API.Action<API.Message>) => boolean;
+  sendAction: (action: API.SendMessageAction) => boolean;
   send: (content: string, type: API.MessageType) => Promise<boolean>;
   close: () => void;
 }>({
@@ -30,7 +30,7 @@ const store = proxy<{
       return Promise.reject(new Error('当前无聊天对象，无法发送'));
     }
   },
-  sendAction(action: API.Action<API.Message>) {
+  sendAction(action: API.SendMessageAction) {
     if (store.websocket) {
       try {
         store.websocket.send(JSON.stringify(action));
@@ -66,7 +66,7 @@ const store = proxy<{
     }
   },
   close() {
-    store.websocket?.close();
+    store.websocket?.close(0);
   },
   connect() {
     const url = `${WS_URL}?token=${getToken()}`;
@@ -80,7 +80,7 @@ const store = proxy<{
     ws.onmessage = (e: MessageEvent) => {
       try {
         if (e.data !== '') {
-          const action: API.NewAction = JSON.parse(e.data);
+          const action: API.Action = JSON.parse(e.data);
           switch (action.action) {
             case 'admins':
               admins.setAdmins(action.data);
@@ -178,8 +178,18 @@ const store = proxy<{
       } catch (err) {}
     };
     // 服务器断开连接会触发该事件/连接服务器失败触发error事件后也会触发该事件
-    ws.onclose = () => {
-      store.websocket = undefined;
+    ws.onclose = (e) => {
+      if (e.code !== 0) {
+        store.websocket = undefined;
+        Modal.error({
+          title: '提示',
+          content: '聊天服务器已断开',
+          okText: '重新连接连接聊天服务器',
+          onOk() {
+            window.location.reload();
+          },
+        });
+      }
     };
     store.websocket = ref(ws);
   },

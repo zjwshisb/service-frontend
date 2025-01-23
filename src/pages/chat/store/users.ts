@@ -30,7 +30,7 @@ const store = proxy({
       res.data.forEach((v) => {
         map.set(v.id, v);
       });
-      store.users = map;
+      store.users = proxyMap(map);
     });
   },
 });

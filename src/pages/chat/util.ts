@@ -4,7 +4,7 @@ export async function createMsg(
   content: string,
   userId: number,
   type: API.MessageType = 'text',
-): Promise<API.Action<API.Message>> {
+): Promise<API.SendMessageAction> {
   const res = await getReqId();
   return {
     action: 'send-message',

@@ -21,13 +21,12 @@ const chatHeight = 700;
 
 const Index: React.FC = () => {
   const { connect, close } = useSnapshot(websocket);
-  const { fetchUsers } = useSnapshot(users);
 
-  const { setting, fetchSetting } = useSnapshot(adminSetting);
+  const { setting } = useSnapshot(adminSetting);
 
   React.useEffect(() => {
-    fetchSetting();
-  }, [fetchSetting]);
+    adminSetting.fetchSetting();
+  }, []);
 
   useAutoAccept();
 
@@ -36,13 +35,13 @@ const Index: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
-    fetchUsers().then(() => {
+    users.fetchUsers().then(() => {
       connect();
     });
     return () => {
       close();
     };
-  }, [close, connect, fetchUsers]);
+  }, [close, connect]);
 
   return (
     <PageContainer

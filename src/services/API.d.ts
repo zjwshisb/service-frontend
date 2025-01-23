@@ -41,19 +41,15 @@ declare namespace API {
     | 'error-message'
     | 'read';
 
-  type Action<T = any, A = ActionType> = {
-    action: A;
-    data: T;
-    time: number;
-  };
-
   type BaseAction<T = any, A = ActionType> = {
     action: A;
     data: T;
     time: number;
   };
 
-  type NewAction =
+  type SendMessageAction = BaseAction<API.Message, 'send-message'>;
+
+  type Action =
     | BaseAction<API.Admin[], 'admins'>
     | BaseAction<{ user_id: number }, 'user-offline'>
     | BaseAction<{ user_id: number; platform: API.Platform }, 'user-online'>
@@ -65,12 +61,6 @@ declare namespace API {
     | BaseAction<API.Message, 'receive-message'>
     | BaseAction<API.WaitingUser[], 'waiting-users'>
     | BaseAction<API.Transfer[], 'user-transfer'>;
-
-  type Receipt = {
-    user_id: number;
-    req_id: string;
-    msg_id: number;
-  };
 
   type MessageType = 'text' | 'navigator' | 'image' | 'audio' | 'video' | 'pdf';
 
@@ -108,15 +98,6 @@ declare namespace API {
     label: string;
     name: string;
     description: string;
-  };
-
-  type OffLine = {
-    user_id: number;
-  };
-
-  type OnLine = {
-    user_id: number;
-    platform: Platform;
   };
 
   type WaitingUser = {
