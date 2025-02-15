@@ -82,6 +82,8 @@ const MessageList: React.FC = () => {
           }, 5000);
         }
       }
+    } else {
+      setCurrent(undefined);
     }
   }, [
     current?.disabled,
